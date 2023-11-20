@@ -91,12 +91,16 @@ void Player::CreateBullet()
 {
 	Bullet* pBullet = new Bullet;
 	Vec2 vBulletPos = GetPos();
-	vBulletPos.y -= GetScale().y / 2.f;
+	vBulletPos.y -= GetScale().y / 5.f;
+
+	POINT ptMouse;
+	GetCursorPos(&ptMouse);
 	pBullet->SetPos(vBulletPos);
 	pBullet->SetScale(Vec2(25.f,25.f));
 //	pBullet->SetDir(M_PI / 4 * 7);
 //	pBullet->SetDir(120* M_PI / 180);
-	pBullet->SetDir(Vec2(-10.f,-15.f));
+	//pBullet->SetDir(Vec2(-10.f,-15.f));
+	pBullet->SetDir(Vec2((float)ptMouse.x, (float)ptMouse.y));
 	pBullet->SetName(L"Player_Bullet");
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
 }
