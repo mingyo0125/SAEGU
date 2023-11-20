@@ -56,27 +56,27 @@ void Player::Update()
 {
 	Vec2 vPos = GetPos();
 
-	if (KEY_PRESS(KEY_TYPE::LEFT))
+	if (KEY_PRESS(KEY_TYPE::A))
 	{
 		vPos.x -= 100.f * fDT;
 		GetAnimator()->PlayAnim(L"Jiwoo_Left", true);
 	}
-	if (KEY_PRESS(KEY_TYPE::RIGHT))
+	if (KEY_PRESS(KEY_TYPE::D))
 	{
 		vPos.x += 100.f * fDT;
 		GetAnimator()->PlayAnim(L"Jiwoo_Right", true);
 	}
-	if (KEY_PRESS(KEY_TYPE::UP))
+	if (KEY_PRESS(KEY_TYPE::W))
 	{
 		vPos.y -= 100.f * fDT;
 		GetAnimator()->PlayAnim(L"Jiwoo_Back", true);
 	}
-	if (KEY_PRESS(KEY_TYPE::DOWN))
+	if (KEY_PRESS(KEY_TYPE::S))
 	{
 		vPos.y += 100.f * fDT;
 		GetAnimator()->PlayAnim(L"Jiwoo_Front", true);
 	}
-	if (KEY_DOWN(KEY_TYPE::SPACE))
+	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
 		CreateBullet();
 		ResMgr::GetInst()->Play(L"Shoot");
