@@ -7,21 +7,21 @@
 #include "KeyMgr.h"
 #include "CollisionMgr.h"
 #include "ResMgr.h"
+#include "EnemySpawner.h"
+
+Object* pTarget;
+float fMonsterSpeed = 1;
+float fMonsterHp = 10;
+float fMonsterScale = 50;
+
 void Start_Scene::Init()
 {
-	float fMonsterScale = 50;
-
+	//플레이어 생성
 	Object* pObj = new Player;
 	pObj->SetPos((Vec2({Core::GetInst()->GetResolution().x /2, Core::GetInst()->GetResolution().y / 2})));
 	pObj->SetScale(Vec2(100.f,100.f));
+	pTarget = pObj;
 	AddObject(pObj, OBJECT_GROUP::PLAYER);
-
-	// 적 생성
-	Monster* pMonster = new Monster;
-	pMonster->SetPos(Vec2(100, 100));
-	pMonster->SetScale(Vec2(fMonsterScale, fMonsterScale));
-	pMonster->SetCenterPos(pMonster->GetPos());
-	AddObject(pMonster, OBJECT_GROUP::MONSTER);
 
 	ResMgr::GetInst()->LoadSound(L"BGM", L"Sound\\Retro_bgm.wav", true);
 	ResMgr::GetInst()->LoadSound(L"Shoot", L"Sound\\laserShoot.wav", false);
@@ -34,8 +34,10 @@ void Start_Scene::Init()
 void Start_Scene::Update()
 {
 	Scene::Update();
-	//if(KEY_DOWN(KEY_TYPE::ENTER))
-	//	// 씬 변경
+	if (KEY_DOWN(KEY_TYPE::ENTER))
+	{
+		SpawnEnemy(pTarget, fMonsterSpeed, fMonsterHp, fMonsterScale);
+	}
 }
 
 void Start_Scene::Render(HDC _dc)

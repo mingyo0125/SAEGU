@@ -5,12 +5,13 @@
 #include "Object.h"
 #include "EventMgr.h"
 
-Monster::Monster()
-	: m_fSpeed(100.f)
-	, m_target()
-	, m_vCenterPos(Vec2(0.f,0.f))
-	, m_iHp(5)
+Monster::Monster(Object* target, float speed, int hp) 
+	: m_target(target), m_fSpeed(speed), m_iHp(hp)
 {
+	m_target = target;
+	m_fSpeed = speed;
+	m_iHp = hp;
+
 	CreateCollider();
 }
 
@@ -21,13 +22,12 @@ Monster::~Monster()
 void Monster::Update()
 {
 	Vec2 vCurPos = GetPos();
-	Vec2 vTargetPos = m_target.GetPos();
-	//Vec2 moveDir = (vTargetPos - vCurPos).Normalize();
-	Vec2 moveDir = (vCurPos - vTargetPos).Normalize();
+	Vec2 vTargetPos = m_target->GetPos();
+	Vec2 moveDir = (vTargetPos - vCurPos).Normalize();
 
 	vCurPos = vCurPos + (moveDir * 1);
 
-	SetPos(vCurPos);	
+	SetPos(vCurPos);
 }
 
 void Monster::EnterCollision(Collider* _pOther)

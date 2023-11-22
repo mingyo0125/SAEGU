@@ -4,7 +4,7 @@
 class Monster : public Object
 {
 public:
-	Monster();
+	Monster(Object* target, float speed, int hp);
 	~Monster();
 public:
 	void Update() override;
@@ -19,7 +19,7 @@ public:
 private:
 	float m_fSpeed; // 몬스터 스피드
 	Vec2 m_vCenterPos; // 중심 위치
-	Object m_target; // 이동할 수 있는 최대 거리
+	Object* m_target; // 이동할 수 있는 최대 거리
 	int   m_iHp; // 체력
 };
 
