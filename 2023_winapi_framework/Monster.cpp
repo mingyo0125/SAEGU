@@ -25,7 +25,7 @@ void Monster::Update()
 	Vec2 vTargetPos = m_target->GetPos();
 	Vec2 moveDir = (vTargetPos - vCurPos).Normalize();
 
-	vCurPos = vCurPos + (moveDir * 1);
+	vCurPos = vCurPos + (moveDir * m_fSpeed);
 
 	SetPos(vCurPos);
 }

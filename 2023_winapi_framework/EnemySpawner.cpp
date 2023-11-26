@@ -5,6 +5,7 @@
 #include "SceneMgr.h"
 #include "EnemySpawner.h"
 #include "Scene.h"
+#include <time.h>
 
 void SpawnEnemy(Object* targetObj, float speed, int hp, float scale)
 {
@@ -14,4 +15,11 @@ void SpawnEnemy(Object* targetObj, float speed, int hp, float scale)
 	pMonster->SetCenterPos(pMonster->GetPos());
 
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pMonster, OBJECT_GROUP::BULLET);
+}
+
+Vec2 GetSpawnPos()
+{
+	srand((unsigned int)time(NULL));
+	int chooseAreaIdx = rand() % 4;
+	std::pair<Vec2, Vec2> chooseAreaPair = areaSizeArr[chooseAreaIdx];
 }

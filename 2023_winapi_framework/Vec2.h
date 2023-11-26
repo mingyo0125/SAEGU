@@ -41,6 +41,10 @@ public:
 	{
 		return Vec2(x * (float)_i, y * (float)_i);
 	}
+	Vec2 operator * (float _f)
+	{
+		return Vec2(x * _f, y * _f);
+	}
 public:
 	float x;
 	float y;

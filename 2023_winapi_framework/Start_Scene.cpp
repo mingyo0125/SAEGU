@@ -8,11 +8,15 @@
 #include "CollisionMgr.h"
 #include "ResMgr.h"
 #include "EnemySpawner.h"
+#include "TimeMgr.h"
 
 Object* pTarget;
-float fMonsterSpeed = 1;
+float fMonsterSpeed = 0.15f;
 float fMonsterHp = 10;
-float fMonsterScale = 50;
+float fMonsterScale = 30;
+
+float fMonsterSpawnTime = 5;
+float fCurrentTime = 0;
 
 void Start_Scene::Init()
 {
@@ -34,10 +38,13 @@ void Start_Scene::Init()
 void Start_Scene::Update()
 {
 	Scene::Update();
-	if (KEY_DOWN(KEY_TYPE::ENTER))
+
+	if (fCurrentTime >= fMonsterSpawnTime)
 	{
 		SpawnEnemy(pTarget, fMonsterSpeed, fMonsterHp, fMonsterScale);
+		fCurrentTime = 0;
 	}
+	fCurrentTime += fDT;
 }
 
 void Start_Scene::Render(HDC _dc)
