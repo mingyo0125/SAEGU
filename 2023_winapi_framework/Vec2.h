@@ -15,7 +15,7 @@ public:
 	{
 		float fLen = Length();
 		// 0¿Ã∏È æ»µ≈.
-		assert(fLen !=0.f);
+		//assert(fLen !=0.f);
 		x /= fLen;
 		y /= fLen;
 		return *this;

@@ -15,7 +15,7 @@ float fMonsterSpeed = 0.15f;
 float fMonsterHp = 10;
 float fMonsterScale = 30;
 
-float fMonsterSpawnTime = 5;
+float fMonsterSpawnTime = 1;
 float fCurrentTime = 0;
 
 void Start_Scene::Init()
@@ -38,10 +38,11 @@ void Start_Scene::Init()
 void Start_Scene::Update()
 {
 	Scene::Update();
-
+	
 	if (fCurrentTime >= fMonsterSpawnTime)
 	{
-		SpawnEnemy(pTarget, fMonsterSpeed, fMonsterHp, fMonsterScale);
+		EnemySpawner spawner;
+		spawner.SpawnEnemy(pTarget, fMonsterSpeed, fMonsterHp, fMonsterScale);
 		fCurrentTime = 0;
 	}
 	fCurrentTime += fDT;
