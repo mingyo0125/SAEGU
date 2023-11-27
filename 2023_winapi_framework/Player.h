@@ -16,6 +16,7 @@ private:
     void CreateBullet();
 private:
     Texture* m_pTex;
+    Texture* m_pTex2;
     int* Hp;
     int MaxHp;
 };
