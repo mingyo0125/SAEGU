@@ -17,6 +17,7 @@ private:
 private:
     Texture* m_pTex;
     Texture* m_pTex2;
+    Texture* m_pTexIdle;
     int* Hp;
     int MaxHp;
 };
