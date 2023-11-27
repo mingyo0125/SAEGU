@@ -181,8 +181,11 @@
     <ClInclude Include="EventMgr.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game_Scene.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemSpawner.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="NosItem.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="pch.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="XItem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -210,9 +214,12 @@
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="Game_Scene.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemSpawner.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="NosItem.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PathMgr.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -225,6 +232,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="Vec2.cpp" />
+    <ClCompile Include="XItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc" />

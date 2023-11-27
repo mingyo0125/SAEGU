@@ -65,6 +65,12 @@
     <Filter Include="Engine\03. Manager\EnemyManager">
       <UniqueIdentifier>{c549c0b4-a35a-4cb1-95e7-17ef37983d5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Manager\ItemManager">
+      <UniqueIdentifier>{abed8871-d012-4e55-b800-c3a1f93ee0bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Object\Item">
+      <UniqueIdentifier>{e64c6e78-a6dd-44b6-815a-b420c1796ebd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -160,6 +166,18 @@
     <ClInclude Include="EnemySpawner.h">
       <Filter>Engine\03. Manager\EnemyManager</Filter>
     </ClInclude>
+    <ClInclude Include="ItemSpawner.h">
+      <Filter>Engine\03. Manager\ItemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Engine\04. Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="NosItem.h">
+      <Filter>Engine\04. Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="XItem.h">
+      <Filter>Engine\04. Object\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -249,6 +267,18 @@
     </ClCompile>
     <ClCompile Include="EnemySpawner.cpp">
       <Filter>Engine\03. Manager\EnemyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemSpawner.cpp">
+      <Filter>Engine\03. Manager\ItemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Engine\04. Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="NosItem.cpp">
+      <Filter>Engine\04. Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="XItem.cpp">
+      <Filter>Engine\04. Object\Item</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

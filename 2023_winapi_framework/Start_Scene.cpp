@@ -11,11 +11,11 @@
 #include "TimeMgr.h"
 
 Object* pTarget;
-float fMonsterSpeed = 0.15f;
+float fMonsterSpeed = 0.1f;
 float fMonsterHp = 10;
 float fMonsterScale = 30;
 
-float fMonsterSpawnTime = 1;
+float fMonsterSpawnTime = 3;
 float fCurrentTime = 0;
 
 void Start_Scene::Init()
