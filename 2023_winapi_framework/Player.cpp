@@ -12,8 +12,11 @@
 #include "Collider.h"
 #include "Animator.h"
 #include "Animation.h"
+#include "EventMgr.h"
 Player::Player()
 	: m_pTex(nullptr)
+	, Hp(0)
+	, MaxHp(10)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -22,9 +25,10 @@ Player::Player()
 
 	//m_pTex = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\plane.bmp");
 	
-	//m_pTex = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\jiwoo.bmp");
+	m_pTex = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\jiwoo.bmp");
+	Hp = &MaxHp; //Hp 초기화
 
-	m_pTex = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\hero.bmp");
+	//m_pTex = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\hero.bmp");
 
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(20.f,30.f));
@@ -32,20 +36,20 @@ Player::Player()
 	
 	// 엉엉엉 내 20분 ㅠㅠㅠ ㅁ날어;ㅣ남러;ㅁ나얼
 	CreateAnimator();
-	//GetAnimator()->CreateAnim(L"Jiwoo_Front", m_pTex, Vec2(0.f, 150.f),
-	//	Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
-	//GetAnimator()->CreateAnim(L"Jiwoo_Back", m_pTex, Vec2(0.f, 100.f),
-	//	Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
-	//GetAnimator()->CreateAnim(L"Jiwoo_Left", m_pTex, Vec2(0.f, 0.f),
-	//	Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
-	//GetAnimator()->CreateAnim(L"Jiwoo_Right", m_pTex, Vec2(0.f, 50.f),
-	//	Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
-	//GetAnimator()->CreateAnim(L"Jiwoo_Attack", m_pTex, Vec2(0.f, 200.f),
-	//	Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
-	//GetAnimator()->PlayAnim(L"Jiwoo_Front",true);
+	GetAnimator()->CreateAnim(L"Jiwoo_Front", m_pTex, Vec2(0.f, 150.f),
+		Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
+	GetAnimator()->CreateAnim(L"Jiwoo_Back", m_pTex, Vec2(0.f, 100.f),
+		Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
+	GetAnimator()->CreateAnim(L"Jiwoo_Left", m_pTex, Vec2(0.f, 0.f),
+		Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
+	GetAnimator()->CreateAnim(L"Jiwoo_Right", m_pTex, Vec2(0.f, 50.f),
+		Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
+	GetAnimator()->CreateAnim(L"Jiwoo_Attack", m_pTex, Vec2(0.f, 200.f),
+		Vec2(50.f, 50.f), Vec2(50.f, 0.f), 5, 0.2f);
+	GetAnimator()->PlayAnim(L"Jiwoo_Front",true);
 
 	//// 오프셋 건드리기
-	//Animation* pAnim = GetAnimator()->FindAnim(L"Jiwoo_Front");
+	Animation* pAnim = GetAnimator()->FindAnim(L"Jiwoo_Front");
 	//// 하나만
 	//pAnim->SetFrameOffset(0, Vec2(0.f, 20.f));
 
@@ -65,22 +69,22 @@ void Player::Update()
 	if (KEY_PRESS(KEY_TYPE::A))
 	{
 		vPos.x -= 100.f * fDT;
-		//GetAnimator()->PlayAnim(L"Jiwoo_Left", true);
+		GetAnimator()->PlayAnim(L"Jiwoo_Left", true);
 	}
 	if (KEY_PRESS(KEY_TYPE::D))
 	{
 		vPos.x += 100.f * fDT;
-		//GetAnimator()->PlayAnim(L"Jiwoo_Right", true);
+		GetAnimator()->PlayAnim(L"Jiwoo_Right", true);
 	}
 	if (KEY_PRESS(KEY_TYPE::W))
 	{
 		vPos.y -= 100.f * fDT;
-		//GetAnimator()->PlayAnim(L"Jiwoo_Back", true);
+		GetAnimator()->PlayAnim(L"Jiwoo_Back", true);
 	}
 	if (KEY_PRESS(KEY_TYPE::S))
 	{
 		vPos.y += 100.f * fDT;
-		//GetAnimator()->PlayAnim(L"Jiwoo_Front", true);
+		GetAnimator()->PlayAnim(L"Jiwoo_Front", true);
 	}
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
@@ -113,16 +117,16 @@ void Player::CreateBullet()
 
 void Player::Render(HDC _dc)
 {
-	Vec2 vPos = GetPos();
-	Vec2 vScale = GetScale();
-	int Width = m_pTex->GetWidth();
-	int Height = m_pTex->GetHeight();
+	//Vec2 vPos = GetPos();
+	//Vec2 vScale = GetScale();
+	//int Width = m_pTex->GetWidth();
+	//int Height = m_pTex->GetHeight();
 	// 1. 기본 옮기기
-	BitBlt(_dc
+	/*BitBlt(_dc
 		,(int)(vPos.x - vScale.x /2)
 		,(int)(vPos.y - vScale.y /2)
 		, Width,Height, m_pTex->GetDC()
-		,0,0,SRCCOPY);
+		,0,0,SRCCOPY);*/
 
 	//// 2. 색상 걷어내기
 	//TransparentBlt(_dc
@@ -146,4 +150,19 @@ void Player::Render(HDC _dc)
 	//	, Width, Height, m_pTex->GetDC()
 	//	, 0, 0, Width, Height, RGB(255, 0, 255));
 	Component_Render(_dc);
+}
+
+void Player::MinusHp(int damage)
+{
+	*Hp -= damage;
+	if (*Hp >= 0)
+	{
+		Die();
+	}
+}
+
+void Player::Die()
+{
+	//죽으면 할것들.
+	EventMgr::GetInst()->DeleteObject(this);
 }

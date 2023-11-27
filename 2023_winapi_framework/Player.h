@@ -10,9 +10,13 @@ public:
 public:
     void Update() override;
     void Render(HDC _dc) override;
+    void MinusHp(int damage);
+    void Die();
 private:
     void CreateBullet();
 private:
     Texture* m_pTex;
+    int* Hp;
+    int MaxHp;
 };
 
