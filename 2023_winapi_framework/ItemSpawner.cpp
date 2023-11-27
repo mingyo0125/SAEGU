@@ -1,7 +1,6 @@
-#include "ItemSpawner.h"
 #include "pch.h"
+#include "ItemSpawner.h"
 #include "Core.h"
-#include "Vec2.h"
 #include "Monster.h"
 #include "SceneMgr.h"
 #include "Scene.h"
@@ -11,29 +10,38 @@
 #include "NosItem.h"
 #include "XItem.h"
 
-void RandomItemSpawn(Vec2 spawnPos)
-{
-	srand((unsigned int)time(NULL));
-
-	ItemType it = rand() % 2 ? ItemType::Nos : ItemType::X;
-	SpawnItem(it, spawnPos);
-}
+float scale = 20;
 
 void SpawnItem(ItemType it, Vec2 spPos)
 {
+	
 	switch (it)
 	{
-	case Nos: 
+	case Nos:
 	{
-		Item item = NosItem(spPos);
+		Object* pItem = new NosItem(spPos);
+		pItem->SetPos(spPos);
+		pItem->SetScale(Vec2(scale, scale));
+		SceneMgr::GetInst()->GetCurScene()->AddObject(pItem, OBJECT_GROUP::ITEM);
 		break;
 	}
 	case X:
 	{
-		//Item item = XItem(spPos);
+		Object* pItem = new XItem(spPos);
+		pItem->SetPos(spPos);
+		pItem->SetScale(Vec2(scale, scale));
+		SceneMgr::GetInst()->GetCurScene()->AddObject(pItem, OBJECT_GROUP::ITEM);
 		break;
 	}
 	default:
 		break;
 	}
+}
+
+void ItemSpawner::RandomItemSpawn(Vec2 spawnPos)
+{
+	srand((unsigned int)time(NULL));
+
+	ItemType it = rand() % 2 ? ItemType::Nos : ItemType::X;
+	SpawnItem(it, spawnPos);
 }

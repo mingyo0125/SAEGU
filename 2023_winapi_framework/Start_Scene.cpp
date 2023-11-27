@@ -9,6 +9,7 @@
 #include "ResMgr.h"
 #include "EnemySpawner.h"
 #include "TimeMgr.h"
+#include "ItemSpawner.h"
 
 Object* pTarget;
 float fMonsterSpeed = 0.1f;
@@ -38,14 +39,20 @@ void Start_Scene::Init()
 void Start_Scene::Update()
 {
 	Scene::Update();
+
+	if (KEY_PRESS(KEY_TYPE::E))
+	{
+		ItemSpawner* item = new ItemSpawner();
+		item->RandomItemSpawn(Vec2(200, 200));
+	}
 	
-	if (fCurrentTime >= fMonsterSpawnTime)
+	/*if (fCurrentTime >= fMonsterSpawnTime)
 	{
 		EnemySpawner spawner;
 		spawner.SpawnEnemy(pTarget, fMonsterSpeed, fMonsterHp, fMonsterScale);
 		fCurrentTime = 0;
 	}
-	fCurrentTime += fDT;
+	fCurrentTime += fDT;*/
 }
 
 void Start_Scene::Render(HDC _dc)

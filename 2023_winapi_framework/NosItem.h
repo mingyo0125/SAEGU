@@ -1,6 +1,5 @@
 #pragma once
 #include "Item.h"
-#include "Vec2.h"
 
 class NosItem : public Item
 {

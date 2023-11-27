@@ -6,5 +6,11 @@ enum ItemType
 	X
 };
 
-void RandomItemSpawn(Vec2 spawnPos);
+class ItemSpawner
+{
+public:
+	void RandomItemSpawn(Vec2 spawnPos);
+};
+
+
 
