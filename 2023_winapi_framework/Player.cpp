@@ -42,7 +42,7 @@ Player::Player()
 	GetAnimator()->CreateAnim(L"Player_Right", m_pTex, Vec2(0.f, 0.f),
 		Vec2(128.f, 125.f), Vec2(128.f, 0.f), 11, 0.1f);
 	GetAnimator()->CreateAnim(L"Player_Left", m_pTex2, Vec2(0.f, 0.f),
-		Vec2(128.f, 125.f), Vec2(125.f, 0.f), 11, 0.1f);
+		Vec2(128.f, 125.f), Vec2(127.f, 0.f), 11, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -82,13 +82,27 @@ void Player::Update()
 	if (KEY_PRESS(KEY_TYPE::W))
 	{
 		vPos.y -= 100.f * fDT;
-		GetAnimator()->PlayAnim(L"Player_Right", false);
+		if (KEY_PRESS(KEY_TYPE::A))
+		{
+			GetAnimator()->PlayAnim(L"Player_Left", false);
+		}
+		else
+		{
+			GetAnimator()->PlayAnim(L"Player_Right", false);
+		}
 		isKeyPressing = true;
 	}
 	if (KEY_PRESS(KEY_TYPE::S))
 	{
 		vPos.y += 100.f * fDT;
-		GetAnimator()->PlayAnim(L"Player_Right", false);
+		if (KEY_PRESS(KEY_TYPE::A))
+		{
+			GetAnimator()->PlayAnim(L"Player_Left", false);
+		}
+		else
+		{
+			GetAnimator()->PlayAnim(L"Player_Right", false);
+		}
 		isKeyPressing = true;
 	}
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
