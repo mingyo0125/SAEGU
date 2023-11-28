@@ -18,6 +18,7 @@ Player::Player()
 	, m_pTex2(nullptr)
 	, Hp(0)
 	, MaxHp(10)
+	, isKeyPressing(false)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -29,6 +30,7 @@ Player::Player()
 	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\hero_walk_12.bmp");
 	
 	Hp = &MaxHp; //Hp 초기화
+	isKeyPressing = false;
 	
 
 	CreateCollider();
@@ -38,9 +40,9 @@ Player::Player()
 	// 엉엉엉 내 20분 ㅠㅠㅠ ㅁ날어;ㅣ남러;ㅁ나얼
 	CreateAnimator(); 
 	GetAnimator()->CreateAnim(L"Player_Right", m_pTex, Vec2(0.f, 0.f),
-		Vec2(512.f, 500.f), Vec2(512.f, 0.f), 13, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_Left", m_pTex2, Vec2(6144.f, 0.f),
-		Vec2(512.f, 500.f), Vec2(-512.f, 0.f), 13, 0.1f);
+		Vec2(512.f, 500.f), Vec2(512.f, 0.f), 11, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_Left", m_pTex2, Vec2(0.f, 0.f),
+		Vec2(512.f, 500.f), Vec2(508.f, 0.f), 11, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -69,40 +71,30 @@ void Player::Update()
 	{
 		vPos.x -= 100.f * fDT;
 		GetAnimator()->PlayAnim(L"Player_Left", false);
+		isKeyPressing = true;
 	}
 	if (KEY_PRESS(KEY_TYPE::D))
 	{
 		vPos.x += 100.f * fDT;
 		GetAnimator()->PlayAnim(L"Player_Right", false);
+		isKeyPressing = true;
 	}
 	if (KEY_PRESS(KEY_TYPE::W))
 	{
 		vPos.y -= 100.f * fDT;
-		//GetAnimator()->PlayAnim(L"Player_Front", true);
+		GetAnimator()->PlayAnim(L"Player_Right", false);
+		isKeyPressing = true;
 	}
 	if (KEY_PRESS(KEY_TYPE::S))
 	{
 		vPos.y += 100.f * fDT;
-		//GetAnimator()->PlayAnim(L"Jiwoo_Front", true);
+		GetAnimator()->PlayAnim(L"Player_Right", false);
+		isKeyPressing = true;
 	}
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
 		CreateBullet();
 		//ResMgr::GetInst()->Play(L"Shoot");
-	}
-	else
-	{
-		//Vec2 vPos = GetPos();
-		//Vec2 vScale = GetScale();
-		//int Width = m_pTexIdle->GetWidth();
-		//int Height = m_pTexIdle->GetHeight();
-		//// 1. 기본 옮기기
-		//BitBlt(Core::GetInst()->GetMainDC()
-		//	, (int)(vPos.x - vScale.x / 2)
-		//	, (int)(vPos.y - vScale.y / 2)
-		//	, Width, Height, m_pTexIdle->GetDC()
-		//	, 0, 0, SRCCOPY);
-
 	}
 	if(KEY_PRESS(KEY_TYPE::CTRL))
 		GetAnimator()->PlayAnim(L"Jiwoo_Attack", false, 1);
@@ -130,6 +122,20 @@ void Player::CreateBullet()
 
 void Player::Render(HDC _dc)
 {
+	if (!isKeyPressing)
+	{
+		Vec2 vPos = GetPos();
+		Vec2 vScale = GetScale();
+		int Width = m_pTexIdle->GetWidth();
+		int Height = m_pTexIdle->GetHeight();
+		// 1. 기본 옮기기
+		BitBlt(_dc
+			, (int)(vPos.x - vScale.x / 2) - 200
+			, (int)(vPos.y - vScale.y / 2) - 200
+			, Width, Height, m_pTexIdle->GetDC()
+			, 0, 0, SRCCOPY);
+	}
+	
 	//// 2. 색상 걷어내기
 	//TransparentBlt(_dc
 	//	, (int)(vPos.x - vScale.x / 2)

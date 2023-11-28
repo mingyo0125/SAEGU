@@ -20,5 +20,6 @@ private:
     Texture* m_pTexIdle;
     int* Hp;
     int MaxHp;
+    bool isKeyPressing;
 };
 
