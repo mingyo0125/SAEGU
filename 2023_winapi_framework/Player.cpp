@@ -27,8 +27,8 @@ Player::Player()
 	//strFilePath += L"Texture\\plane.bmp";
 	//m_pTex->Load(strFilePath);
 
-	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\hero_walk.bmp");
-	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\hero_walk2.bmp");
+	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
+	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
 	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\hero_walk_12.bmp");
 	
 	Hp = &MaxHp; //Hp 초기화
@@ -39,10 +39,10 @@ Player::Player()
 	
 	// 엉엉엉 내 20분 ㅠㅠㅠ ㅁ날어;ㅣ남러;ㅁ나얼
 	CreateAnimator(); 
-	GetAnimator()->CreateAnim(L"Player_Right", walkRightTex, Vec2(0.f, 0.f),
-		Vec2(128.f, 125.f), Vec2(128.f, 0.f), 11, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_Left", walkLeftTex, Vec2(0.f, 0.f),
-		Vec2(128.f, 125.f), Vec2(127.f, 0.f), 11, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_Right", walkRightTex, Vec2(30.f, 0.2f),
+		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 8, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_Left", walkLeftTex, Vec2(180.f, 0.2f),
+		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 8, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -70,7 +70,7 @@ void Player::Update()
 	{
 		if (KEY_PRESS(KEY_TYPE::A))
 		{
-			GetAnimator()->PlayAnim(L"Player_Left", false);
+			GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 
 			vPos.x -= 100.f * fDT;
 			isLeft = true;
@@ -78,7 +78,7 @@ void Player::Update()
 		}
 		if (KEY_PRESS(KEY_TYPE::D))
 		{
-			GetAnimator()->PlayAnim(L"Player_Right", false);
+			GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 			vPos.x += 100.f * fDT;
 			isLeft = false;
 			isKeyPressing = true;
@@ -88,11 +88,11 @@ void Player::Update()
 			vPos.y -= 100.f * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
-				GetAnimator()->PlayAnim(L"Player_Left", false);
+				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 			}
 			else
 			{
-				GetAnimator()->PlayAnim(L"Player_Right", false);
+				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 			}
 			isKeyPressing = true;
 		}
@@ -101,11 +101,11 @@ void Player::Update()
 			vPos.y += 100.f * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
-				GetAnimator()->PlayAnim(L"Player_Left", false);
+				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 			}
 			else
 			{
-				GetAnimator()->PlayAnim(L"Player_Right", false);
+				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 			}
 			isKeyPressing = true;
 		}
@@ -127,7 +127,7 @@ void Player::Update()
 		{
 			if (abs(degAngle) <= 90)
 			{
-				GetAnimator()->PlayAnim(L"Player_Right", false);
+				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 				isLeft = false;
 			}
 		}
@@ -135,7 +135,7 @@ void Player::Update()
 		{
 			if (abs(degAngle) >= 90)
 			{
-				GetAnimator()->PlayAnim(L"Player_Left", false);
+				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 				isLeft = true;
 			}
 		}
@@ -174,19 +174,20 @@ void Player::CreateBullet()
 
 void Player::Render(HDC _dc)
 {
-	if (!isKeyPressing)
-	{
-		Vec2 vPos = GetPos();
-		Vec2 vScale = GetScale();
-		int Width = m_pTexIdle->GetWidth();
-		int Height = m_pTexIdle->GetHeight();
-		// 1. 기본 옮기기
-		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) - 11
-			, (int)(vPos.y - vScale.y / 2) - 11
-			, Width, Height, m_pTexIdle->GetDC()
-			, 0, 0, SRCCOPY);
-	}
+	
+	//if (!isKeyPressing)
+	//{
+	//	Vec2 vPos = GetPos();
+	//	Vec2 vScale = GetScale();
+	//	int Width = m_pTexIdle->GetWidth();
+	//	int Height = m_pTexIdle->GetHeight();
+	//	// 1. 기본 옮기기
+	//	BitBlt(_dc
+	//		, (int)(vPos.x - vScale.x / 2) - 11
+	//		, (int)(vPos.y - vScale.y / 2) - 11
+	//		, Width, Height, m_pTexIdle->GetDC()
+	//		, 0, 0, SRCCOPY);
+	//}
 	
 	//// 2. 색상 걷어내기
 	//TransparentBlt(_dc
