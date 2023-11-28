@@ -40,9 +40,9 @@ Player::Player()
 	// ¾û¾û¾û ³» 20ºÐ ¤Ð¤Ð¤Ð ¤±³¯¾î;¤Ó³²·¯;¤±³ª¾ó
 	CreateAnimator(); 
 	GetAnimator()->CreateAnim(L"Player_Right", m_pTex, Vec2(0.f, 0.f),
-		Vec2(512.f, 500.f), Vec2(512.f, 0.f), 11, 0.1f);
+		Vec2(128.f, 125.f), Vec2(128.f, 0.f), 11, 0.1f);
 	GetAnimator()->CreateAnim(L"Player_Left", m_pTex2, Vec2(0.f, 0.f),
-		Vec2(512.f, 500.f), Vec2(508.f, 0.f), 11, 0.1f);
+		Vec2(128.f, 125.f), Vec2(125.f, 0.f), 11, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -96,6 +96,10 @@ void Player::Update()
 		CreateBullet();
 		//ResMgr::GetInst()->Play(L"Shoot");
 	}
+	else
+	{
+		isKeyPressing = false;
+	}
 	if(KEY_PRESS(KEY_TYPE::CTRL))
 		GetAnimator()->PlayAnim(L"Jiwoo_Attack", false, 1);
 	SetPos(vPos);
@@ -130,8 +134,8 @@ void Player::Render(HDC _dc)
 		int Height = m_pTexIdle->GetHeight();
 		// 1. ±âº» ¿Å±â±â
 		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) - 200
-			, (int)(vPos.y - vScale.y / 2) - 200
+			, (int)(vPos.x - vScale.x / 2) - 11
+			, (int)(vPos.y - vScale.y / 2) - 11
 			, Width, Height, m_pTexIdle->GetDC()
 			, 0, 0, SRCCOPY);
 	}
