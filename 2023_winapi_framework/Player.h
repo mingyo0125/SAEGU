@@ -15,11 +15,13 @@ public:
 private:
     void CreateBullet();
 private:
-    Texture* m_pTex;
-    Texture* m_pTex2;
+    Texture* walkRightTex;
+    Texture* walkLeftTex;
     Texture* m_pTexIdle;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;
+    bool isLeft;
+    bool isShooting;
 };
 

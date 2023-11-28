@@ -14,24 +14,24 @@
 #include "Animation.h"
 #include "EventMgr.h"
 Player::Player()
-	: m_pTex(nullptr)
-	, m_pTex2(nullptr)
+	: walkRightTex(nullptr)
+	, walkLeftTex(nullptr)
 	, Hp(0)
 	, MaxHp(10)
 	, isKeyPressing(false)
+	, isLeft(false)
+	, isShooting(false)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
 	//strFilePath += L"Texture\\plane.bmp";
 	//m_pTex->Load(strFilePath);
 
-	m_pTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\hero_walk.bmp");
-	m_pTex2 = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\hero_walk2.bmp");
+	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\hero_walk.bmp");
+	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\hero_walk2.bmp");
 	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\hero_walk_12.bmp");
 	
 	Hp = &MaxHp; //Hp ÃÊ±âÈ­
-	isKeyPressing = false;
-	
 
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(20.f,30.f));
@@ -39,9 +39,9 @@ Player::Player()
 	
 	// ¾û¾û¾û ³» 20ºÐ ¤Ð¤Ð¤Ð ¤±³¯¾î;¤Ó³²·¯;¤±³ª¾ó
 	CreateAnimator(); 
-	GetAnimator()->CreateAnim(L"Player_Right", m_pTex, Vec2(0.f, 0.f),
+	GetAnimator()->CreateAnim(L"Player_Right", walkRightTex, Vec2(0.f, 0.f),
 		Vec2(128.f, 125.f), Vec2(128.f, 0.f), 11, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_Left", m_pTex2, Vec2(0.f, 0.f),
+	GetAnimator()->CreateAnim(L"Player_Left", walkLeftTex, Vec2(0.f, 0.f),
 		Vec2(128.f, 125.f), Vec2(127.f, 0.f), 11, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
@@ -66,49 +66,80 @@ Player::~Player()
 void Player::Update()
 {
 	Vec2 vPos = GetPos();
+	if (!isShooting)
+	{
+		if (KEY_PRESS(KEY_TYPE::A))
+		{
+			GetAnimator()->PlayAnim(L"Player_Left", false);
 
-	if (KEY_PRESS(KEY_TYPE::A))
-	{
-		vPos.x -= 100.f * fDT;
-		GetAnimator()->PlayAnim(L"Player_Left", false);
-		isKeyPressing = true;
-	}
-	if (KEY_PRESS(KEY_TYPE::D))
-	{
-		vPos.x += 100.f * fDT;
-		GetAnimator()->PlayAnim(L"Player_Right", false);
-		isKeyPressing = true;
-	}
-	if (KEY_PRESS(KEY_TYPE::W))
-	{
-		vPos.y -= 100.f * fDT;
-		if (KEY_PRESS(KEY_TYPE::A))
-		{
-			GetAnimator()->PlayAnim(L"Player_Left", false);
+			vPos.x -= 100.f * fDT;
+			isLeft = true;
+			isKeyPressing = true;
 		}
-		else
+		if (KEY_PRESS(KEY_TYPE::D))
 		{
 			GetAnimator()->PlayAnim(L"Player_Right", false);
+			vPos.x += 100.f * fDT;
+			isLeft = false;
+			isKeyPressing = true;
 		}
-		isKeyPressing = true;
-	}
-	if (KEY_PRESS(KEY_TYPE::S))
-	{
-		vPos.y += 100.f * fDT;
-		if (KEY_PRESS(KEY_TYPE::A))
+		if (KEY_PRESS(KEY_TYPE::W))
 		{
-			GetAnimator()->PlayAnim(L"Player_Left", false);
+			vPos.y -= 100.f * fDT;
+			if (KEY_PRESS(KEY_TYPE::A))
+			{
+				GetAnimator()->PlayAnim(L"Player_Left", false);
+			}
+			else
+			{
+				GetAnimator()->PlayAnim(L"Player_Right", false);
+			}
+			isKeyPressing = true;
 		}
-		else
+		if (KEY_PRESS(KEY_TYPE::S))
 		{
-			GetAnimator()->PlayAnim(L"Player_Right", false);
+			vPos.y += 100.f * fDT;
+			if (KEY_PRESS(KEY_TYPE::A))
+			{
+				GetAnimator()->PlayAnim(L"Player_Left", false);
+			}
+			else
+			{
+				GetAnimator()->PlayAnim(L"Player_Right", false);
+			}
+			isKeyPressing = true;
 		}
-		isKeyPressing = true;
 	}
+	
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
+		isShooting = true;
+
+		Vec2 curPos = GetPos();
+		float deltaX = KeyMgr::GetInst()->GetMousePos().x - curPos.x;
+		float deltaY = KeyMgr::GetInst()->GetMousePos().y - curPos.y;
+
+		float radAngle = atan2(deltaY, deltaX);
+
+		float degAngle = radAngle * 180.0f / M_PI;
+
+		if (isLeft)
+		{
+			if (abs(degAngle) <= 90)
+			{
+				GetAnimator()->PlayAnim(L"Player_Right", false);
+				isLeft = false;
+			}
+		}
+		else
+		{
+			if (abs(degAngle) >= 90)
+			{
+				GetAnimator()->PlayAnim(L"Player_Left", false);
+				isLeft = true;
+			}
+		}
 		CreateBullet();
-		//ResMgr::GetInst()->Play(L"Shoot");
 	}
 	else
 	{
@@ -124,7 +155,9 @@ void Player::CreateBullet()
 {
 	Bullet* pBullet = new Bullet;
 	Vec2 vBulletPos = GetPos();
-	vBulletPos.y -= GetScale().y / 5.f;
+
+	vBulletPos.y -= 10.f;
+	vBulletPos.x = isLeft ? vBulletPos.x -= 50.f : vBulletPos.x += 50.f;
 
 	POINT pMousePos = KeyMgr::GetInst()->GetMousePos();
 
@@ -136,6 +169,7 @@ void Player::CreateBullet()
 	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vBulletPos);
 	pBullet->SetName(L"Player_Bullet");
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
+	//isShooting = false;
 }
 
 void Player::Render(HDC _dc)
