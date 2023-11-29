@@ -19,6 +19,10 @@ Player::Player()
 	, shootLeftTex(nullptr)
 	, shootRightTex(nullptr)
 	, m_pTexIdle(nullptr)
+	, hitTexLeft(nullptr)
+	, hitTexRight(nullptr)
+	, DieTexLeft(nullptr)
+	, DieTexRight(nullptr)
 	, Hp(0)
 	, MaxHp(10)
 	, isKeyPressing(false)
@@ -35,6 +39,10 @@ Player::Player()
 	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\static_idle.bmp");
 	shootRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRightShoot", L"Texture\\shoot_with_FX.bmp");
 	shootLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeftShoot", L"Texture\\shoot_with_FX2.bmp");
+	hitTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerHitLeft", L"Texture\\damagedLeft.bmp");
+	hitTexRight = ResMgr::GetInst()->TexLoad(L"PlayerHitRight", L"Texture\\damagedRight.bmp");
+	DieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerDieLeft", L"Texture\\deathLeft.bmp");
+	DieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerDieRight", L"Texture\\deathRight.bmp");
 	
 	Hp = &MaxHp; //Hp 초기화
 
@@ -52,6 +60,14 @@ Player::Player()
 		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 5, 0.1f);
 	GetAnimator()->CreateAnim(L"Player_ShootLeft", shootLeftTex, Vec2(146.f, 0.2f),
 		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 5, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_HitLeft", hitTexLeft, Vec2(146.f, 0.2f),
+		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 2, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_HitRight", hitTexRight, Vec2(30.f, 0.2f),
+		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 2, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_DieLeft", DieTexLeft, Vec2(146.f, 0.2f),
+		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 6, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_DieRight", DieTexRight, Vec2(10.f, 14.5f),
+		Vec2(53.f, 53.f), Vec2(0.f, 54.f), 6, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -161,6 +177,10 @@ void Player::Update()
 			}
 			isKeyPressing = true;
 		}
+		if (KEY_PRESS(KEY_TYPE::E))
+		{
+			MinusHp(1);
+		}
 	}
 	
 	SetPos(vPos);
@@ -230,7 +250,16 @@ void Player::Render(HDC _dc)
 void Player::MinusHp(int damage)
 {
 	*Hp -= damage;
-	if (*Hp >= 0)
+	if (isLeft)
+	{
+		GetAnimator()->PlayAnim(L"Player_HitLeft", false, 1);
+	}
+	else
+	{
+		GetAnimator()->PlayAnim(L"Player_HitRight", false, 1);
+	}
+
+	if (*Hp <= 0)
 	{
 		Die();
 	}
@@ -239,5 +268,15 @@ void Player::MinusHp(int damage)
 void Player::Die()
 {
 	//죽으면 할것들.
-	EventMgr::GetInst()->DeleteObject(this);
+	
+	if (isLeft)
+	{
+		GetAnimator()->PlayAnim(L"Player_DieLeft", false, 1);
+	}
+	else
+	{
+		GetAnimator()->PlayAnim(L"Player_DieRight", false, 1);
+	}
+	
+	//EventMgr::GetInst()->DeleteObject(this);
 }

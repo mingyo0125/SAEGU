@@ -20,6 +20,10 @@ private:
     Texture* shootLeftTex;
     Texture* shootRightTex;
     Texture* m_pTexIdle;
+    Texture* hitTexRight;
+    Texture* hitTexLeft;
+    Texture* DieTexLeft;
+    Texture* DieTexRight;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;
