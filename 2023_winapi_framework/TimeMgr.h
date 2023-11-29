@@ -7,12 +7,19 @@ public:
 	void Update();
 public:
 	const float& GetDT() const { return m_dT; }
+	const float& GetTime()
+	{
+		float preTime = time;
+		time = 0;
+		return preTime;
+	}
 private:
 	// DT(1프레임당 시간: Delta time)
 	LARGE_INTEGER m_llPrevCount; // 이전시간
 	LARGE_INTEGER m_llCurCount; // 현재시간
 	LARGE_INTEGER m_llFrequency; // 주파수
 	float m_dT; // 프레임간의 시간 값
+	float time; // 시간
 
 	// FPS
 	UINT  m_fps; // FPS

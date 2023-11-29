@@ -29,7 +29,7 @@ Player::Player()
 
 	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
 	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
-	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\hero_walk_12.bmp");
+	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\static_idle.bmp");
 	
 	Hp = &MaxHp; //Hp 초기화
 
@@ -66,6 +66,41 @@ Player::~Player()
 void Player::Update()
 {
 	Vec2 vPos = GetPos();
+	if (KEY_DOWN(KEY_TYPE::LBUTTON))
+	{
+		isShooting = true;
+
+		Vec2 curPos = GetPos();
+		float deltaX = KeyMgr::GetInst()->GetMousePos().x - curPos.x;
+		float deltaY = KeyMgr::GetInst()->GetMousePos().y - curPos.y;
+
+		float radAngle = atan2(deltaY, deltaX);
+
+		float degAngle = radAngle * 180.0f / M_PI;
+
+		if (isLeft)
+		{
+			if (abs(degAngle) <= 90)
+			{
+				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
+				isLeft = false;
+			}
+		}
+		else
+		{
+			if (abs(degAngle) >= 90)
+			{
+				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
+				isLeft = true;
+			}
+		}
+		CreateBullet();
+		isKeyPressing = true;
+	}
+	else if (KEY_UP(KEY_TYPE::LBUTTON))
+	{
+		isShooting = false;
+	}
 	if (!isShooting)
 	{
 		if (KEY_PRESS(KEY_TYPE::A))
@@ -111,40 +146,6 @@ void Player::Update()
 		}
 	}
 	
-	if (KEY_DOWN(KEY_TYPE::LBUTTON))
-	{
-		isShooting = true;
-
-		Vec2 curPos = GetPos();
-		float deltaX = KeyMgr::GetInst()->GetMousePos().x - curPos.x;
-		float deltaY = KeyMgr::GetInst()->GetMousePos().y - curPos.y;
-
-		float radAngle = atan2(deltaY, deltaX);
-
-		float degAngle = radAngle * 180.0f / M_PI;
-
-		if (isLeft)
-		{
-			if (abs(degAngle) <= 90)
-			{
-				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
-				isLeft = false;
-			}
-		}
-		else
-		{
-			if (abs(degAngle) >= 90)
-			{
-				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
-				isLeft = true;
-			}
-		}
-		CreateBullet();
-	}
-	else
-	{
-		isKeyPressing = false;
-	}
 	if(KEY_PRESS(KEY_TYPE::CTRL))
 		GetAnimator()->PlayAnim(L"Jiwoo_Attack", false, 1);
 	SetPos(vPos);
@@ -169,25 +170,23 @@ void Player::CreateBullet()
 	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vBulletPos);
 	pBullet->SetName(L"Player_Bullet");
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
-	//isShooting = false;
 }
 
 void Player::Render(HDC _dc)
 {
-	
-	//if (!isKeyPressing)
-	//{
-	//	Vec2 vPos = GetPos();
-	//	Vec2 vScale = GetScale();
-	//	int Width = m_pTexIdle->GetWidth();
-	//	int Height = m_pTexIdle->GetHeight();
-	//	// 1. 기본 옮기기
-	//	BitBlt(_dc
-	//		, (int)(vPos.x - vScale.x / 2) - 11
-	//		, (int)(vPos.y - vScale.y / 2) - 11
-	//		, Width, Height, m_pTexIdle->GetDC()
-	//		, 0, 0, SRCCOPY);
-	//}
+	if (!isKeyPressing)
+	{
+		Vec2 vPos = GetPos();
+		Vec2 vScale = GetScale();
+		int Width = m_pTexIdle->GetWidth();
+		int Height = m_pTexIdle->GetHeight();
+		// 1. 기본 옮기기
+		BitBlt(_dc
+			, (int)(vPos.x - vScale.x / 2) + 25
+			, (int)(vPos.y - vScale.y / 2) + 25
+			, Width, Height, m_pTexIdle->GetDC()
+			, 0, 0, SRCCOPY);
+	}
 	
 	//// 2. 색상 걷어내기
 	//TransparentBlt(_dc
