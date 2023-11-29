@@ -4,8 +4,13 @@
 #include "Collider.h"
 #include "Object.h"
 #include "EventMgr.h"
+#include "ItemSpawner.h"
+#include "KeyMgr.h"
 
-Monster::Monster(Object* target, float speed, int hp) 
+bool m_isDie;
+Vec2 m_vCurPos;
+
+Monster::Monster(Object* target, float speed, int hp)
 	: m_target(target), m_fSpeed(speed), m_iHp(hp)
 {
 	m_target = target;
@@ -21,13 +26,13 @@ Monster::~Monster()
 
 void Monster::Update()
 {
-	Vec2 vCurPos = GetPos();
+	m_vCurPos = GetPos();
 	Vec2 vTargetPos = m_target->GetPos();
-	Vec2 moveDir = (vTargetPos - vCurPos).Normalize();
+	Vec2 moveDir = (vTargetPos - m_vCurPos).Normalize();
 
-	vCurPos = vCurPos + (moveDir * m_fSpeed);
+	m_vCurPos = m_vCurPos + (moveDir * m_fSpeed);
 
-	SetPos(vCurPos);
+	SetPos(m_vCurPos);
 }
 
 void Monster::EnterCollision(Collider* _pOther)
@@ -35,10 +40,14 @@ void Monster::EnterCollision(Collider* _pOther)
 	const Object* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Player_Bullet")
 	{
+		if (m_isDie) return;
 		// 昏力贸府秦林搁蹬.
 		m_iHp--;
-		if(m_iHp<=0)
-			EventMgr::GetInst()->DeleteObject(this);
+		if (m_iHp <= 0)
+		{
+			m_isDie = true;
+			SetDie();
+		}
 	}
 }
 
@@ -48,4 +57,14 @@ void Monster::ExitCollision(Collider* _pOther)
 
 void Monster::StayCollision(Collider* _pOther)
 {
+}
+
+void Monster::SetDie()
+{
+	m_fSpeed = 0;
+
+	ItemSpawner* itemSpawner = new ItemSpawner();
+	itemSpawner->RandomItemSpawn(m_vCurPos);
+
+	EventMgr::GetInst()->DeleteObject(this);
 }

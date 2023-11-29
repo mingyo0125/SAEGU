@@ -5,6 +5,7 @@
 #include "SceneMgr.h"
 #include "EnemySpawner.h"
 #include "Scene.h"
+#include "ItemSpawner.h"
 #include <time.h>
 #include <utility>
 

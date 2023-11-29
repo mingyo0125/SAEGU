@@ -15,6 +15,7 @@ public:
 public:
 	void SetSpeed(float _f) { m_fSpeed = _f; }
 	void SetCenterPos(Vec2 _vPos) { m_vCenterPos = _vPos; }
+	void SetDie();
 	const float& GetSpeed() const { return m_fSpeed; }
 private:
 	float m_fSpeed; // 몬스터 스피드
