@@ -17,6 +17,8 @@ private:
 private:
     Texture* walkRightTex;
     Texture* walkLeftTex;
+    Texture* shootLeftTex;
+    Texture* shootRightTex;
     Texture* m_pTexIdle;
     int* Hp;
     int MaxHp;

@@ -16,6 +16,9 @@
 Player::Player()
 	: walkRightTex(nullptr)
 	, walkLeftTex(nullptr)
+	, shootLeftTex(nullptr)
+	, shootRightTex(nullptr)
+	, m_pTexIdle(nullptr)
 	, Hp(0)
 	, MaxHp(10)
 	, isKeyPressing(false)
@@ -30,6 +33,8 @@ Player::Player()
 	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
 	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
 	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\static_idle.bmp");
+	shootRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRightShoot", L"Texture\\shoot_with_FX.bmp");
+	shootLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeftShoot", L"Texture\\shoot_with_FX2.bmp");
 	
 	Hp = &MaxHp; //Hp ÃÊ±âÈ­
 
@@ -43,6 +48,10 @@ Player::Player()
 		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 8, 0.1f);
 	GetAnimator()->CreateAnim(L"Player_Left", walkLeftTex, Vec2(180.f, 0.2f),
 		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 8, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_ShootRight", shootRightTex, Vec2(0.f, 0.2f),
+		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 5, 0.1f);
+	GetAnimator()->CreateAnim(L"Player_ShootLeft", shootLeftTex, Vec2(146.f, 0.2f),
+		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 5, 0.1f);
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -82,16 +91,24 @@ void Player::Update()
 		{
 			if (abs(degAngle) <= 90)
 			{
-				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
+				GetAnimator()->PlayAnim(L"Player_ShootRight", false, 1);
 				isLeft = false;
+			}
+			else
+			{
+				GetAnimator()->PlayAnim(L"Player_ShootLeft", false, 1);
 			}
 		}
 		else
 		{
 			if (abs(degAngle) >= 90)
 			{
-				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
+				GetAnimator()->PlayAnim(L"Player_ShootLeft", false, 1);
 				isLeft = true;
+			}
+			else
+			{
+				GetAnimator()->PlayAnim(L"Player_ShootRight", false, 1);
 			}
 		}
 		CreateBullet();
@@ -146,8 +163,6 @@ void Player::Update()
 		}
 	}
 	
-	if(KEY_PRESS(KEY_TYPE::CTRL))
-		GetAnimator()->PlayAnim(L"Jiwoo_Attack", false, 1);
 	SetPos(vPos);
 	GetAnimator()->Update();
 }
