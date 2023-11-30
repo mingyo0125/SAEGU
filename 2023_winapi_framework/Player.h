@@ -24,10 +24,13 @@ private:
     Texture* hitTexLeft;
     Texture* DieTexLeft;
     Texture* DieTexRight;
+    Texture* StaticDieTexLeft;
+    Texture* StaticDieTexRight;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;
     bool isLeft;
     bool isShooting;
+    bool isDie;
 };
 

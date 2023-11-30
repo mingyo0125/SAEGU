@@ -23,11 +23,14 @@ Player::Player()
 	, hitTexRight(nullptr)
 	, DieTexLeft(nullptr)
 	, DieTexRight(nullptr)
+	, StaticDieTexRight(nullptr)
+	, StaticDieTexLeft(nullptr)
 	, Hp(0)
 	, MaxHp(10)
 	, isKeyPressing(false)
 	, isLeft(false)
 	, isShooting(false)
+	, isDie(false)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -43,6 +46,8 @@ Player::Player()
 	hitTexRight = ResMgr::GetInst()->TexLoad(L"PlayerHitRight", L"Texture\\damagedRight.bmp");
 	DieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerDieLeft", L"Texture\\deathLeft.bmp");
 	DieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerDieRight", L"Texture\\deathRight.bmp");
+	StaticDieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieRight", L"Texture\\static_die_Right.bmp");
+	StaticDieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieLeft", L"Texture\\static_die_Left.bmp");
 	
 	Hp = &MaxHp; //Hp 초기화
 
@@ -177,7 +182,7 @@ void Player::Update()
 			}
 			isKeyPressing = true;
 		}
-		if (KEY_PRESS(KEY_TYPE::E))
+		if (KEY_DOWN(KEY_TYPE::E))
 		{
 			MinusHp(1);
 		}
@@ -209,18 +214,51 @@ void Player::CreateBullet()
 
 void Player::Render(HDC _dc)
 {
-	if (!isKeyPressing)
+	if (!GetAnimator()->GetIsAnimating())
 	{
-		Vec2 vPos = GetPos();
-		Vec2 vScale = GetScale();
-		int Width = m_pTexIdle->GetWidth();
-		int Height = m_pTexIdle->GetHeight();
-		// 1. 기본 옮기기
-		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) + 25
-			, (int)(vPos.y - vScale.y / 2) + 25
-			, Width, Height, m_pTexIdle->GetDC()
-			, 0, 0, SRCCOPY);
+		if (isDie)
+		{
+			if (isLeft)
+			{
+				Vec2 vPos = GetPos();
+				Vec2 vScale = GetScale();
+				int Width = StaticDieTexLeft->GetWidth();
+				int Height = StaticDieTexLeft->GetHeight();
+				// 1. 기본 옮기기
+				BitBlt(_dc
+					, (int)(vPos.x - vScale.x / 2) + 25
+					, (int)(vPos.y - vScale.y / 2) + 25
+					, Width, Height, StaticDieTexLeft->GetDC()
+					, 0, 0, SRCCOPY);
+			}
+			else
+			{
+				Vec2 vPos = GetPos();
+				Vec2 vScale = GetScale();
+				int Width = StaticDieTexRight->GetWidth();
+				int Height = StaticDieTexRight->GetHeight();
+				// 1. 기본 옮기기
+				BitBlt(_dc
+					, (int)(vPos.x - vScale.x / 2) + 25
+					, (int)(vPos.y - vScale.y / 2) + 25
+					, Width, Height, StaticDieTexRight->GetDC()
+					, 0, 0, SRCCOPY);
+			}
+			
+		}
+		else
+		{
+			Vec2 vPos = GetPos();
+			Vec2 vScale = GetScale();
+			int Width = m_pTexIdle->GetWidth();
+			int Height = m_pTexIdle->GetHeight();
+			// 1. 기본 옮기기
+			BitBlt(_dc
+				, (int)(vPos.x - vScale.x / 2) + 25
+				, (int)(vPos.y - vScale.y / 2) + 25
+				, Width, Height, m_pTexIdle->GetDC()
+				, 0, 0, SRCCOPY);
+		}
 	}
 	
 	//// 2. 색상 걷어내기
@@ -250,6 +288,7 @@ void Player::Render(HDC _dc)
 void Player::MinusHp(int damage)
 {
 	*Hp -= damage;
+
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_HitLeft", false, 1);
@@ -268,7 +307,7 @@ void Player::MinusHp(int damage)
 void Player::Die()
 {
 	//죽으면 할것들.
-	
+	isDie = true;
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_DieLeft", false, 1);
@@ -277,6 +316,7 @@ void Player::Die()
 	{
 		GetAnimator()->PlayAnim(L"Player_DieRight", false, 1);
 	}
+
 	
 	//EventMgr::GetInst()->DeleteObject(this);
 }
