@@ -186,17 +186,23 @@ void Player::Update()
 			}
 			isKeyPressing = true;
 		}
-		if (KEY_DOWN(KEY_TYPE::LSHIFT))
+		if (KEY_PRESS(KEY_TYPE::LSHIFT))
 		{
-			while (curTime <= 1.f)
+			if (curTime >= 0.1f)
+			{
+				speed = 100.f;
+			}
+			else
 			{
 				speed = 500.f;
-
-				curTime += fDT;
 			}
-			speed = 100.f;
-			curTime = 0.f;
 
+			curTime += fDT;
+		}
+		if (KEY_UP(KEY_TYPE::LSHIFT))
+		{
+			curTime = 0;
+			speed = 0;
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
