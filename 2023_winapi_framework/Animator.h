@@ -17,6 +17,7 @@ public:
 					UINT _framecount, float _fDuration);
 	// 애니메이션 찾기함수
 	Animation* FindAnim(const wstring& _strName);
+	bool GetIsAnimating();
 
 	// 애니메이션 플레이 함수
 	void PlayAnim(const wstring& _strName, bool _bRepeat, int _repeatcnt = 1);
@@ -25,6 +26,7 @@ public:
 	const bool& GetRepeat() const { return m_IsRepeat; }
 	const int& GetRepeatcnt() const { return m_repeatcnt; }
 	void SetRepeatcnt() { --m_repeatcnt; }
+
 private:
 	map<wstring, Animation*> m_mapAnim;
 	Animation* m_pCurAnim;

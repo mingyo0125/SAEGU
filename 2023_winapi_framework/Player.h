@@ -10,9 +10,27 @@ public:
 public:
     void Update() override;
     void Render(HDC _dc) override;
+    void MinusHp(int damage);
+    void Die();
 private:
     void CreateBullet();
 private:
-    Texture* m_pTex;
+    Texture* walkRightTex;
+    Texture* walkLeftTex;
+    Texture* shootLeftTex;
+    Texture* shootRightTex;
+    Texture* m_pTexIdle;
+    Texture* hitTexRight;
+    Texture* hitTexLeft;
+    Texture* DieTexLeft;
+    Texture* DieTexRight;
+    Texture* StaticDieTexLeft;
+    Texture* StaticDieTexRight;
+    int* Hp;
+    int MaxHp;
+    bool isKeyPressing;
+    bool isLeft;
+    bool isShooting;
+    bool isDie;
 };
 

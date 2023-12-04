@@ -33,6 +33,7 @@ private:
 	vector<tAnimFrame> m_vecAnimFrame;
 	wstring m_strName;
 	Animator* m_pAnimator;
+	bool isEnded;
 
 };
 

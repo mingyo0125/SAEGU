@@ -34,6 +34,7 @@ void TimeMgr::Update()
 	m_accFrameTime += m_dT; // 시간 누적
 	if (m_accFrameTime >= 1.f) // 1초
 	{
+		time += 1;
 		m_fps = (UINT)(m_frameCount / m_accFrameTime);
 		m_accFrameTime = 0.f;
 		m_frameCount = 0;
@@ -42,6 +43,4 @@ void TimeMgr::Update()
 		//wsprintf();
 		//SetWindowText(Core::GetInst()->GetHwnd(), titlebuf);
 	}
-
-
 }

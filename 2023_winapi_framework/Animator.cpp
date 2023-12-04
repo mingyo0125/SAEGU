@@ -56,6 +56,18 @@ Animation* Animator::FindAnim(const wstring& _strName)
 	return iter->second;
 }
 
+bool Animator::GetIsAnimating()
+{
+	if (nullptr != m_pCurAnim)
+	{
+		return m_pCurAnim->isEnded;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void Animator::PlayAnim(const wstring& _strName, bool _bRepeat, int _repeatcnt)
 {
 	m_pCurAnim = FindAnim(_strName);
