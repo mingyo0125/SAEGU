@@ -12,9 +12,10 @@ public:
     void Render(HDC _dc) override;
     void MinusHp(int damage);
     void Die();
-    float GetSpeed() const { return speed; }
 private:
     void CreateBullet();
+public:
+    float Speed;
 private:
     Texture* walkRightTex;
     Texture* walkLeftTex;
@@ -33,7 +34,6 @@ private:
     bool isLeft;
     bool isShooting;
     bool isDie;
-    float speed;
     float curTime;
 };
 
