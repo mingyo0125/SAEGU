@@ -32,5 +32,7 @@ private:
     bool isLeft;
     bool isShooting;
     bool isDie;
+    float speed;
+    float curTime;
 };
 

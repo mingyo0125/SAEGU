@@ -31,11 +31,15 @@ Player::Player()
 	, isLeft(false)
 	, isShooting(false)
 	, isDie(false)
+	, speed(100.f)
+	, curTime(0.f)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
 	//strFilePath += L"Texture\\plane.bmp";
 	//m_pTex->Load(strFilePath);
+
+	Object::SetName(L"Player");
 
 	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
 	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
@@ -145,20 +149,20 @@ void Player::Update()
 		{
 			GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 
-			vPos.x -= 100.f * fDT;
+			vPos.x -= speed * fDT;
 			isLeft = true;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::D))
 		{
 			GetAnimator()->PlayAnim(L"Player_Right", false, 1);
-			vPos.x += 100.f * fDT;
+			vPos.x += speed * fDT;
 			isLeft = false;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::W))
 		{
-			vPos.y -= 100.f * fDT;
+			vPos.y -= speed * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -171,7 +175,7 @@ void Player::Update()
 		}
 		if (KEY_PRESS(KEY_TYPE::S))
 		{
-			vPos.y += 100.f * fDT;
+			vPos.y += speed * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -181,6 +185,17 @@ void Player::Update()
 				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 			}
 			isKeyPressing = true;
+		}
+		if (KEY_DOWN(KEY_TYPE::LSHIFT))
+		{
+			while (curTime <= 0.1f)
+			{
+				speed = 500.f;
+
+				curTime += fDT;
+			}
+			curTime = 0.f;
+
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
