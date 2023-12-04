@@ -31,7 +31,7 @@ Player::Player()
 	, isLeft(false)
 	, isShooting(false)
 	, isDie(false)
-	, speed(100.f)
+	, Speed(100.f)
 	, curTime(0.f)
 {
 	//m_pTex = new Texture;
