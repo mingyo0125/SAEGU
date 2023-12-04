@@ -15,7 +15,7 @@ public:
 	{
 		float fLen = Length();
 		// 0¿Ã∏È æ»µ≈.
-		assert(fLen !=0.f);
+		//assert(fLen !=0.f);
 		x /= fLen;
 		y /= fLen;
 		return *this;
@@ -40,6 +40,10 @@ public:
 	Vec2 operator * (int _i)
 	{
 		return Vec2(x * (float)_i, y * (float)_i);
+	}
+	Vec2 operator * (float _f)
+	{
+		return Vec2(x * _f, y * _f);
 	}
 public:
 	float x;

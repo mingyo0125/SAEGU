@@ -4,13 +4,19 @@
 #include "Collider.h"
 #include "Object.h"
 #include "EventMgr.h"
-Monster::Monster()
-	: m_fSpeed(100.f)
-	, m_fMaxDis(50.f)
-	, m_vCenterPos(Vec2(0.f,0.f))
-	, m_fDir(1.f) // 오른쪽부터 이동
-	, m_iHp(5)
+#include "ItemSpawner.h"
+#include "KeyMgr.h"
+
+bool m_isDie;
+Vec2 m_vCurPos;
+
+Monster::Monster(Object* target, float speed, int hp)
+	: m_target(target), m_fSpeed(speed), m_iHp(hp)
 {
+	m_target = target;
+	m_fSpeed = speed;
+	m_iHp = hp;
+
 	CreateCollider();
 }
 
@@ -20,18 +26,13 @@ Monster::~Monster()
 
 void Monster::Update()
 {
-	Vec2 vCurPos = GetPos();
-	vCurPos.x += m_fSpeed * fDT * m_fDir;
-	
-	// 내가 갈 수 있는 거리 최대로 갔냐? => 방향 바꿔줄거야.
-	float fDist = abs(m_vCenterPos.x - vCurPos.x) - m_fMaxDis;
-	if (fDist > 0.f)
-	{
-		// dir 바꾸기
-		m_fDir *= -1;
-		vCurPos.x += fDist * m_fDir;
-	}
-	SetPos(vCurPos);
+	m_vCurPos = GetPos();
+	Vec2 vTargetPos = m_target->GetPos();
+	Vec2 moveDir = (vTargetPos - m_vCurPos).Normalize();
+
+	m_vCurPos = m_vCurPos + (moveDir * m_fSpeed);
+
+	SetPos(m_vCurPos);
 }
 
 void Monster::EnterCollision(Collider* _pOther)
@@ -39,10 +40,14 @@ void Monster::EnterCollision(Collider* _pOther)
 	const Object* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Player_Bullet")
 	{
+		if (m_isDie) return;
 		// 삭제처리해주면돼.
 		m_iHp--;
-		if(m_iHp<=0)
-			EventMgr::GetInst()->DeleteObject(this);
+		if (m_iHp <= 0)
+		{
+			m_isDie = true;
+			SetDie();
+		}
 	}
 }
 
@@ -52,4 +57,14 @@ void Monster::ExitCollision(Collider* _pOther)
 
 void Monster::StayCollision(Collider* _pOther)
 {
+}
+
+void Monster::SetDie()
+{
+	m_fSpeed = 0;
+
+	ItemSpawner* itemSpawner = new ItemSpawner();
+	itemSpawner->RandomItemSpawn(m_vCurPos);
+
+	EventMgr::GetInst()->DeleteObject(this);
 }
