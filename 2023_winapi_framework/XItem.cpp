@@ -12,7 +12,6 @@ XItem::XItem(Vec2 spawnPos)
 }
 XItem::~XItem()
 {
-
 }
 
 void XItem::EnterCollision(Collider* _pOther)
