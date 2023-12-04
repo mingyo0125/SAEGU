@@ -12,6 +12,7 @@ public:
     void Render(HDC _dc) override;
     void MinusHp(int damage);
     void Die();
+    float GetSpeed() const { return speed; }
 private:
     void CreateBullet();
 private:
