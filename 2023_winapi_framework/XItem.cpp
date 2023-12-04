@@ -2,6 +2,7 @@
 #include "XItem.h"
 #include "ResMgr.h"
 #include "Texture.h"
+#include "Collider.h"
 
 XItem::XItem(Vec2 spawnPos)
 	:Item(spawnPos)
@@ -16,11 +17,16 @@ XItem::~XItem()
 
 void XItem::EnterCollision(Collider* _pOther)
 {
-	UseItem();
+	const Object* collisionObj = _pOther->GetObj();
+	if (collisionObj->GetName() == L"Player")
+	{
+		UseItem((Player*)collisionObj);
+	}
 }
 
-void XItem::UseItem()
+void XItem::UseItem(Player* p)
 {
+
 }
 
 void XItem::Render(HDC _dc)

@@ -8,7 +8,7 @@ public:
 	~XItem();
 public:
 	virtual void EnterCollision(Collider* _pOther) override;
-	virtual void UseItem() override;
+	virtual void UseItem(Player* p) override;
 	void Render(HDC _dc) override;
 	Vec2 _spawnPos;
 };

@@ -10,6 +10,6 @@ public:
 	~Item();
 public:
 	void Update() override;
-	virtual void UseItem();
+	virtual void UseItem(Player* p);
 	Vec2 _spawnPos;
 };
