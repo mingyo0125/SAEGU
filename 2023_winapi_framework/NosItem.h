@@ -9,5 +9,6 @@ public:
 public:
 	virtual void EnterCollision(Collider* _pOther) override;
 	virtual void UseItem() override;
+	void Render(HDC _dc) override;
 	Vec2 _spawnPos;
 };

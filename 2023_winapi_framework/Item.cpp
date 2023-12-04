@@ -22,6 +22,7 @@ void Item::Update()
 {
 	float value = sin(fDT * _moveSpeed) * _moveDistance;
 	SetPos(Vec2(_spawnPos.x, _spawnPos.y + value));
+
 }
 
 void Item::UseItem()

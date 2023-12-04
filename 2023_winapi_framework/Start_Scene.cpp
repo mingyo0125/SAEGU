@@ -40,12 +40,6 @@ void Start_Scene::Update()
 {
 	Scene::Update();
 
-	/*if (KEY_PRESS(KEY_TYPE::E))
-	{
-		ItemSpawner* item = new ItemSpawner();
-		item->RandomItemSpawn(Vec2(200, 200));
-	}
-	*/
 	if (fCurrentTime >= fMonsterSpawnTime)
 	{
 		EnemySpawner spawner;

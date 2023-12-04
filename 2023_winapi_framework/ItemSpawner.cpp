@@ -9,24 +9,34 @@
 #include "Item.h"
 #include "NosItem.h"
 #include "XItem.h"
+#include "ResMgr.h"
+#include "Texture.h"
+#include "BaseWindow.h"
 
 float scale = 20;
 
 void SpawnItem(ItemType it, Vec2 spPos)
 {
-	
+	Core::GetInst()->GetMainDC();
 	switch (it)
 	{
 	case Nos:
 	{
+		
 		Object* pItem = new NosItem(spPos);
 		pItem->SetPos(spPos);
 		pItem->SetScale(Vec2(scale, scale));
+
+		Vec2 vPos = spPos;
+		Vec2 vScale = Vec2(scale, scale);
+		
+		// 1. 기본 옮기기
 		SceneMgr::GetInst()->GetCurScene()->AddObject(pItem, OBJECT_GROUP::ITEM);
 		break;
 	}
 	case X:
 	{
+
 		Object* pItem = new XItem(spPos);
 		pItem->SetPos(spPos);
 		pItem->SetScale(Vec2(scale, scale));
