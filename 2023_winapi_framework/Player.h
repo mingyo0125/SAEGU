@@ -14,6 +14,7 @@ public:
     void Die();
 private:
     void CreateBullet();
+    void TextureLoad();
 public:
     float Speed;
 private:
@@ -28,6 +29,12 @@ private:
     Texture* DieTexRight;
     Texture* StaticDieTexLeft;
     Texture* StaticDieTexRight;
+    Texture* hp1Tex;
+    Texture* hp2Tex;
+    Texture* hp3Tex;
+    Texture* hp4Tex;
+    Texture* hp5Tex;
+    Texture* hp6Tex;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;

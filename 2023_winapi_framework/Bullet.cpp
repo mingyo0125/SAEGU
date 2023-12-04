@@ -3,13 +3,17 @@
 #include "TimeMgr.h"
 #include "ResMgr.h"
 #include "Texture.h"
+#include "Animator.h"
+#include "Animation.h"
+#include "ResMgr.h"
 Bullet::Bullet()
 //	: m_fDir(-1.f)
 	: m_fTheta(0.f)
 	, m_vDir(Vec2(0.f,0.f))
-	, m_pTex(nullptr)
+	, m_pTex1(nullptr)
 {
-	m_pTex = ResMgr::GetInst()->TexLoad(L"Bullet", L"Texture\\Bullet.bmp");
+	m_pTex1 = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\Bullet.bmp");
+	
 	CreateCollider();
 }
 
@@ -27,19 +31,20 @@ void Bullet::Update()
 	vPos.x += 500.f * fDT * m_vDir.x;
 	vPos.y += 500.f * fDT * m_vDir.y;
 	SetPos(vPos);
+
 }
 
 void Bullet::Render(HDC _dc)
 {
 	Vec2 vPos = GetPos();
 	Vec2 vScale = GetScale();
-	int Width = m_pTex->GetWidth();
-	int Height = m_pTex->GetHeight();
+	int Width = m_pTex1->GetWidth();
+	int Height = m_pTex1->GetHeight();
 	//ELLIPSE_RENDER(vPos.x, vPos.y, vScale.x, vScale.y, _dc);
 	TransparentBlt(_dc
 		, (int)(vPos.x - vScale.x / 2)
 		, (int)(vPos.y - vScale.y / 2)
-		, Width, Height, m_pTex->GetDC()
+		, Width, Height, m_pTex1->GetDC()
 		, 0, 0, Width,Height, RGB(255,0,255));
 	Component_Render(_dc);
 }
