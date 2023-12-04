@@ -188,12 +188,13 @@ void Player::Update()
 		}
 		if (KEY_DOWN(KEY_TYPE::LSHIFT))
 		{
-			while (curTime <= 0.1f)
+			while (curTime <= 1.f)
 			{
 				speed = 500.f;
 
 				curTime += fDT;
 			}
+			speed = 100.f;
 			curTime = 0.f;
 
 		}
