@@ -149,20 +149,20 @@ void Player::Update()
 		{
 			GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 
-			vPos.x -= speed * fDT;
+			vPos.x -= Speed * fDT;
 			isLeft = true;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::D))
 		{
 			GetAnimator()->PlayAnim(L"Player_Right", false, 1);
-			vPos.x += speed * fDT;
+			vPos.x += Speed * fDT;
 			isLeft = false;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::W))
 		{
-			vPos.y -= speed * fDT;
+			vPos.y -= Speed * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -175,7 +175,7 @@ void Player::Update()
 		}
 		if (KEY_PRESS(KEY_TYPE::S))
 		{
-			vPos.y += speed * fDT;
+			vPos.y += Speed * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -190,11 +190,11 @@ void Player::Update()
 		{
 			if (curTime >= 0.1f)
 			{
-				speed = 100.f;
+				Speed = 100.f;
 			}
 			else
 			{
-				speed = 500.f;
+				Speed = 500.f;
 			}
 
 			curTime += fDT;
@@ -202,7 +202,7 @@ void Player::Update()
 		if (KEY_UP(KEY_TYPE::LSHIFT))
 		{
 			curTime = 0;
-			speed = 0;
+			Speed = 0;
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
