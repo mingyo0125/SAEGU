@@ -52,6 +52,11 @@ void Monster::StayCollision(Collider* _pOther)
 {
 }
 
+void Monster::Render(HDC _dc)
+{
+
+}
+
 void Monster::SetDie()
 {
 	m_fSpeed = 0;
