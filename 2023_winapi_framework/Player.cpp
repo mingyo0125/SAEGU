@@ -92,11 +92,45 @@ Player::Player()
 }
 Player::~Player()
 { 
-	//if (nullptr != m_pTex)
-	//	delete m_pTex;
+	/*if (nullptr != walkRightTex)
+		delete& walkRightTex;
+	if (nullptr != walkLeftTex)
+		delete& walkLeftTex;
+	if (nullptr != shootLeftTex)
+		delete& shootLeftTex;
+	if (nullptr != shootRightTex)
+		delete& shootRightTex;
+	if (nullptr != m_pTexIdle)
+		delete& m_pTexIdle;
+	if (nullptr != hitTexRight)
+		delete& hitTexRight;
+	if (nullptr != hitTexLeft)
+		delete& hitTexLeft;
+	if (nullptr != DieTexLeft)
+		delete& DieTexLeft;
+	if (nullptr != DieTexRight)
+		delete& DieTexRight;
+	if (nullptr != StaticDieTexLeft)
+		delete& StaticDieTexLeft;
+	if (nullptr != StaticDieTexRight)
+		delete& StaticDieTexRight;
+	if (nullptr != hp1Tex)
+		delete& hp1Tex;
+	if (nullptr != hp2Tex)
+		delete& hp2Tex;
+	if (nullptr != hp3Tex)
+		delete& hp4Tex;
+	if (nullptr != hp4Tex)
+		delete& hp4Tex;
+	if (nullptr != hp5Tex)
+		delete& hp5Tex;
+	if (nullptr != hp6Tex)
+		delete& hp6Tex;*/
+
 }
 void Player::Update()
 {
+	if (isDie && !GetAnimator()->GetIsAnimating()) { return; }
 	Vec2 vPos = GetPos();
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
@@ -109,7 +143,6 @@ void Player::Update()
 		float radAngle = atan2(deltaY, deltaX);
 
 		float degAngle = radAngle * 180.0f / M_PI;
-
 		if (isLeft)
 		{
 			if (abs(degAngle) <= 90)
@@ -204,7 +237,7 @@ void Player::Update()
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
-			MinusHp(1);
+			OnDamage(1);
 		}
 	}
 	
@@ -262,6 +295,48 @@ void Player::Render(HDC _dc)
 
 	int Width = hp1Tex->GetWidth();
 	int Height = hp1Tex->GetHeight();
+
+	if (!GetAnimator()->GetIsAnimating())
+	{
+		if (isDie)
+		{
+			if (isLeft)
+			{
+				int Width = StaticDieTexLeft->GetWidth();
+				int Height = StaticDieTexLeft->GetHeight();
+				// 1. 기본 옮기기
+				BitBlt(_dc
+					, (int)(vPos.x - vScale.x / 2) + 25
+					, (int)(vPos.y - vScale.y / 2) + 25
+					, Width, Height, StaticDieTexLeft->GetDC()
+					, 0, 0, SRCCOPY);
+			}
+			else
+			{
+				int Width = StaticDieTexRight->GetWidth();
+				int Height = StaticDieTexRight->GetHeight();
+				// 1. 기본 옮기기
+				BitBlt(_dc
+					, (int)(vPos.x - vScale.x / 2) + 25
+					, (int)(vPos.y - vScale.y / 2) + 25
+					, Width, Height, StaticDieTexRight->GetDC()
+					, 0, 0, SRCCOPY);
+			}
+
+		}
+		else
+		{
+			int Width = m_pTexIdle->GetWidth();
+			int Height = m_pTexIdle->GetHeight();
+			// 1. 기본 옮기기
+			BitBlt(_dc
+				, (int)(vPos.x - vScale.x / 2) + 25
+				, (int)(vPos.y - vScale.y / 2) + 25
+				, Width, Height, m_pTexIdle->GetDC()
+				, 0, 0, SRCCOPY);
+		}
+	}
+
 	switch (*Hp)
 	{
 	case 5: BitBlt(_dc
@@ -306,47 +381,6 @@ void Player::Render(HDC _dc)
 			, 0, 0, SRCCOPY);
 		break;
 	}
-
-	if (!GetAnimator()->GetIsAnimating())
-	{
-		if (isDie)
-		{
-			if (isLeft)
-			{
-				int Width = StaticDieTexLeft->GetWidth();
-				int Height = StaticDieTexLeft->GetHeight();
-				// 1. 기본 옮기기
-				BitBlt(_dc
-					, (int)(vPos.x - vScale.x / 2) + 25
-					, (int)(vPos.y - vScale.y / 2) + 25
-					, Width, Height, StaticDieTexLeft->GetDC()
-					, 0, 0, SRCCOPY);
-			}
-			else
-			{
-				int Width = StaticDieTexRight->GetWidth();
-				int Height = StaticDieTexRight->GetHeight();
-				// 1. 기본 옮기기
-				BitBlt(_dc
-					, (int)(vPos.x - vScale.x / 2) + 25
-					, (int)(vPos.y - vScale.y / 2) + 25
-					, Width, Height, StaticDieTexRight->GetDC()
-					, 0, 0, SRCCOPY);
-			}
-			
-		}
-		else
-		{
-			int Width = m_pTexIdle->GetWidth();
-			int Height = m_pTexIdle->GetHeight();
-			// 1. 기본 옮기기
-			BitBlt(_dc
-				, (int)(vPos.x - vScale.x / 2) + 25
-				, (int)(vPos.y - vScale.y / 2) + 25
-				, Width, Height, m_pTexIdle->GetDC()
-				, 0, 0, SRCCOPY);
-		}
-	}
 	
 	// 2. 색상 걷어내기
 	//TransparentBlt(_dc
@@ -372,16 +406,15 @@ void Player::Render(HDC _dc)
 	Component_Render(_dc);
 }
 
-void Player::MinusHp(int damage)
+void Player::OnDamage(int damage)
 {
 	*Hp -= damage;
-
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_HitLeft", false, 1);
 	}
 	else
-	{
+	{	
 		GetAnimator()->PlayAnim(L"Player_HitRight", false, 1);
 	}
 
@@ -395,6 +428,7 @@ void Player::Die()
 {
 	//죽으면 할것들.
 	isDie = true;
+
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_DieLeft", false, 1);
@@ -404,6 +438,5 @@ void Player::Die()
 		GetAnimator()->PlayAnim(L"Player_DieRight", false, 1);
 	}
 
-	
 	//EventMgr::GetInst()->DeleteObject(this);
 }
