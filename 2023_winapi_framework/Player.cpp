@@ -48,8 +48,6 @@ Player::Player()
 	Object::SetName(L"Player");
 
 	TextureLoad();
-
-	
 	
 	Hp = &MaxHp; //Hp ÃÊ±âÈ­
 
@@ -127,6 +125,20 @@ Player::~Player()
 	if (nullptr != hp6Tex)
 		delete& hp6Tex;*/
 
+}
+void Player::EnterCollision(Collider* _pOther)
+{
+	const Object* pOtherObj = _pOther->GetObj();
+	if (pOtherObj->GetName() == L"Monster")
+	{
+		OnDamage(1);
+	}
+}
+void Player::ExitCollision(Collider* _pOther)
+{
+}
+void Player::StayCollision(Collider* _pOther)
+{
 }
 void Player::Update()
 {

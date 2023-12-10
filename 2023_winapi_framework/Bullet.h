@@ -4,6 +4,8 @@ class Texture;
 class Bullet :
     public Object
 {
+private:
+    
 public:
     Bullet();
     ~Bullet();
