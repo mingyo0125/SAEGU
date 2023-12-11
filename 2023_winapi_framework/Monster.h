@@ -24,6 +24,5 @@ private:
 	Vec2 m_vCenterPos; // 중심 위치
 	Object* m_target; // 이동할 수 있는 최대 거리
 	int   m_iHp; // 체력
-	Texture* m_moveTexture;
 };
 

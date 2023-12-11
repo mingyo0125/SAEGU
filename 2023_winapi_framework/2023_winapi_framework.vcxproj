@@ -171,6 +171,8 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="BaseWindow.h" />
+    <ClInclude Include="BatMonster.h" />
+    <ClInclude Include="BirdMonster.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionMgr.h" />
@@ -196,6 +198,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="SelectGDI.h" />
+    <ClInclude Include="SlimeMonster.h" />
     <ClInclude Include="Start_Scene.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Texture.h" />
@@ -207,6 +210,8 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Animator.cpp" />
     <ClCompile Include="BaseWindow.cpp" />
+    <ClCompile Include="BatMonster.cpp" />
+    <ClCompile Include="BirdMonster.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionMgr.cpp" />
@@ -228,6 +233,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="SelectGDI.cpp" />
+    <ClCompile Include="SlimeMonster.cpp" />
     <ClCompile Include="Start_Scene.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
