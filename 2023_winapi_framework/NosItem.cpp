@@ -24,7 +24,7 @@ void NosItem::EnterCollision(Collider* _pOther)
 	}
 }
 
-void NosItem::UseItem(Player* p)
+void NosItem::UseItem(Object* p)
 {
 }
 
