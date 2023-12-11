@@ -337,17 +337,17 @@ void Player::Render(HDC _dc)
 			}
 
 		}
-		else
-		{
-			int Width = m_pTexIdle->GetWidth();
-			int Height = m_pTexIdle->GetHeight();
-			// 1. 기본 옮기기
-			BitBlt(_dc
-				, (int)(renderPos.x - vScale.x / 2) + 25
-				, (int)(renderPos.y - vScale.y / 2) + 25
-				, Width, Height, m_pTexIdle->GetDC()
-				, 0, 0, SRCCOPY);
-		}
+		//else
+		//{
+		//	int Width = m_pTexIdle->GetWidth();
+		//	int Height = m_pTexIdle->GetHeight();
+		//	// 1. 기본 옮기기
+		//	BitBlt(_dc
+		//		, (int)(renderPos.x - vScale.x / 2) + 25
+		//		, (int)(renderPos.y - vScale.y / 2) + 25
+		//		, Width, Height, m_pTexIdle->GetDC()
+		//		, 0, 0, SRCCOPY);
+		//}
 	}
 
 	switch (*Hp)

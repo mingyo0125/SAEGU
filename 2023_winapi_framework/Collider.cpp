@@ -2,6 +2,8 @@
 #include "Collider.h"
 #include "Object.h"
 #include "SelectGDI.h"
+#include "Camera.h"
+
 UINT Collider::m_sNextID = 0;
 Collider::Collider()
 	: m_pOwner(nullptr)
@@ -37,7 +39,10 @@ void Collider::Render(HDC _dc)
 		ePen = PEN_TYPE::RED;
 	SelectGDI pen(_dc, ePen);
 	SelectGDI brush(_dc, BRUSH_TYPE::HOLLOW);
-	RECT_RENDER(m_vFinalPos.x, m_vFinalPos.y, m_vScale.x, m_vScale.y, _dc);
+
+	Vec2 renderPos = Camera::GetInst()->GetRenderPos(m_vFinalPos);
+
+	RECT_RENDER(renderPos.x, renderPos.y, renderPos.x, renderPos.y, _dc);
 }
 
 void Collider::EnterCollision(Collider* _pOther)
