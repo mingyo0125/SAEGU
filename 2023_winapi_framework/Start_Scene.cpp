@@ -10,6 +10,7 @@
 #include "EnemySpawner.h"
 #include "TimeMgr.h"
 #include "ItemSpawner.h"
+#include "Camera.h"
 
 Object* pTarget;
 float fMonsterSpeed = 0.1f;
@@ -34,6 +35,11 @@ void Start_Scene::Init()
 
 	// 충돌체크해야되는것들을 설정하자.
 	CollisionMgr::GetInst()->CheckGroup(OBJECT_GROUP::BULLET, OBJECT_GROUP::MONSTER);
+	CollisionMgr::GetInst()->CheckGroup(OBJECT_GROUP::PLAYER, OBJECT_GROUP::MONSTER);
+
+	// Camera Look 설정
+	Vec2 resolution = Core::GetInst()->GetResolution();
+	Camera::GetInst()->SetLookAt(resolution / 2.f);
 }
 
 void Start_Scene::Update()

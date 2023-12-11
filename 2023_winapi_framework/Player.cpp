@@ -26,13 +26,18 @@ Player::Player()
 	, StaticDieTexRight(nullptr)
 	, StaticDieTexLeft(nullptr)
 	, Hp(0)
-	, MaxHp(10)
+	, MaxHp(5)
 	, isKeyPressing(false)
 	, isLeft(false)
 	, isShooting(false)
 	, isDie(false)
-	, Speed(100.f)
 	, curTime(0.f)
+	, hp1Tex(nullptr)
+	, hp2Tex(nullptr)
+	, hp3Tex(nullptr)
+	, hp4Tex(nullptr)
+	, hp5Tex(nullptr)
+	, hp6Tex(nullptr)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -41,19 +46,10 @@ Player::Player()
 
 	Object::SetName(L"Player");
 
-	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
-	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
-	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\static_idle.bmp");
-	shootRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRightShoot", L"Texture\\shoot_with_FX.bmp");
-	shootLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeftShoot", L"Texture\\shoot_with_FX2.bmp");
-	hitTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerHitLeft", L"Texture\\damagedLeft.bmp");
-	hitTexRight = ResMgr::GetInst()->TexLoad(L"PlayerHitRight", L"Texture\\damagedRight.bmp");
-	DieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerDieLeft", L"Texture\\deathLeft.bmp");
-	DieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerDieRight", L"Texture\\deathRight.bmp");
-	StaticDieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieRight", L"Texture\\static_die_Right.bmp");
-	StaticDieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieLeft", L"Texture\\static_die_Left.bmp");
+	TextureLoad();
 	
 	Hp = &MaxHp; //Hp 초기화
+	Object::SetSpeed(100.f);
 
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(20.f,30.f));
@@ -94,11 +90,59 @@ Player::Player()
 }
 Player::~Player()
 { 
-	//if (nullptr != m_pTex)
-	//	delete m_pTex;
+	/*if (nullptr != walkRightTex)
+		delete& walkRightTex;
+	if (nullptr != walkLeftTex)
+		delete& walkLeftTex;
+	if (nullptr != shootLeftTex)
+		delete& shootLeftTex;
+	if (nullptr != shootRightTex)
+		delete& shootRightTex;
+	if (nullptr != m_pTexIdle)
+		delete& m_pTexIdle;
+	if (nullptr != hitTexRight)
+		delete& hitTexRight;
+	if (nullptr != hitTexLeft)
+		delete& hitTexLeft;
+	if (nullptr != DieTexLeft)
+		delete& DieTexLeft;
+	if (nullptr != DieTexRight)
+		delete& DieTexRight;
+	if (nullptr != StaticDieTexLeft)
+		delete& StaticDieTexLeft;
+	if (nullptr != StaticDieTexRight)
+		delete& StaticDieTexRight;
+	if (nullptr != hp1Tex)
+		delete& hp1Tex;
+	if (nullptr != hp2Tex)
+		delete& hp2Tex;
+	if (nullptr != hp3Tex)
+		delete& hp4Tex;
+	if (nullptr != hp4Tex)
+		delete& hp4Tex;
+	if (nullptr != hp5Tex)
+		delete& hp5Tex;
+	if (nullptr != hp6Tex)
+		delete& hp6Tex;*/
+
+}
+void Player::EnterCollision(Collider* _pOther)
+{
+	const Object* pOtherObj = _pOther->GetObj();
+	if (pOtherObj->GetName() == L"Monster")
+	{
+		OnDamage(1);
+	}
+}
+void Player::ExitCollision(Collider* _pOther)
+{
+}
+void Player::StayCollision(Collider* _pOther)
+{
 }
 void Player::Update()
 {
+	if (isDie && !GetAnimator()->GetIsAnimating()) { return; }
 	Vec2 vPos = GetPos();
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
@@ -111,7 +155,6 @@ void Player::Update()
 		float radAngle = atan2(deltaY, deltaX);
 
 		float degAngle = radAngle * 180.0f / M_PI;
-
 		if (isLeft)
 		{
 			if (abs(degAngle) <= 90)
@@ -149,20 +192,20 @@ void Player::Update()
 		{
 			GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 
-			vPos.x -= Speed * fDT;
+			vPos.x -= Object::GetSpeed() * fDT;
 			isLeft = true;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::D))
 		{
 			GetAnimator()->PlayAnim(L"Player_Right", false, 1);
-			vPos.x += Speed * fDT;
+			vPos.x += Object::GetSpeed() * fDT;
 			isLeft = false;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::W))
 		{
-			vPos.y -= Speed * fDT;
+			vPos.y -= Object::GetSpeed() * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -175,7 +218,7 @@ void Player::Update()
 		}
 		if (KEY_PRESS(KEY_TYPE::S))
 		{
-			vPos.y += Speed * fDT;
+			vPos.y += Object::GetSpeed() * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -190,11 +233,11 @@ void Player::Update()
 		{
 			if (curTime >= 0.1f)
 			{
-				Speed = 100.f;
+				Object::SetSpeed(100.f);
 			}
 			else
 			{
-				Speed = 500.f;
+				Object::SetSpeed(500.f);
 			}
 
 			curTime += fDT;
@@ -202,11 +245,11 @@ void Player::Update()
 		if (KEY_UP(KEY_TYPE::LSHIFT))
 		{
 			curTime = 0;
-			Speed = 0;
+			Object::SetSpeed(100.f);
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
-			MinusHp(1);
+			OnDamage(1);
 		}
 	}
 	
@@ -234,56 +277,125 @@ void Player::CreateBullet()
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
 }
 
+void Player::TextureLoad()
+{
+	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
+	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
+	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\static_idle.bmp");
+	shootRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRightShoot", L"Texture\\shoot_with_FX.bmp");
+	shootLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeftShoot", L"Texture\\shoot_with_FX2.bmp");
+	hitTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerHitLeft", L"Texture\\damagedLeft.bmp");
+	hitTexRight = ResMgr::GetInst()->TexLoad(L"PlayerHitRight", L"Texture\\damagedRight.bmp");
+	DieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerDieLeft", L"Texture\\deathLeft.bmp");
+	DieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerDieRight", L"Texture\\deathRight.bmp");
+	StaticDieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieRight", L"Texture\\static_die_Right.bmp");
+	StaticDieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieLeft", L"Texture\\static_die_Left.bmp");
+
+	hp1Tex = ResMgr::GetInst()->TexLoad(L"Hp1", L"Texture\\zero.bmp");
+	hp2Tex = ResMgr::GetInst()->TexLoad(L"Hp2", L"Texture\\two.bmp");
+	hp3Tex = ResMgr::GetInst()->TexLoad(L"Hp3", L"Texture\\four.bmp");
+	hp4Tex = ResMgr::GetInst()->TexLoad(L"Hp4", L"Texture\\six.bmp");
+	hp5Tex = ResMgr::GetInst()->TexLoad(L"Hp5", L"Texture\\eight.bmp");
+	hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
+
+}
+
 void Player::Render(HDC _dc)
 {
+	Vec2 vPos = GetPos();
+	Vec2 vScale = GetScale();
+	Vec2 renderPos = Camera::GetInst()->GetRenderPos(vPos);
+
+	int Width = hp1Tex->GetWidth();
+	int Height = hp1Tex->GetHeight();
+
 	if (!GetAnimator()->GetIsAnimating())
 	{
 		if (isDie)
 		{
 			if (isLeft)
 			{
-				Vec2 vPos = GetPos();
-				Vec2 vScale = GetScale();
 				int Width = StaticDieTexLeft->GetWidth();
 				int Height = StaticDieTexLeft->GetHeight();
 				// 1. 기본 옮기기
 				BitBlt(_dc
-					, (int)(vPos.x - vScale.x / 2) + 25
-					, (int)(vPos.y - vScale.y / 2) + 25
+					, (int)(renderPos.x - vScale.x / 2) + 25
+					, (int)(renderPos.y - vScale.y / 2) + 25
 					, Width, Height, StaticDieTexLeft->GetDC()
 					, 0, 0, SRCCOPY);
 			}
 			else
 			{
-				Vec2 vPos = GetPos();
-				Vec2 vScale = GetScale();
 				int Width = StaticDieTexRight->GetWidth();
 				int Height = StaticDieTexRight->GetHeight();
 				// 1. 기본 옮기기
 				BitBlt(_dc
-					, (int)(vPos.x - vScale.x / 2) + 25
-					, (int)(vPos.y - vScale.y / 2) + 25
+					, (int)(renderPos.x - vScale.x / 2) + 25
+					, (int)(renderPos.y - vScale.y / 2) + 25
 					, Width, Height, StaticDieTexRight->GetDC()
 					, 0, 0, SRCCOPY);
 			}
-			
+
 		}
 		else
 		{
-			Vec2 vPos = GetPos();
-			Vec2 vScale = GetScale();
 			int Width = m_pTexIdle->GetWidth();
 			int Height = m_pTexIdle->GetHeight();
 			// 1. 기본 옮기기
 			BitBlt(_dc
-				, (int)(vPos.x - vScale.x / 2) + 25
-				, (int)(vPos.y - vScale.y / 2) + 25
+				, (int)(renderPos.x - vScale.x / 2) + 25
+				, (int)(renderPos.y - vScale.y / 2) + 25
 				, Width, Height, m_pTexIdle->GetDC()
 				, 0, 0, SRCCOPY);
 		}
 	}
+
+	switch (*Hp)
+	{
+	case 5: BitBlt(_dc
+		, (int)(renderPos.x - vScale.x / 2) + 15
+		, (int)(renderPos.y - vScale.y / 2)
+		, Width, Height, hp6Tex->GetDC()
+		, 0, 0, SRCCOPY);
+		break;
+	case 4:
+		BitBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
+			, Width, Height, hp5Tex->GetDC()
+			, 0, 0, SRCCOPY);
+		break;
+	case 3:
+		BitBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
+			, Width, Height, hp4Tex->GetDC()
+			, 0, 0, SRCCOPY);
+		break;
+	case 2:
+		BitBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
+			, Width, Height, hp3Tex->GetDC()
+			, 0, 0, SRCCOPY);
+		break;
+	case 1:
+		BitBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
+			, Width, Height, hp2Tex->GetDC()
+			, 0, 0, SRCCOPY);
+		break;
+	case 0:
+		BitBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
+			, Width, Height, hp1Tex->GetDC()
+			, 0, 0, SRCCOPY);
+		break;
+	}
 	
-	//// 2. 색상 걷어내기
+	// 2. 색상 걷어내기
 	//TransparentBlt(_dc
 	//	, (int)(vPos.x - vScale.x / 2)
 	//	, (int)(vPos.y - vScale.y / 2)
@@ -307,16 +419,15 @@ void Player::Render(HDC _dc)
 	Component_Render(_dc);
 }
 
-void Player::MinusHp(int damage)
+void Player::OnDamage(int damage)
 {
 	*Hp -= damage;
-
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_HitLeft", false, 1);
 	}
 	else
-	{
+	{	
 		GetAnimator()->PlayAnim(L"Player_HitRight", false, 1);
 	}
 
@@ -330,6 +441,7 @@ void Player::Die()
 {
 	//죽으면 할것들.
 	isDie = true;
+
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_DieLeft", false, 1);
@@ -339,6 +451,5 @@ void Player::Die()
 		GetAnimator()->PlayAnim(L"Player_DieRight", false, 1);
 	}
 
-	
 	//EventMgr::GetInst()->DeleteObject(this);
 }

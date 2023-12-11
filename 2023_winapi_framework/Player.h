@@ -7,15 +7,18 @@ class Player :
 public:
     Player();
     ~Player();
+private:
+    virtual void EnterCollision(Collider* _pOther) override;
+    virtual void ExitCollision(Collider* _pOther)  override;
+    virtual void StayCollision(Collider* _pOther)  override;
 public:
     void Update() override;
     void Render(HDC _dc) override;
-    void MinusHp(int damage);
+    void OnDamage(int damage);
     void Die();
 private:
     void CreateBullet();
-public:
-    float Speed;
+    void TextureLoad();
 private:
     Texture* walkRightTex;
     Texture* walkLeftTex;
@@ -28,6 +31,12 @@ private:
     Texture* DieTexRight;
     Texture* StaticDieTexLeft;
     Texture* StaticDieTexRight;
+    Texture* hp1Tex;
+    Texture* hp2Tex;
+    Texture* hp3Tex;
+    Texture* hp4Tex;
+    Texture* hp5Tex;
+    Texture* hp6Tex;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;
