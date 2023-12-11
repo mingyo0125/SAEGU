@@ -6,7 +6,7 @@
 #include "TimeMgr.h"
 #include "EventMgr.h"
 
-Player* player;
+Object* player;
 float curT;
 float level_up_speed_value = 50;
 float onEffectTime = 2;
@@ -29,7 +29,7 @@ void XItem::Update()
 	curT += fDT;
 	if (curT > onEffectTime)
 	{
-		player->Speed -= level_up_speed_value;
+		player->SetSpeed(player->GetSpeed() - level_up_speed_value);
 		onEffective = false;
 		EventMgr::GetInst()->DeleteObject(this);
 	}
@@ -39,17 +39,17 @@ void XItem::EnterCollision(Collider* _pOther)
 {
 	if (onEffective) return;
 
-	const Object* collisionObj = _pOther->GetObj();
+	Object* collisionObj = _pOther->GetObj();
 	if (collisionObj->GetName() == L"Player")
 	{
-		UseItem((Player*)collisionObj);
+		UseItem(collisionObj);
 	}
 }
 
-void XItem::UseItem(Player* p)
+void XItem::UseItem(Object* p)
 {
 	player = p;
-	player->Speed += level_up_speed_value;
+	p->SetSpeed(p->GetSpeed() + level_up_speed_value);
 }
 
 void XItem::Render(HDC _dc)
