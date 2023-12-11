@@ -25,7 +25,7 @@ void Item::Update()
 
 }
 
-void Item::UseItem()
+void Item::UseItem(Player* p)
 {
 }
 

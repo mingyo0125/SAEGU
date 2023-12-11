@@ -6,6 +6,9 @@
 #include "EventMgr.h"
 #include "ItemSpawner.h"
 #include "KeyMgr.h"
+#include "Animator.h"
+#include "Animation.h"
+#include "ResMgr.h"
 
 bool m_isDie;
 Vec2 m_vCurPos;
@@ -13,11 +16,11 @@ Vec2 m_vCurPos;
 Monster::Monster(Object* target, float speed, int hp)
 	: m_target(target), m_fSpeed(speed), m_iHp(hp)
 {
+	Object::SetName(L"Monster");
+
 	m_target = target;
 	m_fSpeed = speed;
 	m_iHp = hp;
-
-	CreateCollider();
 }
 
 Monster::~Monster()
@@ -33,21 +36,15 @@ void Monster::Update()
 	m_vCurPos = m_vCurPos + (moveDir * m_fSpeed);
 
 	SetPos(m_vCurPos);
+	GetAnimator()->Update();
 }
 
 void Monster::EnterCollision(Collider* _pOther)
 {
 	const Object* pOtherObj = _pOther->GetObj();
-	if (pOtherObj->GetName() == L"Player_Bullet")
+	if (pOtherObj->GetName() == L"Player") // 레이저 이름 정하면 바꾸기
 	{
-		if (m_isDie) return;
-		// 삭제처리해주면돼.
-		m_iHp--;
-		if (m_iHp <= 0)
-		{
-			m_isDie = true;
-			SetDie();
-		}
+		SetDie();
 	}
 }
 
@@ -57,6 +54,11 @@ void Monster::ExitCollision(Collider* _pOther)
 
 void Monster::StayCollision(Collider* _pOther)
 {
+}
+
+void Monster::Render(HDC _dc)
+{
+	Component_Render(_dc);
 }
 
 void Monster::SetDie()

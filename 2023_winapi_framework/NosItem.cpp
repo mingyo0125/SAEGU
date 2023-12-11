@@ -2,6 +2,7 @@
 #include "NosItem.h"
 #include "ResMgr.h"
 #include "Texture.h"
+#include "Collider.h"
 
 NosItem::NosItem(Vec2 spawnPos)
 	:Item(spawnPos)
@@ -16,10 +17,14 @@ NosItem::~NosItem()
 
 void NosItem::EnterCollision(Collider* _pOther)
 {
-	UseItem();
+	const Object* collisionObj = _pOther->GetObj();
+	if (collisionObj->GetName() == L"Player")
+	{
+		UseItem((Player*)collisionObj);
+	}
 }
 
-void NosItem::UseItem()
+void NosItem::UseItem(Player* p)
 {
 }
 

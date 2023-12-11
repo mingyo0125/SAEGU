@@ -1,6 +1,8 @@
 #pragma once
 #include "Object.h"
 #include "Player.h"
+#include "Texture.h"
+
 class Monster : public Object
 {
 public:
@@ -11,7 +13,7 @@ public:
 	virtual void EnterCollision(Collider* _pOther) override;
 	virtual void ExitCollision(Collider* _pOther)  override;
 	virtual void StayCollision(Collider* _pOther)  override;
-
+	void Render(HDC _dc) override;
 public:
 	void SetSpeed(float _f) { m_fSpeed = _f; }
 	void SetCenterPos(Vec2 _vPos) { m_vCenterPos = _vPos; }

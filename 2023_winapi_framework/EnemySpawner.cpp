@@ -2,6 +2,9 @@
 #include "Core.h"
 #include "Vec2.h"
 #include "Monster.h"
+#include "BatMonster.h"
+#include "BirdMonster.h"
+#include "SlimeMonster.h"
 #include "SceneMgr.h"
 #include "EnemySpawner.h"
 #include "Scene.h"
@@ -11,7 +14,30 @@
 
 void EnemySpawner::SpawnEnemy(Object* targetObj, float speed, int hp, float scale)
 {
-	Monster* pMonster = new Monster(targetObj, speed, hp);
+	srand((unsigned int)time(NULL));
+	int randomMonster = rand() % 3;
+	
+	Monster* pMonster = nullptr;
+	switch (randomMonster)
+	{
+	case 0:
+	{
+		pMonster = new BatMonster(targetObj, speed, hp);
+		break;
+	}
+	case 1:
+	{
+		pMonster = new BirdMonster(targetObj, speed, hp);
+		break;
+	}
+	case 2:
+	{
+		pMonster = new SlimeMonster(targetObj, speed, hp);
+	}
+	default:
+		break;
+	}
+
 	pMonster->SetPos(GetSpawnPos());
 	pMonster->SetScale(Vec2(scale, scale));
 	pMonster->SetCenterPos(pMonster->GetPos());

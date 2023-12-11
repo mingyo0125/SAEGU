@@ -72,7 +72,7 @@ void Animation::Render(HDC _dc)
 		,(int)(m_vecAnimFrame[m_CurFrame].vLT.y)
 		,(int)(m_vecAnimFrame[m_CurFrame].vSlice.x)
 		,(int)(m_vecAnimFrame[m_CurFrame].vSlice.y)
-		,RGB(255,0,255));
+		,RGB(255,255,255));
 }
 
 void Animation::Create(Texture* _pTex, Vec2 _vLT, Vec2 _vSliceSize, Vec2 _vStep, int _framecount, float _fDuration)
