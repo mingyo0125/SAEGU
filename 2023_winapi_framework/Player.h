@@ -19,8 +19,6 @@ public:
 private:
     void CreateBullet();
     void TextureLoad();
-public:
-    float Speed;
 private:
     Texture* walkRightTex;
     Texture* walkLeftTex;

@@ -1,4 +1,7 @@
 #pragma once
+
+#include "Camera.h"
+
 class Collider;
 class Animator;
 class Object
@@ -22,6 +25,7 @@ public:
 	void SetScale(Vec2 _vScale) { m_vScale = _vScale; }
 	const Vec2& GetPos() const { return m_vPos; }
 	const Vec2& GetScale() const { return m_vScale; }
+	const float GetSpeed() const { return speed; }
 	Collider* GetCollider() const 
 	{ return m_pCollider; }
 	Animator* GetAnimator()
@@ -30,6 +34,7 @@ public:
 	}
 	const wstring& GetName() const { return m_strName; }
 	void SetName(wstring _name) { m_strName = _name; }
+	void SetSpeed(float _speed) { speed = _speed; }
 	bool GetIsDead() const { return !m_IsAlive; }
 private:
 	void SetDead() { m_IsAlive = false; }
@@ -44,5 +49,6 @@ private:
 	wstring m_strName; // ¿Ã∏ß.
 	bool m_IsAlive;
 	Animator* m_pAnimator;
+	float speed;
 };
 

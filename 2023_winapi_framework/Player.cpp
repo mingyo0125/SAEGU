@@ -31,7 +31,6 @@ Player::Player()
 	, isLeft(false)
 	, isShooting(false)
 	, isDie(false)
-	, Speed(100.f)
 	, curTime(0.f)
 	, hp1Tex(nullptr)
 	, hp2Tex(nullptr)
@@ -50,6 +49,7 @@ Player::Player()
 	TextureLoad();
 	
 	Hp = &MaxHp; //Hp 초기화
+	Object::SetSpeed(100.f);
 
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(20.f,30.f));
@@ -192,20 +192,20 @@ void Player::Update()
 		{
 			GetAnimator()->PlayAnim(L"Player_Left", false, 1);
 
-			vPos.x -= Speed * fDT;
+			vPos.x -= Object::GetSpeed() * fDT;
 			isLeft = true;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::D))
 		{
 			GetAnimator()->PlayAnim(L"Player_Right", false, 1);
-			vPos.x += Speed * fDT;
+			vPos.x += Object::GetSpeed() * fDT;
 			isLeft = false;
 			isKeyPressing = true;
 		}
 		if (KEY_PRESS(KEY_TYPE::W))
 		{
-			vPos.y -= Speed * fDT;
+			vPos.y -= Object::GetSpeed() * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -218,7 +218,7 @@ void Player::Update()
 		}
 		if (KEY_PRESS(KEY_TYPE::S))
 		{
-			vPos.y += Speed * fDT;
+			vPos.y += Object::GetSpeed() * fDT;
 			if (KEY_PRESS(KEY_TYPE::A))
 			{
 				GetAnimator()->PlayAnim(L"Player_Left", false, 1);
@@ -233,11 +233,11 @@ void Player::Update()
 		{
 			if (curTime >= 0.1f)
 			{
-				Speed = 100.f;
+				Object::SetSpeed(100.f);
 			}
 			else
 			{
-				Speed = 500.f;
+				Object::SetSpeed(500.f);
 			}
 
 			curTime += fDT;
@@ -245,7 +245,7 @@ void Player::Update()
 		if (KEY_UP(KEY_TYPE::LSHIFT))
 		{
 			curTime = 0;
-			Speed = 100.f;
+			Object::SetSpeed(100.f);
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
@@ -304,6 +304,7 @@ void Player::Render(HDC _dc)
 {
 	Vec2 vPos = GetPos();
 	Vec2 vScale = GetScale();
+	Vec2 renderPos = Camera::GetInst()->GetRenderPos(vPos);
 
 	int Width = hp1Tex->GetWidth();
 	int Height = hp1Tex->GetHeight();
@@ -318,8 +319,8 @@ void Player::Render(HDC _dc)
 				int Height = StaticDieTexLeft->GetHeight();
 				// 1. 기본 옮기기
 				BitBlt(_dc
-					, (int)(vPos.x - vScale.x / 2) + 25
-					, (int)(vPos.y - vScale.y / 2) + 25
+					, (int)(renderPos.x - vScale.x / 2) + 25
+					, (int)(renderPos.y - vScale.y / 2) + 25
 					, Width, Height, StaticDieTexLeft->GetDC()
 					, 0, 0, SRCCOPY);
 			}
@@ -329,8 +330,8 @@ void Player::Render(HDC _dc)
 				int Height = StaticDieTexRight->GetHeight();
 				// 1. 기본 옮기기
 				BitBlt(_dc
-					, (int)(vPos.x - vScale.x / 2) + 25
-					, (int)(vPos.y - vScale.y / 2) + 25
+					, (int)(renderPos.x - vScale.x / 2) + 25
+					, (int)(renderPos.y - vScale.y / 2) + 25
 					, Width, Height, StaticDieTexRight->GetDC()
 					, 0, 0, SRCCOPY);
 			}
@@ -342,8 +343,8 @@ void Player::Render(HDC _dc)
 			int Height = m_pTexIdle->GetHeight();
 			// 1. 기본 옮기기
 			BitBlt(_dc
-				, (int)(vPos.x - vScale.x / 2) + 25
-				, (int)(vPos.y - vScale.y / 2) + 25
+				, (int)(renderPos.x - vScale.x / 2) + 25
+				, (int)(renderPos.y - vScale.y / 2) + 25
 				, Width, Height, m_pTexIdle->GetDC()
 				, 0, 0, SRCCOPY);
 		}
@@ -352,43 +353,43 @@ void Player::Render(HDC _dc)
 	switch (*Hp)
 	{
 	case 5: BitBlt(_dc
-		, (int)(vPos.x - vScale.x / 2) + 15
-		, (int)(vPos.y - vScale.y / 2)
+		, (int)(renderPos.x - vScale.x / 2) + 15
+		, (int)(renderPos.y - vScale.y / 2)
 		, Width, Height, hp6Tex->GetDC()
 		, 0, 0, SRCCOPY);
 		break;
 	case 4:
 		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) + 15
-			, (int)(vPos.y - vScale.y / 2)
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, hp5Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 3:
 		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) + 15
-			, (int)(vPos.y - vScale.y / 2)
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, hp4Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 2:
 		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) + 15
-			, (int)(vPos.y - vScale.y / 2)
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, hp3Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 1:
 		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) + 15
-			, (int)(vPos.y - vScale.y / 2)
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, hp2Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 0:
 		BitBlt(_dc
-			, (int)(vPos.x - vScale.x / 2) + 15
-			, (int)(vPos.y - vScale.y / 2)
+			, (int)(renderPos.x - vScale.x / 2) + 15
+			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, hp1Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;

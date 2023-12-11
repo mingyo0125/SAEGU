@@ -178,6 +178,7 @@
     <ClInclude Include="XItem.h">
       <Filter>Engine\04. Object\Item</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -280,5 +281,6 @@
     <ClCompile Include="XItem.cpp">
       <Filter>Engine\04. Object\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
 </Project>
