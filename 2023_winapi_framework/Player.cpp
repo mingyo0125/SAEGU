@@ -45,6 +45,7 @@ Player::Player()
 	//m_pTex->Load(strFilePath);
 
 	Object::SetName(L"Player");
+	Camera::GetInst()->SetTarget(this);
 
 	TextureLoad();
 	

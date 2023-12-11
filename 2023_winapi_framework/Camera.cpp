@@ -14,10 +14,10 @@ void Camera::Update()
 		{
 			_lookAt = _targetObj->GetPos();
 
-			if (KEY_PRESS(KEY_TYPE::W)) { _lookAt.y -= _targetObj->GetSpeed() * fDT; }
-			if (KEY_PRESS(KEY_TYPE::S)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
-			if (KEY_PRESS(KEY_TYPE::A)) { _lookAt.x -= _targetObj->GetSpeed() * fDT; }
-			if (KEY_PRESS(KEY_TYPE::D)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::UP)) { _lookAt.y -= _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::DOWN)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::LEFT)) { _lookAt.x -= _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::RIGHT)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
 		}
 	}
 
