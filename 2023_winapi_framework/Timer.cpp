@@ -2,11 +2,14 @@
 #include "Timer.h"
 #include "TimeMgr.h"
 #include <string>
+#include "EnemySpawner.h"
 
-Timer::Timer()
+Timer::Timer(EnemySpawner* enemySpawner)
 {
 	t_currentTime = 0;
-	t_currentSecnod = 0;
+	t_currentSecond.SetValue(0, enemySpawner);
+
+	t_enemySpawner = enemySpawner;
 }
 
 Timer::~Timer()
@@ -17,7 +20,7 @@ void Timer::Update()
 {
 	if (t_currentTime >= 1.f)
 	{
-		t_currentSecnod++;
+		t_currentSecond.SetValue(t_currentSecond.Getvalue() + 1, t_enemySpawner);
 		t_currentTime = 0.f;
 		SetTime();
 	}
@@ -37,8 +40,15 @@ void Timer::Render(HDC _dc)
 
 void Timer::SetTime()
 {
-	int minute = t_currentSecnod / 60;
-	int sec = t_currentSecnod % 60;
+	int minute = t_currentSecond.Getvalue() / 60;
+	int sec = t_currentSecond.Getvalue() % 60;
 	
 	str_currentSecond = std::to_wstring(minute) + L" : " + std::to_wstring(sec);
+}
+
+void CurrentSecond::SetValue(int newValue, EnemySpawner* e)
+{
+	if (newValue == second) return;
+	
+	(e->*(HandleSecChange))();
 }

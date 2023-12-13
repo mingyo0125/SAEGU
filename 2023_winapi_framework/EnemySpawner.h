@@ -1,4 +1,6 @@
 #pragma once
+#include "Timer.h"
+
 
 class EnemySpawner : public Object
 {
@@ -18,15 +20,16 @@ public:
 public:
 	virtual void Update() override;
 private:
-	float GetSpawnTime(int second);
+	void HandleSecondChange();
 private:
 	float fMonsterSpeed = 0.1f;
 	float fMonsterHp = 10;
 	float fMonsterScale = 30;
 	float fCurrentTime = 0;
+	float fSpawnTime = 0;
 
 	float limitTimeArr[8] = {10, 30, 60, 120, 150, 180, 200, 230};
-	float spawnTimeArr[8] = {4, 3.6, 3.2, 3, 2.7, 2.4, 2, 1.5};
+	float spawnTimeArr[8] = {5.5, 4.6, 4, 3.6, 3, 2.5, 1.9, 1.3};
 
 	Object* p_target;
 	Timer* p_timer;
