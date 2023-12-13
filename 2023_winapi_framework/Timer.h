@@ -19,7 +19,7 @@ public:
 class Timer : public Object
 {
 public:
-	Timer(EnemySpawner* enemySpawner);
+	Timer();
 	~Timer();
 public:
 	float t_currentTime;
@@ -30,4 +30,5 @@ public:
 private:
 	EnemySpawner* t_enemySpawner;
 	void SetTime();
+	Object* target;
 };
