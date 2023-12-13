@@ -13,6 +13,8 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "EventMgr.h"
+#include "Camera.h"
+
 Player::Player()
 	: walkRightTex(nullptr)
 	, walkLeftTex(nullptr)
@@ -252,6 +254,10 @@ void Player::Update()
 		{
 			OnDamage(1);
 		}
+		if (KEY_DOWN(KEY_TYPE::O))
+		{
+			Camera::GetInst()->CameraShake();
+		}
 	}
 	
 	SetPos(vPos);
@@ -274,7 +280,6 @@ void Player::CreateBullet()
 //	pBullet->SetDir(120* M_PI / 180);
 	//pBullet->SetDir(Vec2(10.f,15.f));
 	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vBulletPos);
-	pBullet->SetName(L"Player_Bullet");
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
 }
 

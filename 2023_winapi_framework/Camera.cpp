@@ -9,15 +9,26 @@ void Camera::Update()
 {
 	if (_targetObj != nullptr)
 	{
+		if (isCameraShake)
+		{
+			if (currentTime >= shakeTime)
+			{
+				_lookAt = _lookAt - moveVec;
+
+				currentTime = 0;
+				isCameraShake = false;
+			}
+
+			_lookAt = _lookAt + moveVec;
+			
+			currentTime += fDT;
+			return;
+		}
+
 		if (_targetObj->GetIsDead()) { _targetObj = nullptr; } // 죽으면 null로 초기화
 		else
 		{
 			_lookAt = _targetObj->GetPos();
-
-			if (KEY_PRESS(KEY_TYPE::W)) { _lookAt.y -= _targetObj->GetSpeed() * fDT; }
-			if (KEY_PRESS(KEY_TYPE::S)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
-			if (KEY_PRESS(KEY_TYPE::A)) { _lookAt.x -= _targetObj->GetSpeed() * fDT; }
-			if (KEY_PRESS(KEY_TYPE::D)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
 		}
 	}
 
@@ -30,5 +41,4 @@ void Camera::CalDiff()
 	Vec2 center = resolution / 2;
 
 	_diffVec = _lookAt - center;
-
 }

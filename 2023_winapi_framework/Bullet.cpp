@@ -6,6 +6,8 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "ResMgr.h"
+#include "Camera.h"
+
 Bullet::Bullet()
 //	: m_fDir(-1.f)
 	: m_fTheta(0.f)
@@ -41,10 +43,13 @@ void Bullet::Render(HDC _dc)
 	Vec2 vScale = GetScale();
 	int Width = m_pTex1->GetWidth();
 	int Height = m_pTex1->GetHeight();
+
+	Vec2 renderPos = Camera::GetInst()->GetRenderPos(vPos);
+
 	//ELLIPSE_RENDER(vPos.x, vPos.y, vScale.x, vScale.y, _dc);
 	TransparentBlt(_dc
-		, (int)(vPos.x - vScale.x / 2)
-		, (int)(vPos.y - vScale.y / 2)
+		, (int)(renderPos.x - vScale.x / 2)
+		, (int)(renderPos.y - vScale.y / 2)
 		, Width, Height, m_pTex1->GetDC()
 		, 0, 0, Width,Height, RGB(255,0,255));
 	Component_Render(_dc);
