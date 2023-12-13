@@ -3,6 +3,7 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "ResMgr.h"
+#include "Collider.h"
 
 BirdMonster::BirdMonster(Object* target, float speed, int hp)
 	:Monster(target, speed, hp)
@@ -17,3 +18,4 @@ BirdMonster::BirdMonster(Object* target, float speed, int hp)
 BirdMonster::~BirdMonster()
 {
 }
+

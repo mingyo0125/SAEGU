@@ -190,6 +190,11 @@
     <ClInclude Include="SlimeMonster.h">
       <Filter>Engine\04. Object\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Title_Scene.h" />
+    <ClInclude Include="Timer.h">
+      <Filter>Engine\04. Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -300,6 +305,11 @@
     </ClCompile>
     <ClCompile Include="SlimeMonster.cpp">
       <Filter>Engine\04. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Title_Scene.cpp" />
+    <ClCompile Include="Timer.cpp">
+      <Filter>Engine\04. Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

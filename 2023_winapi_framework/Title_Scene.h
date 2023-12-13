@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.h"
 
-class Start_Scene :
+class Title_Scene : 
     public Scene
 {
 public:
@@ -10,4 +10,3 @@ public:
     virtual void Render(HDC _dc) override;
     virtual void Release() override;
 };
-
