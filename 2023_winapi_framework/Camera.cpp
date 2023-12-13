@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "Core.h"
 #include "KeyMgr.h"
+#include "TimeMgr.h"
 
 void Camera::Update()
 {
@@ -12,12 +13,12 @@ void Camera::Update()
 		else
 		{
 			_lookAt = _targetObj->GetPos();
-		}
-	}
 
-	if (KEY_PRESS(KEY_TYPE::W))
-	{
-		/*_lookAt.y -= */
+			if (KEY_PRESS(KEY_TYPE::W)) { _lookAt.y -= _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::S)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::A)) { _lookAt.x -= _targetObj->GetSpeed() * fDT; }
+			if (KEY_PRESS(KEY_TYPE::D)) { _lookAt.y += _targetObj->GetSpeed() * fDT; }
+		}
 	}
 
 	CalDiff();

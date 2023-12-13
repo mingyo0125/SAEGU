@@ -14,7 +14,8 @@ public:
 	void SetTarget(Object* lookObj) { _targetObj = lookObj; }
 	Vec2 GetRenderPos(Vec2 objPos) { return objPos - _diffVec; }
 private:
-	void Update();
 	void CalDiff();
+public:
+	void Update();
 };
 
