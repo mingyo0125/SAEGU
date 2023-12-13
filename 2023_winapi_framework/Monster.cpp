@@ -42,7 +42,7 @@ void Monster::Update()
 void Monster::EnterCollision(Collider* _pOther)
 {
 	const Object* pOtherObj = _pOther->GetObj();
-	if (pOtherObj->GetName() == L"Player") // 레이저 이름 정하면 바꾸기
+	if (pOtherObj->GetName() == L"Bullet")
 	{
 		SetDie();
 	}

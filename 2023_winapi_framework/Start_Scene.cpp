@@ -11,14 +11,7 @@
 #include "TimeMgr.h"
 #include "ItemSpawner.h"
 #include "Camera.h"
-
-Object* pTarget;
-float fMonsterSpeed = 0.1f;
-float fMonsterHp = 10;
-float fMonsterScale = 30;
-
-float fMonsterSpawnTime = 3;
-float fCurrentTime = 0;
+#include "Timer.h"
 
 void Start_Scene::Init()
 {
@@ -26,7 +19,6 @@ void Start_Scene::Init()
 	Object* pObj = new Player;
 	pObj->SetPos((Vec2({Core::GetInst()->GetResolution().x /2, Core::GetInst()->GetResolution().y / 2})));
 	pObj->SetScale(Vec2(100.f,100.f));
-	pTarget = pObj;
 	AddObject(pObj, OBJECT_GROUP::PLAYER);
 
 	ResMgr::GetInst()->LoadSound(L"BGM", L"Sound\\Retro_bgm.wav", true);
@@ -40,19 +32,16 @@ void Start_Scene::Init()
 	// Camera Look ¼³Á¤
 	Vec2 resolution = Core::GetInst()->GetResolution();
 	Camera::GetInst()->SetLookAt(resolution / 2.f);
+
+	Timer* p_timer = new Timer();
+	AddObject(p_timer, OBJECT_GROUP::DEFAULT);
+
+	EnemySpawner* p_enemySpawner = new EnemySpawner(pObj, 10, 5, 20);
 }
 
 void Start_Scene::Update()
 {
 	Scene::Update();
-
-	if (fCurrentTime >= fMonsterSpawnTime)
-	{
-		EnemySpawner spawner;
-		spawner.SpawnEnemy(pTarget, fMonsterSpeed, fMonsterHp, fMonsterScale);
-		fCurrentTime = 0;
-	}
-	fCurrentTime += fDT;
 }
 
 void Start_Scene::Render(HDC _dc)
