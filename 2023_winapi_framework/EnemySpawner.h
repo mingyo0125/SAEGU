@@ -22,11 +22,12 @@ public:
 private:
 	void HandleSecondChange();
 private:
+	int idx = 0;
 	float fMonsterSpeed = 0.1f;
 	float fMonsterHp = 10;
 	float fMonsterScale = 30;
 	float fCurrentTime = 0;
-	float fSpawnTime = 3;
+	float fSpawnTime = 5.5;
 
 	float limitTimeArr[8] = {10, 30, 60, 120, 150, 180, 200, 230};
 	float spawnTimeArr[8] = {5.5, 4.6, 4, 3.6, 3, 2.5, 1.9, 1.3};

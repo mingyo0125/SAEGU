@@ -88,13 +88,10 @@ void EnemySpawner::Update()
 
 void EnemySpawner::HandleSecondChange()
 {
-	for (int i = 0; i < (sizeof(limitTimeArr) / sizeof(*limitTimeArr)); i++)
+	if (p_timer->t_currentSecond.second > limitTimeArr[idx])
 	{
-		if (p_timer->t_currentSecond.Getvalue() > limitTimeArr[i])
-		{
-			fSpawnTime = spawnTimeArr[i];
-			break;
-		}
+		idx++;
+		fSpawnTime = spawnTimeArr[idx];
 	}
 }
 
