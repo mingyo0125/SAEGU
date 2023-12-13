@@ -1,15 +1,14 @@
 #include "pch.h"
 #include "Timer.h"
 #include "TimeMgr.h"
+#include "SceneMgr.h"
 #include <string>
 #include "EnemySpawner.h"
+#include "Scene.h"
 
-Timer::Timer(EnemySpawner* enemySpawner)
+Timer::Timer()
 {
 	t_currentTime = 0;
-	t_currentSecond.SetValue(0, enemySpawner);
-
-	t_enemySpawner = enemySpawner;
 }
 
 Timer::~Timer()
@@ -20,6 +19,21 @@ void Timer::Update()
 {
 	if (t_currentTime >= 1.f)
 	{
+		if (target == nullptr)
+		{
+			auto objs = SceneMgr::GetInst()->GetCurScene()->GetGroupObject(OBJECT_GROUP::DEFAULT);
+			for (int i = 0; i < objs.size(); i++)
+			{
+				if (objs[i]->GetName() == L"EnemySpawner")
+				{
+					target = objs[i];
+					break;
+				}
+			}
+			
+			t_enemySpawner = (EnemySpawner*)target;
+		}
+		
 		t_currentSecond.SetValue(t_currentSecond.Getvalue() + 1, t_enemySpawner);
 		t_currentTime = 0.f;
 		SetTime();

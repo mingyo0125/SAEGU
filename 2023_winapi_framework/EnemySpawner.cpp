@@ -16,6 +16,8 @@
 
 EnemySpawner::EnemySpawner(Object* targetObj, float speed, int hp, float scale, Timer* timer)
 {
+	Object::SetName(L"EnemySpawner");
+
 	p_target = targetObj;
 	fMonsterSpeed = speed;
 	fMonsterHp = hp;

@@ -33,11 +33,11 @@ void Start_Scene::Init()
 	Vec2 resolution = Core::GetInst()->GetResolution();
 	Camera::GetInst()->SetLookAt(resolution / 2.f);
 
-	EnemySpawner* p_enemySpawner;
-	Timer* p_timer = new Timer(p_enemySpawner);
+	Timer* p_timer = new Timer();
 	AddObject(p_timer, OBJECT_GROUP::DEFAULT);
 
-	p_enemySpawner = new EnemySpawner(pObj, 10, 5, 20, p_timer);
+	EnemySpawner* p_enemySpawner = new EnemySpawner(pObj, 0.1, 5, 20, p_timer);
+	AddObject(p_enemySpawner, OBJECT_GROUP::DEFAULT);
 }
 
 void Start_Scene::Update()
