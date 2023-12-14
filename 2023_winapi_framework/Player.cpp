@@ -427,6 +427,7 @@ void Player::Render(HDC _dc)
 
 void Player::OnDamage(int damage)
 {
+	Camera::GetInst()->CameraShake();
 	*Hp -= damage;
 	if (isLeft)
 	{

@@ -37,6 +37,7 @@ bool Core::Init(HWND _hWnd, POINT _ptResolution)
 	KeyMgr::GetInst()->Init();
 	ResMgr::GetInst()->Init();
 	SceneMgr::GetInst()->Init();
+	Camera::GetInst()->Init();
 
 	return true;
 }
