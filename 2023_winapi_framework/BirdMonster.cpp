@@ -18,4 +18,3 @@ BirdMonster::BirdMonster(Object* target, float speed, int hp)
 BirdMonster::~BirdMonster()
 {
 }
-

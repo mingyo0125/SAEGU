@@ -61,7 +61,7 @@ void EnemySpawner::SpawnEnemy()
 	pMonster->SetScale(Vec2(fMonsterScale, fMonsterScale));
 	pMonster->SetCenterPos(pMonster->GetPos());
 
-	SceneMgr::GetInst()->GetCurScene()->AddObject(pMonster, OBJECT_GROUP::BULLET);
+	SceneMgr::GetInst()->GetCurScene()->AddObject(pMonster, OBJECT_GROUP::MONSTER);
 }
 
 Vec2 EnemySpawner::GetSpawnPos()

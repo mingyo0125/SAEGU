@@ -273,7 +273,7 @@ void Player::CreateBullet()
 //	pBullet->SetDir(120* M_PI / 180);
 	//pBullet->SetDir(Vec2(10.f,15.f));
 	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vBulletPos);
-	pBullet->SetName(L"Player_Bullet");
+	//pBullet->SetName(L"Player_Bullet");
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
 }
 

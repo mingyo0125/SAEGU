@@ -12,9 +12,8 @@ Bullet::Bullet()
 	, m_vDir(Vec2(0.f,0.f))
 	, m_pTex1(nullptr)
 {
-	Object::SetName(L"Bullet");
 	m_pTex1 = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\Bullet.bmp");
-	
+	Object::SetName(L"Bullet");
 	CreateCollider();
 }
 
