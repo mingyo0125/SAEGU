@@ -12,6 +12,7 @@
 #include "ItemSpawner.h"
 #include "Camera.h"
 #include "Timer.h"
+#include "SceneMgr.h"
 
 void Start_Scene::Init()
 {
@@ -28,6 +29,7 @@ void Start_Scene::Init()
 	// 충돌체크해야되는것들을 설정하자.
 	CollisionMgr::GetInst()->CheckGroup(OBJECT_GROUP::BULLET, OBJECT_GROUP::MONSTER);
 	CollisionMgr::GetInst()->CheckGroup(OBJECT_GROUP::PLAYER, OBJECT_GROUP::MONSTER);
+	CollisionMgr::GetInst()->CheckGroup(OBJECT_GROUP::PLAYER, OBJECT_GROUP::ITEM);
 
 	// Camera Look 설정
 	Vec2 resolution = Core::GetInst()->GetResolution();
@@ -43,6 +45,11 @@ void Start_Scene::Init()
 void Start_Scene::Update()
 {
 	Scene::Update();
+
+	if (KEY_DOWN(KEY_TYPE::ENTER))
+	{
+		SceneMgr::GetInst()->LoadScene(L"GameOver_Scene");
+	}
 }
 
 void Start_Scene::Render(HDC _dc)
@@ -54,4 +61,5 @@ void Start_Scene::Release()
 {
 	Scene::Release();
 	CollisionMgr::GetInst()->CheckReset();
+	ResMgr::GetInst()->Stop(SOUND_CHANNEL::BGM);
 }
