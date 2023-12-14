@@ -41,8 +41,8 @@ Player::Player()
 	, _hp4Tex(nullptr)
 	, _hp5Tex(nullptr)
 	, _hp6Tex(nullptr)
-	, speed(300.f)
-	, dashSpeed(500.f)
+	, speed(150.f)
+	, dashSpeed(700.f)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();

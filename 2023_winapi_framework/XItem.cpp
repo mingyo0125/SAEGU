@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "TimeMgr.h"
 #include "EventMgr.h"
+#include "Camera.h"
 
 Object* player;
 float curT;
@@ -56,14 +57,16 @@ void XItem::Render(HDC _dc)
 {
 	if (onEffective) return;
 
+	Vec2 renderPos = Camera::GetInst()->GetRenderPos(_spawnPos);
+
 	Texture* i_texture = ResMgr::GetInst()->TexLoad(L"Item", L"Texture\\XItem.bmp");
 
 	int Width = i_texture->GetWidth();
 	int Height = i_texture->GetHeight();
 
 	BitBlt(_dc
-		, (int)(_spawnPos.x - _spawnPos.x / 2)
-		, (int)(_spawnPos.y - _spawnPos.y / 2)
+		, (int)(renderPos.x - renderPos.x / 2)
+		, (int)(renderPos.y - renderPos.y / 2)
 		, Width, Height, i_texture->GetDC()
 		, 0, 0, SRCCOPY);
 }

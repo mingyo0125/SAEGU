@@ -9,15 +9,16 @@
 #include "Animator.h"
 #include "Animation.h"
 #include "ResMgr.h"
+#include "Camera.h"
 
 bool m_isDie;
 Vec2 m_vCurPos;
 
 Monster::Monster(Object* target, float speed, int hp)
-	: m_target(target), m_fSpeed(speed), m_iHp(hp)
+	: m_target(target), m_fSpeed(speed), m_iHp(hp), hpTex(nullptr)
 {
 	Object::SetName(L"Monster");
-
+	hpTex = ResMgr::GetInst()->TexLoad(L"HpTex", L"Texture\\Heart_Red_1.bmp");
 	m_target = target;
 	m_fSpeed = speed;
 	m_iHp = hp;
@@ -44,7 +45,8 @@ void Monster::EnterCollision(Collider* _pOther)
 	const Object* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Bullet")
 	{
-		SetDie();
+		//SetDie();
+		SetHit();
 	}
 }
 
@@ -58,7 +60,45 @@ void Monster::StayCollision(Collider* _pOther)
 
 void Monster::Render(HDC _dc)
 {
-	Component_Render(_dc);
+	Vec2 vPos = GetPos();
+	Vec2 vScale = GetScale();
+	Vec2 renderPos = Camera::GetInst()->GetRenderPos(vPos);
+	int Width = hpTex->GetWidth();
+	int Height = hpTex->GetHeight();
+
+	if (m_iHp == 3)
+	{
+		for (int i = 1; i <= 3; i++)
+		{
+			TransparentBlt(_dc
+				, (int)(renderPos.x - vScale.x / 2 * i)
+				, (int)(renderPos.y - vScale.y - 25)
+				, Width, Height, hpTex->GetDC()
+				, 0, 0, Width, Height, RGB(255, 0, 255));
+		}
+	}
+	else if (m_iHp == 2)
+	{
+		for (int i = 1; i <= 2; i++)
+		{
+			TransparentBlt(_dc
+				, (int)(renderPos.x - vScale.x / 2 * i)
+				, (int)(renderPos.y - vScale.y - 25)
+				, Width, Height, hpTex->GetDC()
+				, 0, 0, Width, Height, RGB(255, 0, 255));
+		}
+	}
+	else
+	{
+		TransparentBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2)
+			, (int)(renderPos.y - vScale.y - 25)
+			, Width, Height, hpTex->GetDC()
+			, 0, 0, Width, Height, RGB(255, 0, 255));
+	}
+	
+
+    Component_Render(_dc);
 }
 
 void Monster::SetDie()
@@ -69,4 +109,14 @@ void Monster::SetDie()
 	itemSpawner->RandomItemSpawn(m_vCurPos);
 
 	EventMgr::GetInst()->DeleteObject(this);
+}
+
+void Monster::SetHit()
+{
+	m_iHp -= 1;
+
+	if (m_iHp == 0)
+	{
+		SetDie();
+	}
 }

@@ -11,4 +11,6 @@ public:
 	virtual void UseItem(Object* p) override;
 	void Render(HDC _dc) override;
 	Vec2 _spawnPos;
+private:
+	Texture* i_texture;
 };

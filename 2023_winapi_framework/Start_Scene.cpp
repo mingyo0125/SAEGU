@@ -36,8 +36,8 @@ void Start_Scene::Init()
 
 	Timer* p_timer = new Timer();
 	AddObject(p_timer, OBJECT_GROUP::DEFAULT);
-
-	EnemySpawner* p_enemySpawner = new EnemySpawner(pObj, 0.1, 5, 20, p_timer);
+	int arr[3] = { 1, 3, 5 };
+	EnemySpawner* p_enemySpawner = new EnemySpawner(pObj, 0.1, arr, 20, p_timer);
 	AddObject(p_enemySpawner, OBJECT_GROUP::DEFAULT);
 }
 

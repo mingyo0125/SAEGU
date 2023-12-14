@@ -5,7 +5,7 @@
 class EnemySpawner : public Object
 {
 public:
-	EnemySpawner(Object* targetObj, float speed, int hp, float scale, Timer* timer);
+	EnemySpawner(Object* targetObj, float speed, int hp[], float scale, Timer* timer);
 	~EnemySpawner();
 
 public:
@@ -24,7 +24,9 @@ private:
 private:
 	int idx = 0;
 	float fMonsterSpeed = 0.1f;
-	float fMonsterHp = 10;
+	float fBatHp = 2.0f;
+	float fBirdHp = 3.0f;
+	float fSlimeHp = 1.0f;
 	float fMonsterScale = 30;
 	float fCurrentTime = 0;
 	float fSpawnTime = 4;
