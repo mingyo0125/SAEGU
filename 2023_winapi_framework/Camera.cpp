@@ -5,8 +5,9 @@
 #include "KeyMgr.h"
 #include "TimeMgr.h"
 
-void Camera::CameraShake()
+void Camera::CameraShake(float shakeM)
 {
+    shakeMagnitude = shakeM;
     isCameraShake = true;
     currentTime = 0.0f;
     originShakeMagnitude = shakeMagnitude;

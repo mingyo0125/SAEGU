@@ -268,11 +268,6 @@ void Player::Update()
 			OnDamage(1);
 			isIdle = false;
 		}
-		if (KEY_DOWN(KEY_TYPE::O))
-		{
-			Camera::GetInst()->CameraShake();
-			isIdle = false;
-		}
 	}
 	
 	SetPos(vPos);
@@ -281,6 +276,7 @@ void Player::Update()
 
 void Player::CreateBullet()
 {
+	Camera::GetInst()->CameraShake(3.f);
 	Bullet* pBullet = new Bullet;
 	Vec2 vBulletPos = GetPos();
 	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
@@ -444,7 +440,7 @@ void Player::Render(HDC _dc)
 
 void Player::OnDamage(int damage)
 {
-	Camera::GetInst()->CameraShake();
+	Camera::GetInst()->CameraShake(10.f);
 	*Hp -= damage;
 	if (isLeft)
 	{

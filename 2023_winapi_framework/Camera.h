@@ -29,7 +29,7 @@ private:
 public:
 	void Init();
 	void Update();
-	void CameraShake();
+	void CameraShake(float shakeM);
 
 };
 
