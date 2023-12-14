@@ -16,30 +16,33 @@
 #include "Camera.h"
 
 Player::Player()
-	: walkRightTex(nullptr)
-	, walkLeftTex(nullptr)
-	, shootLeftTex(nullptr)
-	, shootRightTex(nullptr)
+	: _walkRightTex(nullptr)
+	, _walkLeftTex(nullptr)
+	, _shootLeftTex(nullptr)
+	, _shootRightTex(nullptr)
 	, m_pTexIdle(nullptr)
-	, hitTexLeft(nullptr)
-	, hitTexRight(nullptr)
-	, DieTexLeft(nullptr)
-	, DieTexRight(nullptr)
-	, StaticDieTexRight(nullptr)
-	, StaticDieTexLeft(nullptr)
+	, _hitTexLeft(nullptr)
+	, _hitTexRight(nullptr)
+	, _dieTexLeft(nullptr)
+	, _dieTexRight(nullptr)
+	, _staticDieTexRight(nullptr)
+	, _staticDieTexLeft(nullptr)
 	, Hp(0)
 	, MaxHp(5)
 	, isKeyPressing(false)
 	, isLeft(false)
 	, isShooting(false)
 	, isDie(false)
+	, isIdle(true)
 	, curTime(0.f)
-	, hp1Tex(nullptr)
-	, hp2Tex(nullptr)
-	, hp3Tex(nullptr)
-	, hp4Tex(nullptr)
-	, hp5Tex(nullptr)
-	, hp6Tex(nullptr)
+	, _hp1Tex(nullptr)
+	, _hp2Tex(nullptr)
+	, _hp3Tex(nullptr)
+	, _hp4Tex(nullptr)
+	, _hp5Tex(nullptr)
+	, _hp6Tex(nullptr)
+	, speed(100.f)
+	, dashSpeed(500.f)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -52,7 +55,7 @@ Player::Player()
 	TextureLoad();
 	
 	Hp = &MaxHp; //Hp 초기화
-	Object::SetSpeed(100.f);
+	Object::SetSpeed(speed);
 
 	CreateCollider();
 	GetCollider()->SetScale(Vec2(20.f,30.f));
@@ -60,22 +63,23 @@ Player::Player()
 	
 	// 엉엉엉 내 20분 ㅠㅠㅠ ㅁ날어;ㅣ남러;ㅁ나얼
 	CreateAnimator(); 
-	GetAnimator()->CreateAnim(L"Player_Right", walkRightTex, Vec2(30.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_Right", _walkRightTex, Vec2(30.f, 0.2f),
 		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 8, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_Left", walkLeftTex, Vec2(180.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_Left", _walkLeftTex, Vec2(180.f, 0.2f),
 		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 8, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_ShootRight", shootRightTex, Vec2(0.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_ShootRight", _shootRightTex, Vec2(0.f, 0.2f),
 		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 5, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_ShootLeft", shootLeftTex, Vec2(146.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_ShootLeft", _shootLeftTex, Vec2(146.f, 0.2f),
 		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 5, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_HitLeft", hitTexLeft, Vec2(146.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_HitLeft", _hitTexLeft, Vec2(146.f, 0.2f),
 		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 2, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_HitRight", hitTexRight, Vec2(30.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_HitRight", _hitTexRight, Vec2(30.f, 0.2f),
 		Vec2(45.f, 56.f), Vec2(0.f, 57.f), 2, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_DieLeft", DieTexLeft, Vec2(146.f, 0.2f),
+	GetAnimator()->CreateAnim(L"Player_DieLeft", _dieTexLeft, Vec2(146.f, 0.2f),
 		Vec2(110.f, 56.f), Vec2(0.f, 57.f), 6, 0.1f);
-	GetAnimator()->CreateAnim(L"Player_DieRight", DieTexRight, Vec2(10.f, 14.5f),
+	GetAnimator()->CreateAnim(L"Player_DieRight", _dieTexRight, Vec2(10.f, 14.5f),
 		Vec2(53.f, 53.f), Vec2(0.f, 54.f), 6, 0.1f);
+
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -132,6 +136,9 @@ Player::~Player()
 void Player::EnterCollision(Collider* _pOther)
 {
 	const Object* pOtherObj = _pOther->GetObj();
+
+	MessageBox(NULL, pOtherObj->GetName().c_str(), L"Debug Info", MB_OK | MB_ICONINFORMATION);
+
 	if (pOtherObj->GetName() == L"Monster")
 	{
 		OnDamage(1);
@@ -151,9 +158,9 @@ void Player::Update()
 	{
 		isShooting = true;
 
-		Vec2 curPos = GetPos();
-		float deltaX = KeyMgr::GetInst()->GetMousePos().x - curPos.x;
-		float deltaY = KeyMgr::GetInst()->GetMousePos().y - curPos.y;
+		Vec2 curRenderPos = Camera::GetInst()->GetRenderPos(vPos);
+		float deltaX = KeyMgr::GetInst()->GetMousePos().x - curRenderPos.x;
+		float deltaY = KeyMgr::GetInst()->GetMousePos().y - curRenderPos.y;
 
 		float radAngle = atan2(deltaY, deltaX);
 
@@ -184,10 +191,12 @@ void Player::Update()
 		}
 		CreateBullet();
 		isKeyPressing = true;
+		isIdle = false;
 	}
 	else if (KEY_UP(KEY_TYPE::LBUTTON))
 	{
 		isShooting = false;
+		isIdle = false;
 	}
 	if (!isShooting)
 	{
@@ -198,6 +207,7 @@ void Player::Update()
 			vPos.x -= Object::GetSpeed() * fDT;
 			isLeft = true;
 			isKeyPressing = true;
+			isIdle = false;
 		}
 		if (KEY_PRESS(KEY_TYPE::D))
 		{
@@ -205,6 +215,7 @@ void Player::Update()
 			vPos.x += Object::GetSpeed() * fDT;
 			isLeft = false;
 			isKeyPressing = true;
+			isIdle = false;
 		}
 		if (KEY_PRESS(KEY_TYPE::W))
 		{
@@ -218,6 +229,7 @@ void Player::Update()
 				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 			}
 			isKeyPressing = true;
+			isIdle = false;
 		}
 		if (KEY_PRESS(KEY_TYPE::S))
 		{
@@ -231,32 +243,37 @@ void Player::Update()
 				GetAnimator()->PlayAnim(L"Player_Right", false, 1);
 			}
 			isKeyPressing = true;
+			isIdle = false;
 		}
 		if (KEY_PRESS(KEY_TYPE::LSHIFT))
 		{
 			if (curTime >= 0.1f)
 			{
-				Object::SetSpeed(100.f);
+				Object::SetSpeed(speed);
 			}
 			else
 			{
-				Object::SetSpeed(500.f);
+				Object::SetSpeed(dashSpeed);
 			}
 
 			curTime += fDT;
+			isIdle = false;
 		}
 		if (KEY_UP(KEY_TYPE::LSHIFT))
 		{
 			curTime = 0;
-			Object::SetSpeed(100.f);
+			Object::SetSpeed(speed);
+			isIdle = false;
 		}
 		if (KEY_DOWN(KEY_TYPE::E))
 		{
 			OnDamage(1);
+			isIdle = false;
 		}
 		if (KEY_DOWN(KEY_TYPE::O))
 		{
 			Camera::GetInst()->CameraShake();
+			isIdle = false;
 		}
 	}
 	
@@ -268,6 +285,7 @@ void Player::CreateBullet()
 {
 	Bullet* pBullet = new Bullet;
 	Vec2 vBulletPos = GetPos();
+	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
 
 	vBulletPos.y -= 10.f;
 	vBulletPos.x = isLeft ? vBulletPos.x -= 50.f : vBulletPos.x += 50.f;
@@ -279,30 +297,30 @@ void Player::CreateBullet()
 //	pBullet->SetDir(M_PI / 4 * 7);
 //	pBullet->SetDir(120* M_PI / 180);
 	//pBullet->SetDir(Vec2(10.f,15.f));
-	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vBulletPos);
+	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vRenderBulletPos);
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
 }
 
 void Player::TextureLoad()
 {
-	walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
-	walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
+	_walkRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRight", L"Texture\\move_with_FX.bmp");
+	_walkLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeft", L"Texture\\move_with_FX2.bmp");
 	m_pTexIdle = ResMgr::GetInst()->TexLoad(L"Player", L"Texture\\static_idle.bmp");
-	shootRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRightShoot", L"Texture\\shoot_with_FX.bmp");
-	shootLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeftShoot", L"Texture\\shoot_with_FX2.bmp");
-	hitTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerHitLeft", L"Texture\\damagedLeft.bmp");
-	hitTexRight = ResMgr::GetInst()->TexLoad(L"PlayerHitRight", L"Texture\\damagedRight.bmp");
-	DieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerDieLeft", L"Texture\\deathLeft.bmp");
-	DieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerDieRight", L"Texture\\deathRight.bmp");
-	StaticDieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieRight", L"Texture\\static_die_Right.bmp");
-	StaticDieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieLeft", L"Texture\\static_die_Left.bmp");
+	_shootRightTex = ResMgr::GetInst()->TexLoad(L"PlayerRightShoot", L"Texture\\shoot_with_FX.bmp");
+	_shootLeftTex = ResMgr::GetInst()->TexLoad(L"PlayerLeftShoot", L"Texture\\shoot_with_FX2.bmp");
+	_hitTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerHitLeft", L"Texture\\damagedLeft.bmp");
+	_hitTexRight = ResMgr::GetInst()->TexLoad(L"PlayerHitRight", L"Texture\\damagedRight.bmp");
+	_dieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerDieLeft", L"Texture\\deathLeft.bmp");
+	_dieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerDieRight", L"Texture\\deathRight.bmp");
+	_staticDieTexRight = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieRight", L"Texture\\static_die_Right.bmp");
+	_staticDieTexLeft = ResMgr::GetInst()->TexLoad(L"PlayerStaticDieLeft", L"Texture\\static_die_Left.bmp");
 
-	hp1Tex = ResMgr::GetInst()->TexLoad(L"Hp1", L"Texture\\zero.bmp");
-	hp2Tex = ResMgr::GetInst()->TexLoad(L"Hp2", L"Texture\\two.bmp");
-	hp3Tex = ResMgr::GetInst()->TexLoad(L"Hp3", L"Texture\\four.bmp");
-	hp4Tex = ResMgr::GetInst()->TexLoad(L"Hp4", L"Texture\\six.bmp");
-	hp5Tex = ResMgr::GetInst()->TexLoad(L"Hp5", L"Texture\\eight.bmp");
-	hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
+	_hp1Tex = ResMgr::GetInst()->TexLoad(L"Hp1", L"Texture\\zero.bmp");
+	_hp2Tex = ResMgr::GetInst()->TexLoad(L"Hp2", L"Texture\\two.bmp");
+	_hp3Tex = ResMgr::GetInst()->TexLoad(L"Hp3", L"Texture\\four.bmp");
+	_hp4Tex = ResMgr::GetInst()->TexLoad(L"Hp4", L"Texture\\six.bmp");
+	_hp5Tex = ResMgr::GetInst()->TexLoad(L"Hp5", L"Texture\\eight.bmp");
+	_hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
 
 }
 
@@ -312,8 +330,20 @@ void Player::Render(HDC _dc)
 	Vec2 vScale = GetScale();
 	Vec2 renderPos = Camera::GetInst()->GetRenderPos(vPos);
 
-	int Width = hp1Tex->GetWidth();
-	int Height = hp1Tex->GetHeight();
+	int Width = _hp1Tex->GetWidth();
+	int Height = _hp1Tex->GetHeight();
+
+	if (isIdle)
+	{
+		int Width = m_pTexIdle->GetWidth();
+		int Height = m_pTexIdle->GetHeight();
+		// 1. 기본 옮기기
+		BitBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 25
+			, (int)(renderPos.y - vScale.y / 2) + 25
+			, Width, Height, m_pTexIdle->GetDC()
+			, 0, 0, SRCCOPY);
+	}
 
 	if (!GetAnimator()->GetIsAnimating())
 	{
@@ -321,82 +351,71 @@ void Player::Render(HDC _dc)
 		{
 			if (isLeft)
 			{
-				int Width = StaticDieTexLeft->GetWidth();
-				int Height = StaticDieTexLeft->GetHeight();
+				int Width = _staticDieTexLeft->GetWidth();
+				int Height = _staticDieTexLeft->GetHeight();
 				// 1. 기본 옮기기
 				BitBlt(_dc
 					, (int)(renderPos.x - vScale.x / 2) + 25
 					, (int)(renderPos.y - vScale.y / 2) + 25
-					, Width, Height, StaticDieTexLeft->GetDC()
+					, Width, Height, _staticDieTexLeft->GetDC()
 					, 0, 0, SRCCOPY);
 			}
 			else
 			{
-				int Width = StaticDieTexRight->GetWidth();
-				int Height = StaticDieTexRight->GetHeight();
+				int Width = _staticDieTexRight->GetWidth();
+				int Height = _staticDieTexRight->GetHeight();
 				// 1. 기본 옮기기
 				BitBlt(_dc
 					, (int)(renderPos.x - vScale.x / 2) + 25
 					, (int)(renderPos.y - vScale.y / 2) + 25
-					, Width, Height, StaticDieTexRight->GetDC()
+					, Width, Height, _staticDieTexRight->GetDC()
 					, 0, 0, SRCCOPY);
 			}
-
 		}
-		//else
-		//{
-		//	int Width = m_pTexIdle->GetWidth();
-		//	int Height = m_pTexIdle->GetHeight();
-		//	// 1. 기본 옮기기
-		//	BitBlt(_dc
-		//		, (int)(renderPos.x - vScale.x / 2) + 25
-		//		, (int)(renderPos.y - vScale.y / 2) + 25
-		//		, Width, Height, m_pTexIdle->GetDC()
-		//		, 0, 0, SRCCOPY);
-		//}
 	}
 
 	switch (*Hp)
 	{
-	case 5: BitBlt(_dc
+	case 5:
+		BitBlt(_dc
 		, (int)(renderPos.x - vScale.x / 2) + 15
 		, (int)(renderPos.y - vScale.y / 2)
-		, Width, Height, hp6Tex->GetDC()
+		, Width, Height, _hp6Tex->GetDC()
 		, 0, 0, SRCCOPY);
 		break;
 	case 4:
 		BitBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
-			, Width, Height, hp5Tex->GetDC()
+			, Width, Height, _hp5Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 3:
 		BitBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
-			, Width, Height, hp4Tex->GetDC()
+			, Width, Height, _hp4Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 2:
 		BitBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
-			, Width, Height, hp3Tex->GetDC()
+			, Width, Height, _hp3Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 1:
 		BitBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
-			, Width, Height, hp2Tex->GetDC()
+			, Width, Height, _hp2Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	case 0:
 		BitBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
-			, Width, Height, hp1Tex->GetDC()
+			, Width, Height, _hp1Tex->GetDC()
 			, 0, 0, SRCCOPY);
 		break;
 	}
