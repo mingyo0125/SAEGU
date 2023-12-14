@@ -12,6 +12,7 @@
 #include "ItemSpawner.h"
 #include "Camera.h"
 #include "Timer.h"
+#include "SceneMgr.h"
 
 void Start_Scene::Init()
 {
@@ -44,6 +45,11 @@ void Start_Scene::Init()
 void Start_Scene::Update()
 {
 	Scene::Update();
+
+	if (KEY_DOWN(KEY_TYPE::ENTER))
+	{
+		SceneMgr::GetInst()->LoadScene(L"GameOver_Scene");
+	}
 }
 
 void Start_Scene::Render(HDC _dc)
@@ -55,4 +61,5 @@ void Start_Scene::Release()
 {
 	Scene::Release();
 	CollisionMgr::GetInst()->CheckReset();
+	ResMgr::GetInst()->Stop(SOUND_CHANNEL::BGM);
 }

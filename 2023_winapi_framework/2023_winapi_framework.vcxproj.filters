@@ -195,6 +195,9 @@
     <ClInclude Include="Timer.h">
       <Filter>Engine\04. Object</Filter>
     </ClInclude>
+    <ClInclude Include="GameOver_Scene.h">
+      <Filter>Engine\05. Scene\MainScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -310,6 +313,9 @@
     <ClCompile Include="Title_Scene.cpp" />
     <ClCompile Include="Timer.cpp">
       <Filter>Engine\04. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver_Scene.cpp">
+      <Filter>Engine\05. Scene\MainScene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
