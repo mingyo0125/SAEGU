@@ -198,6 +198,9 @@
     <ClInclude Include="GameOver_Scene.h">
       <Filter>Engine\05. Scene\MainScene</Filter>
     </ClInclude>
+    <ClInclude Include="GroundObj.h">
+      <Filter>Engine\04. Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="GameOver_Scene.cpp">
       <Filter>Engine\05. Scene\MainScene</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundObj.cpp">
+      <Filter>Engine\04. Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

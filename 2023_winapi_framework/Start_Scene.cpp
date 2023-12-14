@@ -13,9 +13,20 @@
 #include "Camera.h"
 #include "Timer.h"
 #include "SceneMgr.h"
+#include "GroundObj.h"
 
 void Start_Scene::Init()
 {
+	for (int i = -2; i < 3; i++)
+	{
+		for (int j = -2; j < 3; j++)
+		{
+			Object* pGround = new GroundObj(Vec2(1920 * j, 1920 * i));
+			pGround->SetPos(Vec2(0, 0));
+			AddObject(pGround, OBJECT_GROUP::DEFAULT);
+		}
+	}
+
 	//플레이어 생성
 	Object* pObj = new Player;
 	pObj->SetPos((Vec2({Core::GetInst()->GetResolution().x /2, Core::GetInst()->GetResolution().y / 2})));

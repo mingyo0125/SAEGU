@@ -51,12 +51,13 @@ void XItem::UseItem(Object* p)
 {
 	player = p;
 	p->SetSpeed(p->GetSpeed() + level_up_speed_value);
+	onEffective = true;
 }
 
 void XItem::Render(HDC _dc)
 {
 	if (onEffective) return;
-
+	Component_Render(_dc);
 	Vec2 renderPos = Camera::GetInst()->GetRenderPos(_spawnPos);
 
 	Texture* i_texture = ResMgr::GetInst()->TexLoad(L"Item", L"Texture\\XItem.bmp");

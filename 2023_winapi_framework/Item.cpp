@@ -12,6 +12,8 @@ Item::Item(Vec2 spawnPos)
 	:_spawnPos(spawnPos)
 {
 	_spawnPos = spawnPos;
+	CreateCollider();
+	GetCollider()->SetScale(Vec2(10, 10));
 }
 
 Item::~Item()
@@ -20,9 +22,7 @@ Item::~Item()
 
 void Item::Update()
 {
-	float value = sin(fDT * _moveSpeed) * _moveDistance;
-	SetPos(Vec2(_spawnPos.x, _spawnPos.y + value));
-
+	
 }
 
 void Item::UseItem(Object* p)
