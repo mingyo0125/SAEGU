@@ -9,6 +9,9 @@
 Timer::Timer()
 {
 	t_currentTime = 0;
+	t_currentSecond = CurrentSecond();
+	t_enemySpawner = nullptr;
+	target = nullptr;
 }
 
 Timer::~Timer()
@@ -34,7 +37,7 @@ void Timer::Update()
 			t_enemySpawner = (EnemySpawner*)target;
 		}
 		
-		t_currentSecond.SetValue(t_currentSecond.Getvalue() + 1, t_enemySpawner);
+		t_currentSecond.SetValue(t_currentSecond.second + 1, t_enemySpawner);
 		t_currentTime = 0.f;
 		SetTime();
 	}
@@ -54,15 +57,15 @@ void Timer::Render(HDC _dc)
 
 void Timer::SetTime()
 {
-	int minute = t_currentSecond.Getvalue() / 60;
-	int sec = t_currentSecond.Getvalue() % 60;
+	int minute = t_currentSecond.second / 60;
+	int sec = t_currentSecond.second % 60;
 	
 	str_currentSecond = std::to_wstring(minute) + L" : " + std::to_wstring(sec);
 }
 
 void CurrentSecond::SetValue(int newValue, EnemySpawner* e)
 {
-	if (newValue == second) return;
-	
+	second = newValue;
 	(e->*(HandleSecChange))();
 }
+

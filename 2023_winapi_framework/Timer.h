@@ -4,16 +4,12 @@
 class EnemySpawner;
 class CurrentSecond
 {
-private:
+public:
 	int second;	
 public:
 	void (EnemySpawner::*HandleSecChange)();
 public:
 	void SetValue(int newValue, EnemySpawner* e);
-	int Getvalue()
-	{
-		return second;
-	}
 };
 
 class Timer : public Object

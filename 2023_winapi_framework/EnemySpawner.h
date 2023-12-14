@@ -22,14 +22,15 @@ public:
 private:
 	void HandleSecondChange();
 private:
+	int idx = 0;
 	float fMonsterSpeed = 0.1f;
 	float fMonsterHp = 10;
 	float fMonsterScale = 30;
 	float fCurrentTime = 0;
-	float fSpawnTime = 3;
+	float fSpawnTime = 4;
 
 	float limitTimeArr[8] = {10, 30, 60, 120, 150, 180, 200, 230};
-	float spawnTimeArr[8] = {5.5, 4.6, 4, 3.6, 3, 2.5, 1.9, 1.3};
+	float spawnTimeArr[8] = {4, 3.4, 3, 2.6, 2, 1.6, 1, 0.6};
 
 	Object* p_target;
 	Timer* p_timer;
