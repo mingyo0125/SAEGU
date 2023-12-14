@@ -18,12 +18,10 @@ void Camera::ApplyShake()
     if (isCameraShake)
     {
         Object* tarObj = _targetObj;
-        _targetObj = nullptr;    
         float shakeX = sin(currentTime * 50.0f) * shakeMagnitude;
         float shakeY = cos(currentTime * 50.0f) * shakeMagnitude;
 
         _lookAt = _originLookAt + Vec2(shakeX, shakeY);
-        //MessageBox(NULL, L"Your debugging message here", L"Debug Info", MB_OK | MB_ICONINFORMATION);
         currentTime += fDT;
 
         if (currentTime >= shakeTime)
@@ -59,7 +57,7 @@ void Camera::Update()
     if (_targetObj != nullptr)
     {
         if (_targetObj->GetIsDead()) { _targetObj = nullptr; }
-        else
+        else if(!isCameraShake)
         {
             _lookAt = _targetObj->GetPos();
         }

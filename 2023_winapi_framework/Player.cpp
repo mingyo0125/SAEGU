@@ -41,7 +41,7 @@ Player::Player()
 	, _hp4Tex(nullptr)
 	, _hp5Tex(nullptr)
 	, _hp6Tex(nullptr)
-	, speed(100.f)
+	, speed(300.f)
 	, dashSpeed(500.f)
 {
 	//m_pTex = new Texture;
@@ -136,8 +136,6 @@ Player::~Player()
 void Player::EnterCollision(Collider* _pOther)
 {
 	const Object* pOtherObj = _pOther->GetObj();
-
-	MessageBox(NULL, pOtherObj->GetName().c_str(), L"Debug Info", MB_OK | MB_ICONINFORMATION);
 
 	if (pOtherObj->GetName() == L"Monster")
 	{
