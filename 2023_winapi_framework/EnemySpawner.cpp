@@ -10,6 +10,8 @@
 #include "Scene.h"
 #include "ItemSpawner.h"
 #include "TimeMgr.h"
+#include "ResMgr.h"
+#include "SelectGDI.h"
 #include <array>
 #include <time.h>
 #include <utility>
@@ -17,6 +19,7 @@
 EnemySpawner::EnemySpawner(Object* targetObj, float speed, int hp[], float scale, Timer* timer)
 {
 	Object::SetName(L"EnemySpawner");
+	ResMgr::GetInst()->AddFont(L"neodgm");
 
 	p_target = targetObj;
 	fMonsterSpeed = speed;
@@ -33,13 +36,10 @@ EnemySpawner::~EnemySpawner()
 {
 }
 
-void EnemySpawner::SpawnEnemy()
+void EnemySpawner::SpawnRandomEnemy()
 {
-	srand((unsigned int)time(NULL));
-	int randomMonster = rand() % 3;
-	
 	Monster* pMonster = nullptr;
-	switch (randomMonster)
+	switch (randomT % 3)
 	{
 	case 0:
 	{
@@ -64,28 +64,65 @@ void EnemySpawner::SpawnEnemy()
 	pMonster->SetCenterPos(pMonster->GetPos());
 
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pMonster, OBJECT_GROUP::MONSTER);
+	randomT++;
+	if (randomT >= 200)
+	{
+		randomT = 0;
+	}
 }
+
 
 Vec2 EnemySpawner::GetSpawnPos()
 {
-	srand((unsigned int)time(NULL));
-	int chooseAreaIdx = rand() % 4;
-	std::pair<Vec2, Vec2> chooseAreaPair = areaSizeArr[chooseAreaIdx];
+	std::pair<Vec2, Vec2> chooseAreaPair = areaSizeArr[randomS % 4];
 
 	int firstElement = rand() % (int)(chooseAreaPair.second.x - chooseAreaPair.first.x) + chooseAreaPair.first.x;
 	int secondElement = rand() % (int)(chooseAreaPair.second.y - chooseAreaPair.first.y) + chooseAreaPair.first.y;
-
+	randomS++;
+	if (randomS >= 200)
+	{
+		randomS = 0;
+	}
 	return Vec2(firstElement, secondElement);
 }
 
 void EnemySpawner::Update()
 {
+	if (fCrazyTime >= crazyEnemyTime)
+	{
+		fSpawnTime = 0.1f;
+		onWarnning = true;
+		fCrazyTime = 0;
+	}
+
+	if (onWarnning && fCrazyTime >= warnningTextTime)
+	{
+		onWarnning = false;
+	}
+
 	if (fCurrentTime >= fSpawnTime)
 	{
-		SpawnEnemy();
+		SpawnRandomEnemy();
 		fCurrentTime = 0;
 	}
+	
+	fCrazyTime += fDT;
 	fCurrentTime += fDT;
+}
+
+void EnemySpawner::Render(HDC _dc)
+{
+	if (!onWarnning) return;
+
+	HFONT myFont = ResMgr::GetInst()->LoadFont(L"neodgm", 50);
+	SelectGDI gdi(_dc, myFont);
+
+	SetBkMode(_dc, TRANSPARENT);
+	SetTextAlign(_dc, TA_CENTER);
+	SetTextColor(_dc, RGB(255, 255, 255));
+
+	TextOut(_dc, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 200,
+		TEXT("적들이 몰려옵니다!!!"), 12);
 }
 
 void EnemySpawner::HandleSecondChange()
@@ -93,7 +130,8 @@ void EnemySpawner::HandleSecondChange()
 	if (p_timer->t_currentSecond.second > limitTimeArr[idx])
 	{
 		idx++;
-		fSpawnTime = spawnTimeArr[idx];
+		if(!onWarnning)
+			fSpawnTime = spawnTimeArr[idx];
 	}
 }
 

@@ -15,24 +15,33 @@ public:
 											{Vec2(WINDOW_WIDTH - 20, 0), Vec2(WINDOW_WIDTH, WINDOW_HEIGHT)}
 	};
 
-	void SpawnEnemy();
+	void SpawnRandomEnemy();
 	Vec2 GetSpawnPos();
 public:
 	virtual void Update() override;
+	virtual void Render(HDC _dc) override;
 private:
 	void HandleSecondChange();
 private:
 	int idx = 0;
-	float fMonsterSpeed = 0.1f;
+	float fMonsterSpeed = 0.3f;
 	float fBatHp = 2.0f;
 	float fBirdHp = 3.0f;
 	float fSlimeHp = 1.0f;
 	float fMonsterScale = 30;
 	float fCurrentTime = 0;
-	float fSpawnTime = 4;
+	float fCrazyTime = 0;
+	float fSpawnTime = 2;
+
+	int randomT;
+	int randomS;
 
 	float limitTimeArr[8] = {10, 30, 60, 120, 150, 180, 200, 230};
-	float spawnTimeArr[8] = {2, 1.8, 1.5, 1.2, 1, 0.6, 0.2, 0.1};
+	float spawnTimeArr[8] = {2, 1.8, 1.5, 1.2, 1, 0.6, 0.4, 0.35};
+
+	float crazyEnemyTime = 10;
+	float warnningTextTime = 3;
+	bool onWarnning;
 
 	Object* p_target;
 	Timer* p_timer;
