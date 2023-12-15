@@ -51,8 +51,8 @@ void NosItem::Render(HDC _dc)
 	int Height = i_texture->GetHeight();
 
 	BitBlt(_dc
-		, (int)(renderPos.x - renderPos.x / 2)
-		, (int)(renderPos.y - renderPos.y / 2)
+		, (int)((renderPos.x - renderPos.x) / 2)
+		, (int)((renderPos.y - renderPos.y) / 2)
 		, Width, Height, i_texture->GetDC()
 		, 0, 0, SRCCOPY);
 

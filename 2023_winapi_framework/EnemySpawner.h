@@ -32,7 +32,7 @@ private:
 	float fSpawnTime = 4;
 
 	float limitTimeArr[8] = {10, 30, 60, 120, 150, 180, 200, 230};
-	float spawnTimeArr[8] = {4, 3.4, 3, 2.6, 2, 1.6, 1, 0.6};
+	float spawnTimeArr[8] = {2, 1.8, 1.5, 1.2, 1, 0.6, 0.2, 0.1};
 
 	Object* p_target;
 	Timer* p_timer;

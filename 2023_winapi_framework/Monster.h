@@ -25,6 +25,7 @@ private:
 	Object* m_target; // 이동할 수 있는 최대 거리
 	int   m_iHp; // 체력
 	Texture* hpTex;
+	Vec2 m_renderPos;
 private:
 	void SetHit();
 };

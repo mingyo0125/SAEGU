@@ -4,10 +4,11 @@
 #include "SceneMgr.h"
 #include "ResMgr.h"
 #include "Texture.h"
+#include "SelectGDI.h"
 
 void Title_Scene::Init()
 {
-	
+	ResMgr::GetInst()->AddFont(L"neodgm");
 }
 
 void Title_Scene::Update()
@@ -30,6 +31,9 @@ void Title_Scene::Render(HDC _dc)
 
 	/*AddFontResource(L"강원교육새음");
 	SelectObject(_dc )*/
+
+	HFONT myFont = ResMgr::GetInst()->LoadFont(L"neodgm", 40);
+	SelectGDI gdi(_dc, myFont);
 	
 	SetBkMode(_dc, TRANSPARENT);
 	SetTextAlign(_dc, TA_CENTER);
