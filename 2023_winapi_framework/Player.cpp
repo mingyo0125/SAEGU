@@ -34,7 +34,7 @@ Player::Player()
 	, isShooting(false)
 	, isDie(false)
 	, isIdle(true)
-	, isDashing(false)
+	, isUnDestroyed(false)
 	, isHit(nullptr)
 	, curTime(0.f)
 	, _hp1Tex(nullptr)
@@ -48,6 +48,10 @@ Player::Player()
 	, targetTime(0.15f)
 	, dashCooldown(2.f)
 	, dashCooldownTime(0.f)
+	, shootCooldown(0.5f)
+	, shootCooldownTime(0.f)
+	, unDestroyedTime(5.f)
+	, bulletCurTime(0.f)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -163,7 +167,13 @@ void Player::Update()
 	{
 		dashCooldownTime += fDT;
 	}
+	if (shootCooldownTime < shootCooldown)
+	{
+		shootCooldownTime += fDT;
+	}
 	
+	MSetUnDestroyedBullet();
+
 	if (isHit)
 	{
 		if (isLeft)
@@ -188,7 +198,7 @@ void Player::Update()
 
 	Vec2 vPos = GetPos();
 	
-	if (KEY_DOWN(KEY_TYPE::LBUTTON))
+	if (KEY_DOWN(KEY_TYPE::LBUTTON) && shootCooldownTime >= shootCooldown)
 	{
 		isShooting = true;
 
@@ -226,12 +236,17 @@ void Player::Update()
 		CreateBullet();
 		isKeyPressing = true;
 		isIdle = false;
+		shootCooldownTime = 0.f;
+
 	}
 	else if (KEY_UP(KEY_TYPE::LBUTTON))
 	{
 		isShooting = false;
 		isIdle = false;
 	}
+
+	
+
 	if (!isShooting && !isHit)
 	{
 		if (KEY_PRESS(KEY_TYPE::A))
@@ -293,7 +308,6 @@ void Player::Update()
 
         curTime += fDT;
         isIdle = false;
-        isDashing = true;
 
     }
     else if (KEY_UP(KEY_TYPE::LSHIFT))
@@ -301,7 +315,6 @@ void Player::Update()
         curTime = 0;
         Object::SetSpeed(speed);
         isIdle = false;
-        isDashing = false;
 
     }
 		if (KEY_UP(KEY_TYPE::LSHIFT))
@@ -315,6 +328,11 @@ void Player::Update()
 			OnDamage(1);
 			isIdle = false;
 		}
+	}
+
+	if (KEY_DOWN(KEY_TYPE::O))
+	{
+		SetUnDestroyedBullet();
 	}
 	
 	SetPos(vPos);
@@ -341,6 +359,11 @@ void Player::CreateBullet()
 	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vRenderBulletPos);
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
 	ResMgr::GetInst()->Play(L"Shoot");
+
+	if (isUnDestroyed)
+	{
+		pBullet->SetUnDestroyedBullet();
+	}
 }
 
 void Player::TextureLoad()
@@ -365,6 +388,28 @@ void Player::TextureLoad()
 	_hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
 
 }
+
+void Player::MSetUnDestroyedBullet()
+{
+	if (isUnDestroyed)
+	{
+		if (bulletCurTime >= unDestroyedTime)
+		{
+			isUnDestroyed = false;
+			bulletCurTime = 0;
+		}
+		else
+		{
+			bulletCurTime += fDT;
+		}
+	}
+}
+
+void Player::SetUnDestroyedBullet()
+{
+	isUnDestroyed = true;
+}
+
 
 void Player::Render(HDC _dc)
 {

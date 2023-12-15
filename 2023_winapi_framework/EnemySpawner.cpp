@@ -89,7 +89,7 @@ void EnemySpawner::Update()
 {
 	if (fCrazyTime >= crazyEnemyTime)
 	{
-		Camera::GetInst()->CameraShake();
+		Camera::GetInst()->CameraShake(7.f);
 		fSpawnTime = 0.1f;
 		onWarnning = true;
 		fCrazyTime = 0;
