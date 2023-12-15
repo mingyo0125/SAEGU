@@ -75,7 +75,7 @@ void Monster::Render(HDC _dc)
 				, (int)(renderPos.x - vScale.x / 2 * i)
 				, (int)(renderPos.y - vScale.y - 25)
 				, Width, Height, hpTex->GetDC()
-				, 0, 0, Width, Height, RGB(255, 0, 255));
+				, 0, 0, Width, Height, RGB(255, 255, 255));
 		}
 	}
 	else if (m_iHp == 2)
@@ -86,7 +86,7 @@ void Monster::Render(HDC _dc)
 				, (int)(renderPos.x - vScale.x / 2 * i)
 				, (int)(renderPos.y - vScale.y - 25)
 				, Width, Height, hpTex->GetDC()
-				, 0, 0, Width, Height, RGB(255, 0, 255));
+				, 0, 0, Width, Height, RGB(255, 255, 255));
 		}
 	}
 	else
@@ -95,7 +95,7 @@ void Monster::Render(HDC _dc)
 			, (int)(renderPos.x - vScale.x / 2)
 			, (int)(renderPos.y - vScale.y - 25)
 			, Width, Height, hpTex->GetDC()
-			, 0, 0, Width, Height, RGB(255, 0, 255));
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 	}
 	
 

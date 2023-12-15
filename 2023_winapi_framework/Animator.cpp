@@ -62,6 +62,7 @@ bool Animator::GetIsAnimating()
 	{
 		return m_pCurAnim->isEnded;
 	}
+	return false;
 }
 
 void Animator::PlayAnim(const wstring& _strName, bool _bRepeat, int _repeatcnt)

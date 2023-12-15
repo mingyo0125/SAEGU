@@ -44,8 +44,10 @@ private:
     bool isShooting;
     bool isDie;
     bool isIdle;
+    bool isHit;
     float curTime;
     float speed;
     float dashSpeed;
+    float targetTime;
 };
 

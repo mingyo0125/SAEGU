@@ -34,6 +34,7 @@ Player::Player()
 	, isShooting(false)
 	, isDie(false)
 	, isIdle(true)
+	, isHit(nullptr)
 	, curTime(0.f)
 	, _hp1Tex(nullptr)
 	, _hp2Tex(nullptr)
@@ -43,6 +44,7 @@ Player::Player()
 	, _hp6Tex(nullptr)
 	, speed(150.f)
 	, dashSpeed(700.f)
+	, targetTime(0.15f)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -150,8 +152,32 @@ void Player::StayCollision(Collider* _pOther)
 }
 void Player::Update()
 {
-	if (isDie && !GetAnimator()->GetIsAnimating()) { return; }
+	if (isDie) { return; }
+	
+	if (isHit)
+	{
+		if (isLeft)
+		{
+			GetAnimator()->PlayAnim(L"Player_HitLeft", false, 1);
+		}
+		else
+		{
+			GetAnimator()->PlayAnim(L"Player_HitRight", false, 1);
+		}
+
+		if (curTime >= targetTime)
+		{
+			isHit = false;
+			curTime = 0;
+		}
+
+		curTime += fDT;
+		GetAnimator()->Update();
+		return;
+	}
+
 	Vec2 vPos = GetPos();
+	
 	if (KEY_DOWN(KEY_TYPE::LBUTTON))
 	{
 		isShooting = true;
@@ -196,7 +222,7 @@ void Player::Update()
 		isShooting = false;
 		isIdle = false;
 	}
-	if (!isShooting)
+	if (!isShooting && !isHit)
 	{
 		if (KEY_PRESS(KEY_TYPE::A))
 		{
@@ -327,90 +353,84 @@ void Player::Render(HDC _dc)
 	int Width = _hp1Tex->GetWidth();
 	int Height = _hp1Tex->GetHeight();
 
+	if (isDie)
+	{
+		if (isLeft)
+		{
+			int Width = _staticDieTexLeft->GetWidth();
+			int Height = _staticDieTexLeft->GetHeight();
+
+			TransparentBlt(_dc
+				, (int)(renderPos.x - vScale.x / 2) + 25
+				, (int)(renderPos.y - vScale.y / 2) + 25
+				, Width, Height, _staticDieTexLeft->GetDC()
+				, 0, 0, Width, Height, RGB(255, 255, 255));
+		}
+		else
+		{
+			TransparentBlt(_dc
+				, (int)(renderPos.x - vScale.x / 2) + 25
+				, (int)(renderPos.y - vScale.y / 2) + 25
+				, Width, Height, _staticDieTexRight->GetDC()
+				, 0, 0, Width, Height, RGB(255, 255, 255));
+		}
+	}
+
 	if (isIdle)
 	{
 		int Width = m_pTexIdle->GetWidth();
 		int Height = m_pTexIdle->GetHeight();
 		// 1. 기본 옮기기
-		BitBlt(_dc
+		TransparentBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 25
 			, (int)(renderPos.y - vScale.y / 2) + 25
 			, Width, Height, m_pTexIdle->GetDC()
-			, 0, 0, SRCCOPY);
-	}
-
-	if (!GetAnimator()->GetIsAnimating())
-	{
-		if (isDie)
-		{
-			if (isLeft)
-			{
-				int Width = _staticDieTexLeft->GetWidth();
-				int Height = _staticDieTexLeft->GetHeight();
-				// 1. 기본 옮기기
-				BitBlt(_dc
-					, (int)(renderPos.x - vScale.x / 2) + 25
-					, (int)(renderPos.y - vScale.y / 2) + 25
-					, Width, Height, _staticDieTexLeft->GetDC()
-					, 0, 0, SRCCOPY);
-			}
-			else
-			{
-				int Width = _staticDieTexRight->GetWidth();
-				int Height = _staticDieTexRight->GetHeight();
-				// 1. 기본 옮기기
-				BitBlt(_dc
-					, (int)(renderPos.x - vScale.x / 2) + 25
-					, (int)(renderPos.y - vScale.y / 2) + 25
-					, Width, Height, _staticDieTexRight->GetDC()
-					, 0, 0, SRCCOPY);
-			}
-		}
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 	}
 
 	switch (*Hp)
 	{
 	case 5:
-		BitBlt(_dc
+		TransparentBlt(_dc
 		, (int)(renderPos.x - vScale.x / 2) + 15
 		, (int)(renderPos.y - vScale.y / 2)
 		, Width, Height, _hp6Tex->GetDC()
-		, 0, 0, SRCCOPY);
+		, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	case 4:
-		BitBlt(_dc
+		TransparentBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, _hp5Tex->GetDC()
-			, 0, 0, SRCCOPY);
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	case 3:
-		BitBlt(_dc
+		TransparentBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, _hp4Tex->GetDC()
-			, 0, 0, SRCCOPY);
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	case 2:
-		BitBlt(_dc
+		TransparentBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, _hp3Tex->GetDC()
-			, 0, 0, SRCCOPY);
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	case 1:
-		BitBlt(_dc
+		TransparentBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, _hp2Tex->GetDC()
-			, 0, 0, SRCCOPY);
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	case 0:
-		BitBlt(_dc
+		TransparentBlt(_dc
 			, (int)(renderPos.x - vScale.x / 2) + 15
 			, (int)(renderPos.y - vScale.y / 2)
 			, Width, Height, _hp1Tex->GetDC()
-			, 0, 0, SRCCOPY);
+			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	}
 	
@@ -440,28 +460,20 @@ void Player::Render(HDC _dc)
 
 void Player::OnDamage(int damage)
 {
-	Camera::GetInst()->CameraShake(10.f);
 	*Hp -= damage;
-	if (isLeft)
-	{
-		GetAnimator()->PlayAnim(L"Player_HitLeft", false, 1);
-	}
-	else
-	{	
-		GetAnimator()->PlayAnim(L"Player_HitRight", false, 1);
-	}
+	Camera::GetInst()->CameraShake(10.f);
 
 	if (*Hp <= 0)
 	{
 		Die();
+		return;
 	}
+	isHit = true;
 }
 
 void Player::Die()
 {
 	//죽으면 할것들.
-	isDie = true;
-
 	if (isLeft)
 	{
 		GetAnimator()->PlayAnim(L"Player_DieLeft", false, 1);
@@ -469,6 +481,20 @@ void Player::Die()
 	else
 	{
 		GetAnimator()->PlayAnim(L"Player_DieRight", false, 1);
+	}
+
+	isDie = true;
+
+	while (true)
+	{
+		if (curTime >= targetTime)
+		{
+			curTime = 0;
+			break;
+		}
+
+		curTime += fDT;
+		GetAnimator()->Update();
 	}
 
 	//EventMgr::GetInst()->DeleteObject(this);
