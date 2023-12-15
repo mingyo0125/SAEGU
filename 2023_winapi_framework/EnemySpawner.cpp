@@ -71,7 +71,6 @@ void EnemySpawner::SpawnRandomEnemy()
 	}
 }
 
-
 Vec2 EnemySpawner::GetSpawnPos()
 {
 	std::pair<Vec2, Vec2> chooseAreaPair = areaSizeArr[randomS % 4];
@@ -90,6 +89,7 @@ void EnemySpawner::Update()
 {
 	if (fCrazyTime >= crazyEnemyTime)
 	{
+		Camera::GetInst()->CameraShake();
 		fSpawnTime = 0.1f;
 		onWarnning = true;
 		fCrazyTime = 0;

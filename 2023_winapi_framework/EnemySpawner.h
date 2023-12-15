@@ -37,9 +37,9 @@ private:
 	int randomS;
 
 	float limitTimeArr[8] = {10, 30, 60, 120, 150, 180, 200, 230};
-	float spawnTimeArr[8] = {2, 1.8, 1.5, 1.2, 1, 0.6, 0.4, 0.35};
+	float spawnTimeArr[8] = {2, 1.8, 1.6, 1.5, 1.4, 1.3, 1.2, 1};
 
-	float crazyEnemyTime = 10;
+	float crazyEnemyTime = 60;
 	float warnningTextTime = 3;
 	bool onWarnning;
 

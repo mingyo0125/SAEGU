@@ -9,6 +9,8 @@
 void Title_Scene::Init()
 {
 	ResMgr::GetInst()->AddFont(L"neodgm");
+	ResMgr::GetInst()->LoadSound(L"TITLEBGM", L"Sound\\GameTitle.wav", true);
+	ResMgr::GetInst()->Play(L"TITLEBGM");
 }
 
 void Title_Scene::Update()
