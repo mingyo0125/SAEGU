@@ -6,57 +6,45 @@
 #include "TimeMgr.h"
 #include "EventMgr.h"
 #include "Camera.h"
-
-Object* player;
-float curT;
-float level_up_speed_value = 50;
-float onEffectTime = 2;
-bool onEffective;
+#include "SceneMgr.h"
+#include "Scene.h"
 
 XItem::XItem(Vec2 spawnPos)
 	:Item(spawnPos)
 {
+	Object::SetName(L"XItem");
 	_spawnPos = spawnPos;
 
+	CreateCollider();
+	GetCollider()->SetScale(Vec2(10, 10));
 }
+
 XItem::~XItem()
 {
 }
 
-void XItem::Update()
-{
-	if (!onEffective) return;
-
-	curT += fDT;
-	if (curT > onEffectTime)
-	{
-		player->SetSpeed(player->GetSpeed() - level_up_speed_value);
-		onEffective = false;
-		EventMgr::GetInst()->DeleteObject(this);
-	}
-}
-
 void XItem::EnterCollision(Collider* _pOther)
 {
-	if (onEffective) return;
-
 	Object* collisionObj = _pOther->GetObj();
 	if (collisionObj->GetName() == L"Player")
 	{
-		UseItem(collisionObj);
+		auto target = SceneMgr::GetInst()->GetCurScene()->GetGroupObject(OBJECT_GROUP::DEFAULT);
+		for (int i = 0; i < target.size(); i++)
+		{
+			if (target[i]->GetName() == L"Effecter")
+			{
+				ItemEffecter* itemEffecter = (ItemEffecter*)target[i];
+				itemEffecter->EffectToPlayer(this);
+				break;
+			}
+		}
 	}
-}
-
-void XItem::UseItem(Object* p)
-{
-	player = p;
-	p->SetSpeed(p->GetSpeed() + level_up_speed_value);
+	EventMgr::GetInst()->DeleteObject(this);
 }
 
 void XItem::Render(HDC _dc)
 {
-	if (onEffective) return;
-
+	Component_Render(_dc);
 	Vec2 renderPos = Camera::GetInst()->GetRenderPos(_spawnPos);
 
 	Texture* i_texture = ResMgr::GetInst()->TexLoad(L"Item", L"Texture\\XItem.bmp");
@@ -69,4 +57,6 @@ void XItem::Render(HDC _dc)
 		, (int)(renderPos.y - renderPos.y / 2)
 		, Width, Height, i_texture->GetDC()
 		, 0, 0, SRCCOPY);
+
+	Component_Render(_dc);
 }

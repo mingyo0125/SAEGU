@@ -183,8 +183,11 @@
     <ClInclude Include="enums.h" />
     <ClInclude Include="EventMgr.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GameOver_Scene.h" />
     <ClInclude Include="Game_Scene.h" />
+    <ClInclude Include="GroundObj.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemEffecter.h" />
     <ClInclude Include="ItemSpawner.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Monster.h" />
@@ -222,8 +225,11 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="EventMgr.cpp" />
+    <ClCompile Include="GameOver_Scene.cpp" />
     <ClCompile Include="Game_Scene.cpp" />
+    <ClCompile Include="GroundObj.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemEffecter.cpp" />
     <ClCompile Include="ItemSpawner.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="main.cpp" />

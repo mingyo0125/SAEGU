@@ -15,7 +15,7 @@
 
 float scale = 20;
 
-void SpawnItem(ItemType it, Vec2 spPos)
+void ItemSpawner::SpawnItem(ItemType it, Vec2 spPos)
 {
 	Core::GetInst()->GetMainDC();
 	switch (it)
@@ -27,9 +27,6 @@ void SpawnItem(ItemType it, Vec2 spPos)
 		pItem->SetPos(spPos);
 		pItem->SetScale(Vec2(scale, scale));
 
-		Vec2 vPos = spPos;
-		Vec2 vScale = Vec2(scale, scale);
-		
 		// 1. 기본 옮기기
 		SceneMgr::GetInst()->GetCurScene()->AddObject(pItem, OBJECT_GROUP::ITEM);
 		break;
@@ -50,8 +47,6 @@ void SpawnItem(ItemType it, Vec2 spPos)
 
 void ItemSpawner::RandomItemSpawn(Vec2 spawnPos)
 {
-	srand((unsigned int)time(NULL));
-
 	ItemType it = rand() % 2 ? ItemType::Nos : ItemType::X;
 	SpawnItem(it, spawnPos);
 }

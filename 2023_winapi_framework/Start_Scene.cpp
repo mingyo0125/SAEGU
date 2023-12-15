@@ -12,9 +12,22 @@
 #include "ItemSpawner.h"
 #include "Camera.h"
 #include "Timer.h"
+#include "SceneMgr.h"
+#include "GroundObj.h"
+#include "ItemEffecter.h"
 
 void Start_Scene::Init()
 {
+	for (int i = -2; i < 3; i++)
+	{
+		for (int j = -2; j < 3; j++)
+		{
+			Object* pGround = new GroundObj(Vec2(1920 * j, 1920 * i));
+			pGround->SetPos(Vec2(0, 0));
+			AddObject(pGround, OBJECT_GROUP::DEFAULT);
+		}
+	}
+
 	//플레이어 생성
 	Object* pObj = new Player;
 	pObj->SetPos((Vec2({Core::GetInst()->GetResolution().x /2, Core::GetInst()->GetResolution().y / 2})));
@@ -39,11 +52,19 @@ void Start_Scene::Init()
 	int arr[3] = { 1, 3, 5 };
 	EnemySpawner* p_enemySpawner = new EnemySpawner(pObj, 0.1, arr, 20, p_timer);
 	AddObject(p_enemySpawner, OBJECT_GROUP::DEFAULT);
+
+	ItemEffecter* p_effecter = new ItemEffecter((Player*)pObj);
+	AddObject(p_effecter, OBJECT_GROUP::DEFAULT);
 }
 
 void Start_Scene::Update()
 {
 	Scene::Update();
+
+	if (KEY_DOWN(KEY_TYPE::ENTER))
+	{
+		SceneMgr::GetInst()->LoadScene(L"GameOver_Scene");
+	}
 }
 
 void Start_Scene::Render(HDC _dc)
@@ -55,4 +76,5 @@ void Start_Scene::Release()
 {
 	Scene::Release();
 	CollisionMgr::GetInst()->CheckReset();
+	ResMgr::GetInst()->Stop(SOUND_CHANNEL::BGM);
 }
