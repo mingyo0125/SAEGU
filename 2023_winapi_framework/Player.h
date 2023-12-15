@@ -45,6 +45,9 @@ private:
     bool isDie;
     bool isIdle;
     bool isHit;
+    bool isDashing;
+    float dashCooldown;
+    float dashCooldownTime;
     float curTime;
     float speed;
     float dashSpeed;

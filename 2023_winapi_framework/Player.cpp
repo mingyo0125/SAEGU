@@ -34,6 +34,7 @@ Player::Player()
 	, isShooting(false)
 	, isDie(false)
 	, isIdle(true)
+	, isDashing(false)
 	, isHit(nullptr)
 	, curTime(0.f)
 	, _hp1Tex(nullptr)
@@ -45,6 +46,8 @@ Player::Player()
 	, speed(150.f)
 	, dashSpeed(700.f)
 	, targetTime(0.15f)
+	, dashCooldown(2.f)
+	, dashCooldownTime(0.f)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -153,6 +156,11 @@ void Player::StayCollision(Collider* _pOther)
 void Player::Update()
 {
 	if (isDie) { return; }
+
+	if (dashCooldownTime < dashCooldown)
+	{
+		dashCooldownTime += fDT;
+	}
 	
 	if (isHit)
 	{
@@ -269,20 +277,33 @@ void Player::Update()
 			isKeyPressing = true;
 			isIdle = false;
 		}
-		if (KEY_PRESS(KEY_TYPE::LSHIFT))
-		{
-			if (curTime >= 0.1f)
-			{
-				Object::SetSpeed(speed);
-			}
-			else
-			{
-				Object::SetSpeed(dashSpeed);
-			}
+		// 대시 로직 수정
+    if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
+    {
+        if (curTime >= 0.1f)
+        {
+            Object::SetSpeed(speed);
+			dashCooldownTime = 0.0f;
+        }
+        else
+        {
+            Object::SetSpeed(dashSpeed);
+        }
 
-			curTime += fDT;
-			isIdle = false;
-		}
+        curTime += fDT;
+        isIdle = false;
+        isDashing = true;
+
+        // 대시 쿨타임 초기화
+    }
+    else if (KEY_UP(KEY_TYPE::LSHIFT))
+    {
+        curTime = 0;
+        Object::SetSpeed(speed);
+        isIdle = false;
+        isDashing = false;
+
+    }
 		if (KEY_UP(KEY_TYPE::LSHIFT))
 		{
 			curTime = 0;
