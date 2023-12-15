@@ -34,8 +34,8 @@ void Start_Scene::Init()
 	pObj->SetScale(Vec2(100.f,100.f));
 	AddObject(pObj, OBJECT_GROUP::PLAYER);
 
-	ResMgr::GetInst()->LoadSound(L"BGM", L"Sound\\Retro_bgm.wav", true);
-	ResMgr::GetInst()->LoadSound(L"Shoot", L"Sound\\laserShoot.wav", false);
+	ResMgr::GetInst()->Stop(SOUND_CHANNEL::BGM);
+	ResMgr::GetInst()->LoadSound(L"BGM", L"Sound\\BattleBgm.wav", true);
 	ResMgr::GetInst()->Play(L"BGM");
 
 	// 충돌체크해야되는것들을 설정하자.
