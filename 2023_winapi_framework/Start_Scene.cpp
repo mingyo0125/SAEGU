@@ -14,6 +14,7 @@
 #include "Timer.h"
 #include "SceneMgr.h"
 #include "GroundObj.h"
+#include "ItemEffecter.h"
 
 void Start_Scene::Init()
 {
@@ -51,6 +52,9 @@ void Start_Scene::Init()
 	int arr[3] = { 1, 3, 5 };
 	EnemySpawner* p_enemySpawner = new EnemySpawner(pObj, 0.1, arr, 20, p_timer);
 	AddObject(p_enemySpawner, OBJECT_GROUP::DEFAULT);
+
+	ItemEffecter* p_effecter = new ItemEffecter((Player*)pObj);
+	AddObject(p_effecter, OBJECT_GROUP::DEFAULT);
 }
 
 void Start_Scene::Update()

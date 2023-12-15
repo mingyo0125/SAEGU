@@ -12,8 +12,7 @@ Item::Item(Vec2 spawnPos)
 	:_spawnPos(spawnPos)
 {
 	_spawnPos = spawnPos;
-	CreateCollider();
-	GetCollider()->SetScale(Vec2(10, 10));
+	
 }
 
 Item::~Item()

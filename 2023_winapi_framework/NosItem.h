@@ -8,7 +8,6 @@ public:
 	~NosItem();
 public:
 	virtual void EnterCollision(Collider* _pOther) override;
-	virtual void UseItem(Object* p) override;
 	void Render(HDC _dc) override;
 	Vec2 _spawnPos;
 private:

@@ -15,7 +15,7 @@
 
 float scale = 20;
 
-void SpawnItem(ItemType it, Vec2 spPos)
+void ItemSpawner::SpawnItem(ItemType it, Vec2 spPos)
 {
 	Core::GetInst()->GetMainDC();
 	switch (it)
@@ -47,8 +47,6 @@ void SpawnItem(ItemType it, Vec2 spPos)
 
 void ItemSpawner::RandomItemSpawn(Vec2 spawnPos)
 {
-	srand((unsigned int)time(NULL));
-
 	ItemType it = rand() % 2 ? ItemType::Nos : ItemType::X;
 	SpawnItem(it, spawnPos);
 }

@@ -201,6 +201,9 @@
     <ClInclude Include="GroundObj.h">
       <Filter>Engine\04. Object</Filter>
     </ClInclude>
+    <ClInclude Include="ItemEffecter.h">
+      <Filter>Engine\03. Manager\ItemManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -322,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="GroundObj.cpp">
       <Filter>Engine\04. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemEffecter.cpp">
+      <Filter>Engine\03. Manager\ItemManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

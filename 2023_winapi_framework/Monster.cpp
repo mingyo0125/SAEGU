@@ -10,6 +10,7 @@
 #include "Animation.h"
 #include "ResMgr.h"
 #include "Camera.h"
+#include <time.h>
 
 bool m_isDie;
 Vec2 m_vCurPos;
@@ -105,8 +106,12 @@ void Monster::SetDie()
 {
 	m_fSpeed = 0;
 
-	ItemSpawner* itemSpawner = new ItemSpawner();
-	itemSpawner->RandomItemSpawn(m_vCurPos);
+	srand((unsigned int)time(NULL));
+	if (rand() % 5 == 0)
+	{
+		ItemSpawner* itemSpawner = new ItemSpawner();
+		itemSpawner->RandomItemSpawn(m_vCurPos);
+	}
 
 	EventMgr::GetInst()->DeleteObject(this);
 }
