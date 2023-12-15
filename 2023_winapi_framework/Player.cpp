@@ -277,7 +277,6 @@ void Player::Update()
 			isKeyPressing = true;
 			isIdle = false;
 		}
-		// 대시 로직 수정
     if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
     {
         if (curTime >= 0.1f)
@@ -294,7 +293,6 @@ void Player::Update()
         isIdle = false;
         isDashing = true;
 
-        // 대시 쿨타임 초기화
     }
     else if (KEY_UP(KEY_TYPE::LSHIFT))
     {
