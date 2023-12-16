@@ -18,7 +18,7 @@ Bullet::Bullet()
 	, m_pTex1(nullptr)
 	, isUnDestroyed(false)
 {
-	m_pTex1 = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\Bullet.bmp");
+	m_pTex1 = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\NormalBullet.bmp");
 	Object::SetName(L"Bullet");
 	CreateCollider();
 }
