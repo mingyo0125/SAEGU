@@ -3,17 +3,28 @@
 #include "Object.h"
 void EventMgr::Update()
 {
-	for (size_t i = 0; i < m_vecDead.size(); ++i)
-	{
-		delete m_vecDead[i];
-	}
-	m_vecDead.clear();
+    for (size_t i = 0; i < m_vecDead.size(); ++i)
+    {
+        try
+        {
+            if (m_vecDead[i])
+            {
+                delete m_vecDead[i];
+                m_vecDead[i] = nullptr;
+            }
+        }
+        catch (std::exception& ex)
+        {
+            continue;
+        }
+    }
+    m_vecDead.clear();
 
-	for (size_t i = 0; i < m_vecEvent.size(); ++i)
-	{
-		Excute(m_vecEvent[i]);
-	}
-	m_vecEvent.clear();
+    for (size_t i = 0; i < m_vecEvent.size(); ++i)
+    {
+        Excute(m_vecEvent[i]);
+    }
+    m_vecEvent.clear();
 }
 
 void EventMgr::DeleteObject(Object* _pObj)
@@ -32,7 +43,7 @@ void EventMgr::Excute(const tEvent& _eve)
 	{
 		Object* pDeadObj = _eve.Obj;
 		pDeadObj->SetDead();
-		m_vecDead.push_back(pDeadObj);
+		//m_vecDead.push_back(pDeadObj);
 	}
 		break;
 	case EVENT_TYPE::CREATE_OBJECT:

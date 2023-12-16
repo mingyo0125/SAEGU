@@ -29,7 +29,8 @@ void Start_Scene::Init()
 	}
 
 	//플레이어 생성
-	Object* pObj = new Player;
+	Player* pObj = new Player;
+	player = pObj;
 	pObj->SetPos((Vec2({Core::GetInst()->GetResolution().x /2, Core::GetInst()->GetResolution().y / 2})));
 	pObj->SetScale(Vec2(100.f,100.f));
 	AddObject(pObj, OBJECT_GROUP::PLAYER);
@@ -62,6 +63,11 @@ void Start_Scene::Update()
 	Scene::Update();
 
 	if (KEY_DOWN(KEY_TYPE::ENTER))
+	{
+		SceneMgr::GetInst()->LoadScene(L"GameOver_Scene");
+	}
+
+	if (player->GetIsDead())
 	{
 		SceneMgr::GetInst()->LoadScene(L"GameOver_Scene");
 	}

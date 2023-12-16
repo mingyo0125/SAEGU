@@ -14,6 +14,8 @@
 #include "Animation.h"
 #include "EventMgr.h"
 #include "Camera.h"
+#include "SceneMgr.h"
+#include "Monster.h"
 
 Player::Player()
 	: _walkRightTex(nullptr)
@@ -161,6 +163,8 @@ void Player::EnterCollision(Collider* _pOther)
 
 	if (pOtherObj->GetName() == L"Monster")
 	{
+		Monster* monster = (Monster*)pOtherObj;
+		monster->SetDie();
 		OnDamage(1);
 	}
 }
@@ -631,5 +635,9 @@ void Player::Die()
 		GetAnimator()->Update();
 	}
 
-	//EventMgr::GetInst()->DeleteObject(this);
+	if (curTime == 0)
+	{
+		EventMgr::GetInst()->DeleteObject(this);
+	}
+
 }
