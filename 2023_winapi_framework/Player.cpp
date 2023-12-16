@@ -85,6 +85,8 @@ Player::Player()
 	GetAnimator()->CreateAnim(L"Player_DieRight", _dieTexRight, Vec2(10.f, 14.5f),
 		Vec2(53.f, 53.f), Vec2(0.f, 54.f), 6, 0.1f);
 
+	ResMgr::GetInst()->LoadSound(L"Shoot", L"Sound\\GunShot.wav", false);
+
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -338,6 +340,7 @@ void Player::CreateBullet()
 	//pBullet->SetDir(Vec2(10.f,15.f));
 	pBullet->SetDir((Vec2((float)pMousePos.x, (float)pMousePos.y)) - vRenderBulletPos);
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pBullet, OBJECT_GROUP::BULLET);
+	ResMgr::GetInst()->Play(L"Shoot");
 }
 
 void Player::TextureLoad()

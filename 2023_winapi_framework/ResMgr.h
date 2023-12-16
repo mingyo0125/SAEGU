@@ -18,6 +18,8 @@ public:
 	Texture* TexLoad(const wstring& _strKey,
 		const wstring& _strRelativePath);
 	Texture* TexFind(const wstring& _strKey);
+	HFONT LoadFont(const wstring& _fontName, int size);
+	void AddFont(const wstring& _fontName);
 	void Release();
 private:
 	map<wstring, Texture*> m_mapTex;

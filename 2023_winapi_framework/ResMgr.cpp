@@ -32,6 +32,22 @@ Texture* ResMgr::TexFind(const wstring& _strKey)
     return nullptr;
 }
 
+HFONT ResMgr::LoadFont(const wstring& _fontName, int size)
+{
+    HFONT hFont = CreateFontW(size, 0, 0, 0, 0, 0, 0, 0, HANGEUL_CHARSET, 0, 0, 0,
+        VARIABLE_PITCH, _fontName.c_str());
+
+    return hFont;
+}
+
+void ResMgr::AddFont(const wstring& _fontName)
+{
+    wstring strFilePath = PathMgr::GetInst()->GetResPath();
+    strFilePath += L"Font\\" + _fontName + L".ttf";
+
+    AddFontResourceW(strFilePath.c_str());
+}
+
 void ResMgr::Release()
 {
     // Texture

@@ -63,7 +63,7 @@ void Monster::Render(HDC _dc)
 {
 	Vec2 vPos = GetPos();
 	Vec2 vScale = GetScale();
-	Vec2 renderPos = Camera::GetInst()->GetRenderPos(vPos);
+	m_renderPos = Camera::GetInst()->GetRenderPos(vPos);
 	int Width = hpTex->GetWidth();
 	int Height = hpTex->GetHeight();
 
@@ -72,8 +72,8 @@ void Monster::Render(HDC _dc)
 		for (int i = 1; i <= 3; i++)
 		{
 			TransparentBlt(_dc
-				, (int)(renderPos.x - vScale.x / 2 * i)
-				, (int)(renderPos.y - vScale.y - 25)
+				, (int)(m_renderPos.x - vScale.x / 2 * i)
+				, (int)(m_renderPos.y - vScale.y - 25)
 				, Width, Height, hpTex->GetDC()
 				, 0, 0, Width, Height, RGB(255, 255, 255));
 		}
@@ -83,8 +83,8 @@ void Monster::Render(HDC _dc)
 		for (int i = 1; i <= 2; i++)
 		{
 			TransparentBlt(_dc
-				, (int)(renderPos.x - vScale.x / 2 * i)
-				, (int)(renderPos.y - vScale.y - 25)
+				, (int)(m_renderPos.x - vScale.x / 2 * i)
+				, (int)(m_renderPos.y - vScale.y - 25)
 				, Width, Height, hpTex->GetDC()
 				, 0, 0, Width, Height, RGB(255, 255, 255));
 		}
@@ -92,8 +92,8 @@ void Monster::Render(HDC _dc)
 	else
 	{
 		TransparentBlt(_dc
-			, (int)(renderPos.x - vScale.x / 2)
-			, (int)(renderPos.y - vScale.y - 25)
+			, (int)(m_renderPos.x - vScale.x / 2)
+			, (int)(m_renderPos.y - vScale.y - 25)
 			, Width, Height, hpTex->GetDC()
 			, 0, 0, Width, Height, RGB(255, 255, 255));
 	}
@@ -110,7 +110,7 @@ void Monster::SetDie()
 	if (rand() % 5 == 0)
 	{
 		ItemSpawner* itemSpawner = new ItemSpawner();
-		itemSpawner->RandomItemSpawn(m_vCurPos);
+		itemSpawner->RandomItemSpawn(m_vCenterPos);
 	}
 
 	EventMgr::GetInst()->DeleteObject(this);
