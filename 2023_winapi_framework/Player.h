@@ -16,7 +16,7 @@ public:
     void Render(HDC _dc) override;
     void OnDamage(int damage);
     void Die();
-    void SetUnDestroyedBullet();
+    void SetUnDestroyedBullet() { isUnDestroyed = true; };
 private:
     void CreateBullet();
     void TextureLoad();

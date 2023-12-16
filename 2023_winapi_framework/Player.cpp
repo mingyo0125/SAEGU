@@ -405,12 +405,6 @@ void Player::MSetUnDestroyedBullet()
 	}
 }
 
-void Player::SetUnDestroyedBullet()
-{
-	isUnDestroyed = true;
-}
-
-
 void Player::Render(HDC _dc)
 {
 	Vec2 vPos = GetPos();
