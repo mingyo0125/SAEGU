@@ -100,6 +100,7 @@ Player::Player()
 	ResMgr::GetInst()->LoadSound(L"Shoot", L"Sound\\GunShot.wav", false);
 	ResMgr::GetInst()->LoadSound(L"Reload", L"Sound\\galil-reload-sound.mp3", false);
 	ResMgr::GetInst()->LoadSound(L"Hit", L"Sound\\matrixxx__retro-hit.wav", false);
+	ResMgr::GetInst()->LoadSound(L"DashSound", L"Sound\\kastenfrosch__whoosh-dash.wav", false);
 	
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
@@ -316,6 +317,7 @@ void Player::Update()
 		}
 		if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
 		{
+			ResMgr::GetInst()->Play(L"DashSound");
 
 			if (curTime >= 0.1f)
 			{
