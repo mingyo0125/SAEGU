@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Monster.h"
 
 class ItemEffecter : public Object
 {
@@ -11,6 +12,7 @@ public:
 	void Update() override;
 private:
 	Object* pObject;
+	Monster* curMonster;
 	int level_up_speed_value = 50;
 	bool onXEffective;
 	float xCurT;

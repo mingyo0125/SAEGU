@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "Player.h"
 
 class Start_Scene :
     public Scene
@@ -9,5 +10,7 @@ public:
     virtual void Update() override;
     virtual void Render(HDC _dc) override;
     virtual void Release() override;
+private:
+    Player* player;
 };
 

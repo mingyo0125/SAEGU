@@ -14,6 +14,8 @@
 #include "Animation.h"
 #include "EventMgr.h"
 #include "Camera.h"
+#include "SceneMgr.h"
+#include "Monster.h"
 
 Player::Player()
 	: _walkRightTex(nullptr)
@@ -161,6 +163,8 @@ void Player::EnterCollision(Collider* _pOther)
 
 	if (pOtherObj->GetName() == L"Monster")
 	{
+		Monster* monster = (Monster*)pOtherObj;
+		monster->SetDie();
 		OnDamage(1);
 	}
 }
@@ -342,11 +346,11 @@ void Player::Update()
 
 		}
 	}
-
-	if (KEY_DOWN(KEY_TYPE::O))
+	if (KEY_DOWN(KEY_TYPE::R))
 	{
-		SetUnDestroyedBullet();
+		curAmmo = 0;
 	}
+	
 	
 	SetPos(vPos);
 	GetAnimator()->Update();
@@ -355,7 +359,12 @@ void Player::Update()
 void Player::CreateBullet()
 {
 	Camera::GetInst()->CameraShake(3.f);
+<<<<<<< HEAD
 	Bullet* pBullet = new Bullet;
+=======
+	Bullet* pBullet = new Bullet();
+
+>>>>>>> d2440e97b2212db3b34f6299acd421751a82ea2d
 	Vec2 vBulletPos = GetPos();
 	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
 
@@ -565,6 +574,14 @@ void Player::Render(HDC _dc)
 			, ammoWidth, amooHeight, _ammoTex->GetDC()
 			, 0, 0, ammoWidth, amooHeight, RGB(255, 255, 255));
 	}
+
+	if (isUnDestroyed)
+	{
+		TextOut(_dc,
+			renderPos.x - vScale.x / 2 - 40,
+			renderPos.y - vScale.y / 2 - 30,
+			TEXT("Bullet is UnDestroingMode!!"), 27);
+	}
 	
 	// 2. 색상 걷어내기
 	//TransparentBlt(_dc
@@ -630,5 +647,9 @@ void Player::Die()
 		GetAnimator()->Update();
 	}
 
-	//EventMgr::GetInst()->DeleteObject(this);
+	if (curTime == 0)
+	{
+		EventMgr::GetInst()->DeleteObject(this);
+	}
+
 }

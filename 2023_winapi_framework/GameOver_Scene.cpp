@@ -13,7 +13,7 @@ void GameOver_Scene::Update()
 {
 	if (KEY_DOWN(KEY_TYPE::ENTER))
 	{
-		SceneMgr::GetInst()->LoadScene(L"Start_Scene");
+		SceneMgr::GetInst()->LoadScene(L"Start_Scene"); 
 	}
 }
 
@@ -31,8 +31,11 @@ void GameOver_Scene::Render(HDC _dc)
 	SetTextAlign(_dc, TA_CENTER);
 	SetTextColor(_dc, RGB(255, 255, 255));
 
+	TextOut(_dc, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 - 20,
+		TEXT("GameOver... "), 12);
+
 	TextOut(_dc, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
-		TEXT("GameOver.. Press Enter to Restart"), 20);
+		TEXT("Press Enter to Restart"), 22);
 }
 
 void GameOver_Scene::Release()
