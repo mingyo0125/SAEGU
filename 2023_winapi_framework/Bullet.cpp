@@ -10,7 +10,7 @@
 #include "Collider.h"
 #include "EventMgr.h"
 
-Bullet::Bullet()
+Bullet::Bullet(Texture* tex)
 //	: m_fDir(-1.f)
 	: m_fTheta(0.f)
 	, curTime(0.f)

@@ -35,7 +35,7 @@ void NosItem::EnterCollision(Collider* _pOther)
 			if (target[i]->GetName() == L"Effecter")
 			{
 				ItemEffecter* itemEffecter = (ItemEffecter*)target[i];
-				itemEffecter->EffectToPlayer(this);
+				itemEffecter->EffectToPlayer();
 				break;
 			}
 		}

@@ -41,9 +41,13 @@ private:
     Texture* _hp4Tex;
     Texture* _hp5Tex;
     Texture* _hp6Tex;
+
     Texture* _dashTex;
     Texture* _ammoTex;
     Texture* _reloadTex;
+
+    Texture* _normalBullet;
+    Texture* _unDBullet;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;

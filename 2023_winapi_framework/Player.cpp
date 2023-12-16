@@ -355,7 +355,8 @@ void Player::Update()
 void Player::CreateBullet()
 {
 	Camera::GetInst()->CameraShake(3.f);
-	Bullet* pBullet = new Bullet;
+	Bullet* pBullet;
+
 	Vec2 vBulletPos = GetPos();
 	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
 
