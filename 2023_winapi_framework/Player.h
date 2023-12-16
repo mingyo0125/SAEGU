@@ -16,11 +16,12 @@ public:
     void Render(HDC _dc) override;
     void OnDamage(int damage);
     void Die();
-    void SetUnDestroyedBullet();
+    void SetUnDestroyedBullet() { isUnDestroyed = true; };
 private:
     void CreateBullet();
     void TextureLoad();
     void MSetUnDestroyedBullet();
+    void Reload();
 
 private:
     Texture* _walkRightTex;
@@ -40,8 +41,9 @@ private:
     Texture* _hp4Tex;
     Texture* _hp5Tex;
     Texture* _hp6Tex;
-    Texture* _normalBullet;
-    Texture* _unDBullet;
+    Texture* _dashTex;
+    Texture* _ammoTex;
+    Texture* _reloadTex;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;
@@ -51,6 +53,7 @@ private:
     bool isIdle;
     bool isHit;
     bool isUnDestroyed;
+    bool isRealoading;
     float dashCooldown;
     float dashCooldownTime;
     float shootCooldown;
@@ -60,6 +63,10 @@ private:
     float speed;
     float dashSpeed;
     float targetTime;
+    float curReloadTime;
+    float reloadTime;
     float unDestroyedTime;
+    int curAmmo;
+    int maxAmmo;
 };
 

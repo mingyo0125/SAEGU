@@ -11,10 +11,6 @@
 #include "ResMgr.h"
 #include "Camera.h"
 #include <time.h>
-#include "SceneMgr.h"
-#include "ExplosionEffect.h"
-#include "Scene.h"
-#include "ItemEffecter.h"
 
 bool m_isDie;
 Vec2 m_vCurPos;
@@ -36,7 +32,7 @@ Monster::~Monster()
 void Monster::Update()
 {
 	m_vCurPos = GetPos();
-	Vec2 vTargetPos = m_target->GetPos();
+	Vec2 vTargetPos =  m_target->GetPos();
 	Vec2 moveDir = (vTargetPos - m_vCurPos).Normalize();
 
 	m_vCurPos = m_vCurPos + (moveDir * m_fSpeed);
@@ -50,7 +46,6 @@ void Monster::EnterCollision(Collider* _pOther)
 	const Object* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Bullet")
 	{
-		//SetDie();
 		SetHit();
 	}
 }
@@ -110,29 +105,14 @@ void Monster::SetDie()
 {
 	m_fSpeed = 0;
 
-	ExpEffect* effect = new ExpEffect();
-	effect->SetPos(m_renderPos);
-	SceneMgr::GetInst()->GetCurScene()->AddObject(effect, OBJECT_GROUP::DEFAULT);
-	EventMgr::GetInst()->DeleteObject(this);
-
+	srand((unsigned int)time(NULL));
 	if (rand() % 5 == 0)
 	{
-		Player* p = (Player*)m_target;
-		p->SetUnDestroyedBullet();
+		ItemSpawner* itemSpawner = new ItemSpawner();
+		itemSpawner->RandomItemSpawn(m_renderPos);
 	}
-	if (rand() % 5 == 1)
-	{
-		auto dg = SceneMgr::GetInst()->GetCurScene()->GetGroupObject(OBJECT_GROUP::DEFAULT);
-		for (int i = 0; i < dg.size(); i++)
-		{
-			if (dg[i]->GetName() == L"Effecter")
-			{
-				ItemEffecter ie = (ItemEffecter*)dg[i];
-				ie.EffectToPlayer();
-				break;
-			}
-		}
-	}
+
+	EventMgr::GetInst()->DeleteObject(this);
 }
 
 void Monster::SetHit()
