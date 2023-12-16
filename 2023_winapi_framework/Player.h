@@ -40,6 +40,7 @@ private:
     Texture* _hp4Tex;
     Texture* _hp5Tex;
     Texture* _hp6Tex;
+    Texture* _dashTex;
     int* Hp;
     int MaxHp;
     bool isKeyPressing;

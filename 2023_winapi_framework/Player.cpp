@@ -43,10 +43,11 @@ Player::Player()
 	, _hp4Tex(nullptr)
 	, _hp5Tex(nullptr)
 	, _hp6Tex(nullptr)
+	, _dashTex(nullptr)
 	, speed(150.f)
 	, dashSpeed(700.f)
 	, targetTime(0.15f)
-	, dashCooldown(2.f)
+	, dashCooldown(3.f)
 	, dashCooldownTime(0.f)
 	, shootCooldown(0.5f)
 	, shootCooldownTime(0.f)
@@ -294,39 +295,30 @@ void Player::Update()
 			isKeyPressing = true;
 			isIdle = false;
 		}
-    if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
-    {
-        if (curTime >= 0.1f)
-        {
-            Object::SetSpeed(speed);
-			dashCooldownTime = 0.0f;
-        }
-        else
-        {
-            Object::SetSpeed(dashSpeed);
-        }
-
-        curTime += fDT;
-        isIdle = false;
-
-    }
-    else if (KEY_UP(KEY_TYPE::LSHIFT))
-    {
-        curTime = 0;
-        Object::SetSpeed(speed);
-        isIdle = false;
-
-    }
-		if (KEY_UP(KEY_TYPE::LSHIFT))
+		if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
 		{
+
+			if (curTime >= 0.1f)
+			{
+				Object::SetSpeed(speed);
+				dashCooldownTime = 0.0f;
+			}
+			else
+			{
+				Object::SetSpeed(dashSpeed);
+			}
+
+			curTime += fDT;
+			isIdle = false;
+
+		}
+		else if (KEY_UP(KEY_TYPE::LSHIFT))
+		{
+			if (dashCooldownTime >= dashCooldown) { dashCooldownTime = 0.0f; }
 			curTime = 0;
 			Object::SetSpeed(speed);
 			isIdle = false;
-		}
-		if (KEY_DOWN(KEY_TYPE::E))
-		{
-			OnDamage(1);
-			isIdle = false;
+
 		}
 	}
 
@@ -386,6 +378,8 @@ void Player::TextureLoad()
 	_hp4Tex = ResMgr::GetInst()->TexLoad(L"Hp4", L"Texture\\six.bmp");
 	_hp5Tex = ResMgr::GetInst()->TexLoad(L"Hp5", L"Texture\\eight.bmp");
 	_hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
+
+	_dashTex = ResMgr::GetInst()->TexLoad(L"dash", L"Texture\\UI_Flat_Slot_01_Available.bmp");
 
 }
 
@@ -493,6 +487,18 @@ void Player::Render(HDC _dc)
 			, Width, Height, _hp1Tex->GetDC()
 			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
+	}
+
+	for (int i = 1; i <= dashCooldownTime; i++)
+	{
+		int dashWidth = _dashTex->GetWidth();
+		int dashHeight = _dashTex->GetHeight();
+
+		TransparentBlt(_dc
+			, (int)((renderPos.x) * i / 40) + 665
+			, (int)(renderPos.y - vScale.y / 2) + 25
+			, dashWidth, dashHeight, _dashTex->GetDC()
+			, 0, 0, dashWidth, dashHeight, RGB(255, 255, 255));
 	}
 	
 	// 2. 색상 걷어내기
