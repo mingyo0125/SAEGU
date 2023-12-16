@@ -7,7 +7,7 @@ class Bullet :
 private:
     
 public:
-    Bullet(Texture* tex);
+    Bullet();
     ~Bullet();
 public:
     void Update() override;

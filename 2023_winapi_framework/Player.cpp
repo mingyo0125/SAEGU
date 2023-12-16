@@ -342,11 +342,11 @@ void Player::Update()
 
 		}
 	}
-
-	if (KEY_DOWN(KEY_TYPE::O))
+	if (KEY_DOWN(KEY_TYPE::R))
 	{
-		SetUnDestroyedBullet();
+		curAmmo = 0;
 	}
+	
 	
 	SetPos(vPos);
 	GetAnimator()->Update();
@@ -355,7 +355,7 @@ void Player::Update()
 void Player::CreateBullet()
 {
 	Camera::GetInst()->CameraShake(3.f);
-	Bullet* pBullet;
+	Bullet* pBullet = new Bullet();
 
 	Vec2 vBulletPos = GetPos();
 	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
