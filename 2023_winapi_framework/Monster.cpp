@@ -11,6 +11,10 @@
 #include "ResMgr.h"
 #include "Camera.h"
 #include <time.h>
+#include "SceneMgr.h"
+#include "ExplosionEffect.h"
+#include "Scene.h"
+#include "ItemEffecter.h"
 
 bool m_isDie;
 Vec2 m_vCurPos;
@@ -107,6 +111,7 @@ void Monster::SetDie()
 	m_fSpeed = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	srand((unsigned int)time(NULL));
 	if (rand() % 5 == 0)
 	{
@@ -120,6 +125,15 @@ void Monster::SetDie()
 
 	if (rand() % 5 == 0)
 	{
+=======
+	ExpEffect* effect = new ExpEffect();
+	effect->SetPos(m_renderPos);
+	SceneMgr::GetInst()->GetCurScene()->AddObject(effect, OBJECT_GROUP::DEFAULT);
+	EventMgr::GetInst()->DeleteObject(this);
+
+	if (rand() % 5 == 0)
+	{
+>>>>>>> parent of 46992be (Merge branch 'King')
 		Player* p = (Player*)m_target;
 		p->SetUnDestroyedBullet();
 	}
@@ -135,10 +149,11 @@ void Monster::SetDie()
 				break;
 			}
 		}
+<<<<<<< HEAD
 >>>>>>> d2440e97b2212db3b34f6299acd421751a82ea2d
+=======
+>>>>>>> parent of 46992be (Merge branch 'King')
 	}
-
-	EventMgr::GetInst()->DeleteObject(this);
 }
 
 

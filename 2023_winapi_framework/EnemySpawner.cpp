@@ -12,7 +12,6 @@
 #include "TimeMgr.h"
 #include "ResMgr.h"
 #include "SelectGDI.h"
-#include "Camera.h"
 #include <array>
 #include <time.h>
 #include <utility>
@@ -23,7 +22,7 @@ EnemySpawner::EnemySpawner(Object* targetObj, float speed, int hp[], float scale
 	ResMgr::GetInst()->AddFont(L"neodgm");
 
 	p_target = targetObj;
-	fMonsterSpeed = 0.8f;
+	fMonsterSpeed = speed;
 	fSlimeHp = 1;
 	fBatHp = 2;
 	fBirdHp = 3;
@@ -62,7 +61,7 @@ void EnemySpawner::SpawnRandomEnemy()
 
 	pMonster->SetPos(GetSpawnPos());
 	pMonster->SetScale(Vec2(fMonsterScale, fMonsterScale));
-	pMonster->SetCenterPos(Camera::GetInst()->GetRenderPos(pMonster->GetPos()));
+	pMonster->SetCenterPos(pMonster->GetPos());
 
 	SceneMgr::GetInst()->GetCurScene()->AddObject(pMonster, OBJECT_GROUP::MONSTER);
 	randomT++;

@@ -36,7 +36,6 @@ Player::Player()
 	, isShooting(false)
 	, isDie(false)
 	, isIdle(true)
-	, isRealoading(false)
 	, isUnDestroyed(false)
 	, isHit(nullptr)
 	, curTime(0.f)
@@ -46,22 +45,15 @@ Player::Player()
 	, _hp4Tex(nullptr)
 	, _hp5Tex(nullptr)
 	, _hp6Tex(nullptr)
-	, _dashTex(nullptr)
-	, _ammoTex(nullptr)
-	, _reloadTex(nullptr)
 	, speed(150.f)
 	, dashSpeed(700.f)
 	, targetTime(0.15f)
-	, dashCooldown(3.f)
+	, dashCooldown(2.f)
 	, dashCooldownTime(0.f)
 	, shootCooldown(0.5f)
 	, shootCooldownTime(0.f)
 	, unDestroyedTime(5.f)
 	, bulletCurTime(0.f)
-	, reloadTime(3.f)
-	, curReloadTime(0.f)
-	, maxAmmo(10)
-	, curAmmo(10)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -100,10 +92,7 @@ Player::Player()
 		Vec2(53.f, 53.f), Vec2(0.f, 54.f), 6, 0.1f);
 
 	ResMgr::GetInst()->LoadSound(L"Shoot", L"Sound\\GunShot.wav", false);
-	ResMgr::GetInst()->LoadSound(L"Reload", L"Sound\\galil-reload-sound.mp3", false);
-	ResMgr::GetInst()->LoadSound(L"Hit", L"Sound\\matrixxx__retro-hit.wav", false);
-	ResMgr::GetInst()->LoadSound(L"DashSound", L"Sound\\kastenfrosch__whoosh-dash.wav", false);
-	
+
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -189,11 +178,6 @@ void Player::Update()
 	
 	MSetUnDestroyedBullet();
 
-	if (curAmmo == 0 && !isRealoading)
-	{
-		ResMgr::GetInst()->Play(L"Reload");
-	}
-
 	if (isHit)
 	{
 		if (isLeft)
@@ -217,16 +201,9 @@ void Player::Update()
 	}
 
 	Vec2 vPos = GetPos();
-
-	if (curAmmo == 0)
-	{
-		isRealoading = true;
-	}
-	Reload();
 	
-	if (KEY_DOWN(KEY_TYPE::LBUTTON) && shootCooldownTime >= shootCooldown && curAmmo > 0)
+	if (KEY_DOWN(KEY_TYPE::LBUTTON) && shootCooldownTime >= shootCooldown)
 	{
-		curAmmo--;
 		isShooting = true;
 
 		Vec2 curRenderPos = Camera::GetInst()->GetRenderPos(vPos);
@@ -271,6 +248,8 @@ void Player::Update()
 		isShooting = false;
 		isIdle = false;
 	}
+
+	
 
 	if (!isShooting && !isHit)
 	{
@@ -319,31 +298,39 @@ void Player::Update()
 			isKeyPressing = true;
 			isIdle = false;
 		}
-		if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
+    if (KEY_PRESS(KEY_TYPE::LSHIFT) && dashCooldownTime >= dashCooldown)
+    {
+        if (curTime >= 0.1f)
+        {
+            Object::SetSpeed(speed);
+			dashCooldownTime = 0.0f;
+        }
+        else
+        {
+            Object::SetSpeed(dashSpeed);
+        }
+
+        curTime += fDT;
+        isIdle = false;
+
+    }
+    else if (KEY_UP(KEY_TYPE::LSHIFT))
+    {
+        curTime = 0;
+        Object::SetSpeed(speed);
+        isIdle = false;
+
+    }
+		if (KEY_UP(KEY_TYPE::LSHIFT))
 		{
-			ResMgr::GetInst()->Play(L"DashSound");
-
-			if (curTime >= 0.1f)
-			{
-				Object::SetSpeed(speed);
-				dashCooldownTime = 0.0f;
-			}
-			else
-			{
-				Object::SetSpeed(dashSpeed);
-			}
-
-			curTime += fDT;
-			isIdle = false;
-
-		}
-		else if (KEY_UP(KEY_TYPE::LSHIFT))
-		{
-			if (dashCooldownTime >= dashCooldown) { dashCooldownTime = 0.0f; }
 			curTime = 0;
 			Object::SetSpeed(speed);
 			isIdle = false;
-
+		}
+		if (KEY_DOWN(KEY_TYPE::E))
+		{
+			OnDamage(1);
+			isIdle = false;
 		}
 	}
 	if (KEY_DOWN(KEY_TYPE::R))
@@ -360,11 +347,24 @@ void Player::CreateBullet()
 {
 	Camera::GetInst()->CameraShake(3.f);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Bullet* pBullet = new Bullet;
 =======
 	Bullet* pBullet = new Bullet();
 
 >>>>>>> d2440e97b2212db3b34f6299acd421751a82ea2d
+=======
+	Bullet* pBullet;
+	if (isUnDestroyed)
+	{
+		pBullet = new Bullet(_unDBullet);
+	}
+	else
+	{
+		pBullet = new Bullet(_normalBullet);
+	}
+
+>>>>>>> parent of 46992be (Merge branch 'King')
 	Vec2 vBulletPos = GetPos();
 	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
 
@@ -409,11 +409,8 @@ void Player::TextureLoad()
 	_hp5Tex = ResMgr::GetInst()->TexLoad(L"Hp5", L"Texture\\eight.bmp");
 	_hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
 
-	_dashTex = ResMgr::GetInst()->TexLoad(L"dash", L"Texture\\UI_Flat_Slot_01_Available.bmp");
-
-	_ammoTex = ResMgr::GetInst()->TexLoad(L"ammo", L"Texture\\ammo-rifle.bmp"); 
-	_reloadTex = ResMgr::GetInst()->TexLoad(L"reload", L"Texture\\Reload.bmp"); 
-
+	_normalBullet = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\NormalBullet.bmp");
+	_unDBullet = ResMgr::GetInst()->TexLoad(L"Bullet2", L"Texture\\PenetrateBullet.bmp");
 }
 
 void Player::MSetUnDestroyedBullet()
@@ -432,22 +429,11 @@ void Player::MSetUnDestroyedBullet()
 	}
 }
 
-void Player::Reload()
+void Player::SetUnDestroyedBullet()
 {
-	if (isRealoading)
-	{
-		if (curReloadTime >= reloadTime)
-		{
-			curAmmo = maxAmmo;
-			curReloadTime = 0;
-			isRealoading = false;
-		}
-		else
-		{
-			curReloadTime += fDT;
-		}
-	}
+	isUnDestroyed = true;
 }
+
 
 void Player::Render(HDC _dc)
 {
@@ -538,6 +524,7 @@ void Player::Render(HDC _dc)
 			, 0, 0, Width, Height, RGB(255, 255, 255));
 		break;
 	}
+<<<<<<< HEAD
 
 	for (int i = 1; i <= dashCooldownTime; i++)
 	{
@@ -582,6 +569,8 @@ void Player::Render(HDC _dc)
 			renderPos.y - vScale.y / 2 - 30,
 			TEXT("Bullet is UnDestroingMode!!"), 27);
 	}
+=======
+>>>>>>> parent of 46992be (Merge branch 'King')
 	
 	// 2. 색상 걷어내기
 	//TransparentBlt(_dc
@@ -611,7 +600,6 @@ void Player::OnDamage(int damage)
 {
 	*Hp -= damage;
 	Camera::GetInst()->CameraShake(10.f);
-	ResMgr::GetInst()->Play(L"Hit");
 
 	if (*Hp <= 0)
 	{

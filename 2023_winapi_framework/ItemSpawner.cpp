@@ -12,21 +12,19 @@
 #include "ResMgr.h"
 #include "Texture.h"
 #include "BaseWindow.h"
-#include "Camera.h"
 
 float scale = 20;
 
 void ItemSpawner::SpawnItem(ItemType it, Vec2 spPos)
 {
 	Core::GetInst()->GetMainDC();
-	Vec2 renderPos = Camera::GetInst()->GetRenderPos(spPos);
 	switch (it)
 	{
 	case Nos:
 	{
 		
 		Object* pItem = new NosItem(spPos);
-		pItem->SetPos(renderPos);
+		pItem->SetPos(spPos);
 		pItem->SetScale(Vec2(scale, scale));
 
 		// 1. 기본 옮기기
@@ -37,7 +35,7 @@ void ItemSpawner::SpawnItem(ItemType it, Vec2 spPos)
 	{
 
 		Object* pItem = new XItem(spPos);
-		pItem->SetPos(renderPos);
+		pItem->SetPos(spPos);
 		pItem->SetScale(Vec2(scale, scale));
 		SceneMgr::GetInst()->GetCurScene()->AddObject(pItem, OBJECT_GROUP::ITEM);
 		break;

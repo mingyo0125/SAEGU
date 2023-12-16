@@ -16,12 +16,11 @@ public:
     void Render(HDC _dc) override;
     void OnDamage(int damage);
     void Die();
-    void SetUnDestroyedBullet() { isUnDestroyed = true; };
+    void SetUnDestroyedBullet();
 private:
     void CreateBullet();
     void TextureLoad();
     void MSetUnDestroyedBullet();
-    void Reload();
 
 private:
     Texture* _walkRightTex;
@@ -42,6 +41,7 @@ private:
     Texture* _hp5Tex;
     Texture* _hp6Tex;
 <<<<<<< HEAD
+<<<<<<< HEAD
     Texture* _dashTex;
     Texture* _ammoTex;
     Texture* _reloadTex;
@@ -54,6 +54,10 @@ private:
     Texture* _normalBullet;
     Texture* _unDBullet;
 >>>>>>> d2440e97b2212db3b34f6299acd421751a82ea2d
+=======
+    Texture* _normalBullet;
+    Texture* _unDBullet;
+>>>>>>> parent of 46992be (Merge branch 'King')
     int* Hp;
     int MaxHp;
     bool isKeyPressing;
@@ -63,7 +67,6 @@ private:
     bool isIdle;
     bool isHit;
     bool isUnDestroyed;
-    bool isRealoading;
     float dashCooldown;
     float dashCooldownTime;
     float shootCooldown;
@@ -73,10 +76,6 @@ private:
     float speed;
     float dashSpeed;
     float targetTime;
-    float curReloadTime;
-    float reloadTime;
     float unDestroyedTime;
-    int curAmmo;
-    int maxAmmo;
 };
 
