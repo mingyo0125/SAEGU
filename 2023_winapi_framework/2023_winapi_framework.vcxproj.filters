@@ -74,6 +74,9 @@
     <Filter Include="Engine\04. Object\Monster">
       <UniqueIdentifier>{05cec62e-4862-4a23-abd5-923c56129c91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Object\Effect">
+      <UniqueIdentifier>{430e0680-9e46-4772-aaf6-28e203686a5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="ItemEffecter.h">
       <Filter>Engine\03. Manager\ItemManager</Filter>
     </ClInclude>
+    <ClInclude Include="ExplosionEffect.h">
+      <Filter>Engine\04. Object\Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="2023_winapi_framework.rc">
@@ -328,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="ItemEffecter.cpp">
       <Filter>Engine\03. Manager\ItemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionEffect.cpp">
+      <Filter>Engine\04. Object\Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

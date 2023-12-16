@@ -342,7 +342,16 @@ void Player::Update()
 void Player::CreateBullet()
 {
 	Camera::GetInst()->CameraShake(3.f);
-	Bullet* pBullet = new Bullet;
+	Bullet* pBullet;
+	if (isUnDestroyed)
+	{
+		pBullet = new Bullet(_unDBullet);
+	}
+	else
+	{
+		pBullet = new Bullet(_normalBullet);
+	}
+
 	Vec2 vBulletPos = GetPos();
 	Vec2 vRenderBulletPos = Camera::GetInst()->GetRenderPos(vBulletPos);
 
@@ -387,6 +396,8 @@ void Player::TextureLoad()
 	_hp5Tex = ResMgr::GetInst()->TexLoad(L"Hp5", L"Texture\\eight.bmp");
 	_hp6Tex = ResMgr::GetInst()->TexLoad(L"Hp6", L"Texture\\ten.bmp");
 
+	_normalBullet = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\NormalBullet.bmp");
+	_unDBullet = ResMgr::GetInst()->TexLoad(L"Bullet2", L"Texture\\PenetrateBullet.bmp");
 }
 
 void Player::MSetUnDestroyedBullet()

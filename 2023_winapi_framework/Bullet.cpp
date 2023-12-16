@@ -10,7 +10,7 @@
 #include "Collider.h"
 #include "EventMgr.h"
 
-Bullet::Bullet()
+Bullet::Bullet(Texture* tex)
 //	: m_fDir(-1.f)
 	: m_fTheta(0.f)
 	, curTime(0.f)
@@ -18,7 +18,7 @@ Bullet::Bullet()
 	, m_pTex1(nullptr)
 	, isUnDestroyed(false)
 {
-	m_pTex1 = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\NormalBullet.bmp");
+	m_pTex1 = tex;
 	Object::SetName(L"Bullet");
 	CreateCollider();
 }

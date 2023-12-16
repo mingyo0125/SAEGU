@@ -13,14 +13,12 @@ ItemEffecter::~ItemEffecter()
 {
 }
 
-
-void ItemEffecter::EffectToPlayer(Object* obj)
+void ItemEffecter::EffectToPlayer()
 {
-	if (obj->GetName() == L"XItem" && !onXEffective)
-	{
-		pObject->SetSpeed(pObject->GetSpeed() + level_up_speed_value);
-		onXEffective = true;
-	}
+	if (onXEffective) return;
+
+	pObject->SetSpeed(pObject->GetSpeed() + level_up_speed_value);
+	onXEffective = true;
 }
 
 void ItemEffecter::Update()
