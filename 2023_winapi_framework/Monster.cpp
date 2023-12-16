@@ -128,12 +128,14 @@ void Monster::SetDie()
 			if (dg[i]->GetName() == L"Effecter")
 			{
 				ItemEffecter ie = (ItemEffecter*)dg[i];
-				ie.EffectToPlayer(this);
+				ie.EffectToPlayer();
 				break;
 			}
 		}
 	}
 }
+
+
 
 void Monster::SetHit()
 {

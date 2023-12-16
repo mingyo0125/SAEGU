@@ -8,9 +8,8 @@ public:
 	ItemEffecter(Object* p);
 	~ItemEffecter();
 public:
-	void EffectToPlayer(Monster* monster);
+	void EffectToPlayer();
 	void Update() override;
-	void Render(HDC _dc) override;
 private:
 	Object* pObject;
 	Monster* curMonster;

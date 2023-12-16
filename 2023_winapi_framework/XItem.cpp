@@ -34,7 +34,7 @@ void XItem::EnterCollision(Collider* _pOther)
 			if (target[i]->GetName() == L"Effecter")
 			{
 				ItemEffecter* itemEffecter = (ItemEffecter*)target[i];
-				//itemEffecter->EffectToPlayer();
+				itemEffecter->EffectToPlayer();
 				break;
 			}
 		}

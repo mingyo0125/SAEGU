@@ -570,6 +570,14 @@ void Player::Render(HDC _dc)
 			, ammoWidth, amooHeight, _ammoTex->GetDC()
 			, 0, 0, ammoWidth, amooHeight, RGB(255, 255, 255));
 	}
+
+	if (isUnDestroyed)
+	{
+		TextOut(_dc,
+			renderPos.x - vScale.x / 2 - 40,
+			renderPos.y - vScale.y / 2 - 30,
+			TEXT("Bullet is UnDestroingMode!!"), 27);
+	}
 	
 	// 2. 색상 걷어내기
 	//TransparentBlt(_dc
