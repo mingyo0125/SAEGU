@@ -24,6 +24,7 @@ private:
     float m_fTheta; // 삼각함수 방향.
     Vec2 m_vDir;
     Texture* m_pTex1;
+    Texture* m_pPenetrateTex;
     bool isUnDestroyed;
     float curTime;
 private:

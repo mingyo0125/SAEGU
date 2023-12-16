@@ -32,7 +32,7 @@ Monster::~Monster()
 void Monster::Update()
 {
 	m_vCurPos = GetPos();
-	Vec2 vTargetPos = m_target->GetPos();
+	Vec2 vTargetPos =  m_target->GetPos();
 	Vec2 moveDir = (vTargetPos - m_vCurPos).Normalize();
 
 	m_vCurPos = m_vCurPos + (moveDir * m_fSpeed);
@@ -46,7 +46,6 @@ void Monster::EnterCollision(Collider* _pOther)
 	const Object* pOtherObj = _pOther->GetObj();
 	if (pOtherObj->GetName() == L"Bullet")
 	{
-		//SetDie();
 		SetHit();
 	}
 }
@@ -110,7 +109,7 @@ void Monster::SetDie()
 	if (rand() % 5 == 0)
 	{
 		ItemSpawner* itemSpawner = new ItemSpawner();
-		itemSpawner->RandomItemSpawn(m_vCenterPos);
+		itemSpawner->RandomItemSpawn(m_renderPos);
 	}
 
 	EventMgr::GetInst()->DeleteObject(this);
