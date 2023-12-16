@@ -111,7 +111,7 @@ void Monster::SetDie()
 	m_fSpeed = 0;
 
 	ExpEffect* effect = new ExpEffect();
-	effect->SetPos(m_renderPos);
+	effect->SetPos(GetPos());
 	SceneMgr::GetInst()->GetCurScene()->AddObject(effect, OBJECT_GROUP::DEFAULT);
 	EventMgr::GetInst()->DeleteObject(this);
 
@@ -128,7 +128,7 @@ void Monster::SetDie()
 			if (dg[i]->GetName() == L"Effecter")
 			{
 				ItemEffecter ie = (ItemEffecter*)dg[i];
-				ie.EffectToPlayer();
+				ie.EffectToPlayer(this);
 				break;
 			}
 		}
