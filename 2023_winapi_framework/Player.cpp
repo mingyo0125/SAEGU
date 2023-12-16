@@ -34,6 +34,7 @@ Player::Player()
 	, isShooting(false)
 	, isDie(false)
 	, isIdle(true)
+	, isRealoading(false)
 	, isUnDestroyed(false)
 	, isHit(nullptr)
 	, curTime(0.f)
@@ -44,6 +45,8 @@ Player::Player()
 	, _hp5Tex(nullptr)
 	, _hp6Tex(nullptr)
 	, _dashTex(nullptr)
+	, _ammoTex(nullptr)
+	, _reloadTex(nullptr)
 	, speed(150.f)
 	, dashSpeed(700.f)
 	, targetTime(0.15f)
@@ -53,6 +56,10 @@ Player::Player()
 	, shootCooldownTime(0.f)
 	, unDestroyedTime(5.f)
 	, bulletCurTime(0.f)
+	, reloadTime(3.f)
+	, curReloadTime(0.f)
+	, maxAmmo(10)
+	, curAmmo(10)
 {
 	//m_pTex = new Texture;
 	//wstring strFilePath = PathMgr::GetInst()->GetResPath();
@@ -91,7 +98,9 @@ Player::Player()
 		Vec2(53.f, 53.f), Vec2(0.f, 54.f), 6, 0.1f);
 
 	ResMgr::GetInst()->LoadSound(L"Shoot", L"Sound\\GunShot.wav", false);
-
+	ResMgr::GetInst()->LoadSound(L"Reload", L"Sound\\galil-reload-sound.mp3", false);
+	ResMgr::GetInst()->LoadSound(L"Hit", L"Sound\\matrixxx__retro-hit.wav", false);
+	
 	//GetAnimator()->PlayAnim(L"Player_Front",true);
 
 	/*CreateAnimator();
@@ -175,6 +184,11 @@ void Player::Update()
 	
 	MSetUnDestroyedBullet();
 
+	if (curAmmo == 0 && !isRealoading)
+	{
+		ResMgr::GetInst()->Play(L"Reload");
+	}
+
 	if (isHit)
 	{
 		if (isLeft)
@@ -198,9 +212,16 @@ void Player::Update()
 	}
 
 	Vec2 vPos = GetPos();
-	
-	if (KEY_DOWN(KEY_TYPE::LBUTTON) && shootCooldownTime >= shootCooldown)
+
+	if (curAmmo == 0)
 	{
+		isRealoading = true;
+	}
+	Reload();
+	
+	if (KEY_DOWN(KEY_TYPE::LBUTTON) && shootCooldownTime >= shootCooldown && curAmmo > 0)
+	{
+		curAmmo--;
 		isShooting = true;
 
 		Vec2 curRenderPos = Camera::GetInst()->GetRenderPos(vPos);
@@ -245,8 +266,6 @@ void Player::Update()
 		isShooting = false;
 		isIdle = false;
 	}
-
-	
 
 	if (!isShooting && !isHit)
 	{
@@ -381,6 +400,9 @@ void Player::TextureLoad()
 
 	_dashTex = ResMgr::GetInst()->TexLoad(L"dash", L"Texture\\UI_Flat_Slot_01_Available.bmp");
 
+	_ammoTex = ResMgr::GetInst()->TexLoad(L"ammo", L"Texture\\ammo-rifle.bmp"); 
+	_reloadTex = ResMgr::GetInst()->TexLoad(L"reload", L"Texture\\Reload.bmp"); 
+
 }
 
 void Player::MSetUnDestroyedBullet()
@@ -395,6 +417,23 @@ void Player::MSetUnDestroyedBullet()
 		else
 		{
 			bulletCurTime += fDT;
+		}
+	}
+}
+
+void Player::Reload()
+{
+	if (isRealoading)
+	{
+		if (curReloadTime >= reloadTime)
+		{
+			curAmmo = maxAmmo;
+			curReloadTime = 0;
+			isRealoading = false;
+		}
+		else
+		{
+			curReloadTime += fDT;
 		}
 	}
 }
@@ -500,6 +539,30 @@ void Player::Render(HDC _dc)
 			, dashWidth, dashHeight, _dashTex->GetDC()
 			, 0, 0, dashWidth, dashHeight, RGB(255, 255, 255));
 	}
+
+	if (curAmmo == 0)
+	{
+		int reloadWidth = _reloadTex->GetWidth();
+		int reloadHeight = _reloadTex->GetHeight();
+
+		TransparentBlt(_dc
+			, (int)(renderPos.x - vScale.x / 2) + 31
+			, (int)(renderPos.y - vScale.y / 2) + 80
+			, reloadWidth, reloadHeight, _reloadTex->GetDC()
+			, 0, 0, reloadWidth, reloadHeight, RGB(255, 255, 255));
+	}
+
+	for (int i = 1; i <= curAmmo; i++)
+	{
+		int ammoWidth = _ammoTex->GetWidth();
+		int amooHeight = _ammoTex->GetHeight();
+
+		TransparentBlt(_dc
+			, (int)((renderPos.x) * i / 50) + 550
+			, (int)(renderPos.y - vScale.y / 2) + 80
+			, ammoWidth, amooHeight, _ammoTex->GetDC()
+			, 0, 0, ammoWidth, amooHeight, RGB(255, 255, 255));
+	}
 	
 	// 2. 색상 걷어내기
 	//TransparentBlt(_dc
@@ -529,6 +592,7 @@ void Player::OnDamage(int damage)
 {
 	*Hp -= damage;
 	Camera::GetInst()->CameraShake(10.f);
+	ResMgr::GetInst()->Play(L"Hit");
 
 	if (*Hp <= 0)
 	{
