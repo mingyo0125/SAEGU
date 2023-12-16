@@ -16,9 +16,12 @@ public:
     void Render(HDC _dc) override;
     void OnDamage(int damage);
     void Die();
+    void SetUnDestroyedBullet();
 private:
     void CreateBullet();
     void TextureLoad();
+    void MSetUnDestroyedBullet();
+
 private:
     Texture* _walkRightTex;
     Texture* _walkLeftTex;
@@ -45,12 +48,16 @@ private:
     bool isDie;
     bool isIdle;
     bool isHit;
-    bool isDashing;
+    bool isUnDestroyed;
     float dashCooldown;
     float dashCooldownTime;
+    float shootCooldown;
+    float shootCooldownTime;
     float curTime;
+    float bulletCurTime;
     float speed;
     float dashSpeed;
     float targetTime;
+    float unDestroyedTime;
 };
 

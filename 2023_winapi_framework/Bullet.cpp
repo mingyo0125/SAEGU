@@ -7,12 +7,16 @@
 #include "Animation.h"
 #include "ResMgr.h"
 #include "Camera.h"
+#include "Collider.h"
+#include "EventMgr.h"
 
 Bullet::Bullet()
 //	: m_fDir(-1.f)
 	: m_fTheta(0.f)
-	, m_vDir(Vec2(0.f,0.f))
+	, curTime(0.f)
+	, m_vDir(Vec2(0.f, 0.f))
 	, m_pTex1(nullptr)
+	, isUnDestroyed(false)
 {
 	m_pTex1 = ResMgr::GetInst()->TexLoad(L"Bullet1", L"Texture\\NormalBullet.bmp");
 	Object::SetName(L"Bullet");
@@ -33,7 +37,6 @@ void Bullet::Update()
 	vPos.x += 500.f * fDT * m_vDir.x;
 	vPos.y += 500.f * fDT * m_vDir.y;
 	SetPos(vPos);
-
 }
 
 void Bullet::Render(HDC _dc)
@@ -52,4 +55,25 @@ void Bullet::Render(HDC _dc)
 		, Width, Height, m_pTex1->GetDC()
 		, 0, 0, Width,Height, RGB(255,0,255));
 	Component_Render(_dc);
+}
+
+void Bullet::EnterCollision(Collider* _pOther)
+{
+	const Object* pOtherObj = _pOther->GetObj();
+
+	if (pOtherObj->GetName() == L"Monster")
+	{
+		if (!isUnDestroyed)
+		{
+			EventMgr::GetInst()->DeleteObject(this);
+		}
+	}
+}
+
+void Bullet::ExitCollision(Collider* _pOther)
+{
+}
+
+void Bullet::StayCollision(Collider* _pOther)
+{
 }
