@@ -24,7 +24,7 @@ private:
 	void HandleSecondChange();
 private:
 	int idx = 0;
-	float fMonsterSpeed = 0.3f;
+	float fMonsterSpeed = 0.6f;
 	float fBatHp = 2.0f;
 	float fBirdHp = 3.0f;
 	float fSlimeHp = 1.0f;
