@@ -1,2 +1,2 @@
-2023_winapi_framework/** linguist-documentation=false
-2023_winapi_framework/** linguist-vendored=false
+* linguist-vendored
+*.cpp linguist-vendored=false
